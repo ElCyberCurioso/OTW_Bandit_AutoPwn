@@ -9,13 +9,20 @@ otw_bandit_ssh_port = 2220
 user = "bandit0"
 password = "bandit0"
 
-def ssh_connection(username, password):
+def ssh_connection(username, password, use_ssh_key=False, sshkey_file=None):
+    
+    if (use_ssh_key == True and sshkey_file == None):
+        raise Exception(f"An SSH Key file must be provided")
+    
     client = paramiko.SSHClient()
     
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.load_system_host_keys()
 
-    client.connect(hostname=otw_bandit_ssh_url, port=otw_bandit_ssh_port, username=username, password=password)
+    if (use_ssh_key):
+        client.connect(hostname=otw_bandit_ssh_url, port=otw_bandit_ssh_port, username=username, password="", key_filename=sshkey_file)
+    else:
+        client.connect(hostname=otw_bandit_ssh_url, port=otw_bandit_ssh_port, username=username, password=password)
 
     return client
 
@@ -200,9 +207,10 @@ def bandit11_12(client):
 
     return next_user, next_password
 
+# DONE
 def bandit12_13(client):
 
-    next_user = "bandit12"
+    next_user = "bandit13"
 
     resources_path = createResourcesFolder()
     subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit12_13')
@@ -224,36 +232,50 @@ def bandit12_13(client):
 
     return next_user, next_password
 
+# DONE
 def bandit13_14(client):
 
-    next_user = "bandit13"
-
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
-
-    client.close()
-
-    return next_user, next_password
-
-def bandit14_15(client):
-
     next_user = "bandit14"
+    
+    resources_path = createResourcesFolder()
+    subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit13_14')
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
+    sftp = client.open_sftp()
+    sftp.get('/home/bandit13/sshkey.private',os.path.join(subfolder_path,'sshkey.private'))
+
+    # Process to obtain the ssh key file
+    next_password = os.path.join(str(subfolder_path),'sshkey.private')
 
     client.close()
 
     return next_user, next_password
 
-def bandit15_16(client):
+# DONE
+def bandit14_15(client):
 
     next_user = "bandit15"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit14")
+    current_password = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("echo " + current_password + " | nc localhost 30000 | sed '/^$/d' | tail -n 1")
+    next_password = stdout.read().decode().strip()
+
+    client.close()
+
+    return next_user, next_password
+
+# DONE
+def bandit15_16(client):
+
+    next_user = "bandit16"
+    
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit15")
+    current_password = stdout.read().decode().strip()
+
+    # Process to obtain the password
+    stdin, stdout, stderr = client.exec_command("echo " + current_password + " | ncat --ssl localhost 30001 | sed '/^$/d' | tail -n 1")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -261,18 +283,6 @@ def bandit15_16(client):
     return next_user, next_password
 
 def bandit16_17(client):
-
-    next_user = "bandit16"
-
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
-
-    client.close()
-
-    return next_user, next_password
-
-def bandit17_18(client):
 
     next_user = "bandit17"
 
@@ -284,7 +294,7 @@ def bandit17_18(client):
 
     return next_user, next_password
 
-def bandit18_19(client):
+def bandit17_18(client):
 
     next_user = "bandit18"
 
@@ -296,7 +306,7 @@ def bandit18_19(client):
 
     return next_user, next_password
 
-def bandit19_20(client):
+def bandit18_19(client):
 
     next_user = "bandit19"
 
@@ -308,7 +318,7 @@ def bandit19_20(client):
 
     return next_user, next_password
 
-def bandit20_21(client):
+def bandit19_20(client):
 
     next_user = "bandit20"
 
@@ -320,7 +330,7 @@ def bandit20_21(client):
 
     return next_user, next_password
 
-def bandit21_22(client):
+def bandit20_21(client):
 
     next_user = "bandit21"
 
@@ -332,7 +342,7 @@ def bandit21_22(client):
 
     return next_user, next_password
 
-def bandit22_23(client):
+def bandit21_22(client):
 
     next_user = "bandit22"
 
@@ -344,7 +354,7 @@ def bandit22_23(client):
 
     return next_user, next_password
 
-def bandit23_24(client):
+def bandit22_23(client):
 
     next_user = "bandit23"
 
@@ -356,7 +366,7 @@ def bandit23_24(client):
 
     return next_user, next_password
 
-def bandit24_25(client):
+def bandit23_24(client):
 
     next_user = "bandit24"
 
@@ -368,7 +378,7 @@ def bandit24_25(client):
 
     return next_user, next_password
 
-def bandit25_26(client):
+def bandit24_25(client):
 
     next_user = "bandit25"
 
@@ -380,7 +390,7 @@ def bandit25_26(client):
 
     return next_user, next_password
 
-def bandit26_27(client):
+def bandit25_26(client):
 
     next_user = "bandit26"
 
@@ -392,7 +402,7 @@ def bandit26_27(client):
 
     return next_user, next_password
 
-def bandit27_28(client):
+def bandit26_27(client):
 
     next_user = "bandit27"
 
@@ -404,7 +414,7 @@ def bandit27_28(client):
 
     return next_user, next_password
 
-def bandit28_29(client):
+def bandit27_28(client):
 
     next_user = "bandit28"
 
@@ -416,7 +426,7 @@ def bandit28_29(client):
 
     return next_user, next_password
 
-def bandit29_30(client):
+def bandit28_29(client):
 
     next_user = "bandit29"
 
@@ -428,7 +438,7 @@ def bandit29_30(client):
 
     return next_user, next_password
 
-def bandit30_31(client):
+def bandit29_30(client):
 
     next_user = "bandit30"
 
@@ -440,7 +450,7 @@ def bandit30_31(client):
 
     return next_user, next_password
 
-def bandit31_32(client):
+def bandit30_31(client):
 
     next_user = "bandit31"
 
@@ -452,9 +462,21 @@ def bandit31_32(client):
 
     return next_user, next_password
 
-def bandit32_33(client):
+def bandit31_32(client):
 
     next_user = "bandit32"
+
+    # Process to obtain the password
+    stdin, stdout, stderr = client.exec_command("")
+    next_password = stdout.read().decode().strip()
+
+    client.close()
+
+    return next_user, next_password
+
+def bandit32_33(client):
+
+    next_user = "bandit33"
 
     # Process to obtain the password
     stdin, stdout, stderr = client.exec_command("")
@@ -469,26 +491,27 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit12"
-    password = "7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4"
+    user = "bandit16"
+    password = "kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx"
+    # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit13_14\\sshkey.private"
 
     # user, password = bandit11_12(ssh_connection(user,password))
     # printCredentials()
 
-    user, password = bandit12_13(ssh_connection(user,password))
-    printCredentials()
+    # user, password = bandit12_13(ssh_connection(user,password))
+    # printCredentials()
 
     # user, password = bandit13_14(ssh_connection(user,password))
     # printCredentials()
 
-    # user, password = bandit14_15(ssh_connection(user,password))
+    # user, password = bandit14_15(ssh_connection(user,password,use_ssh_key=True,sshkey_file=password))
     # printCredentials()
 
     # user, password = bandit15_16(ssh_connection(user,password))
     # printCredentials()
 
-    # user, password = bandit16_17(ssh_connection(user,password))
-    # printCredentials()
+    user, password = bandit16_17(ssh_connection(user,password))
+    printCredentials()
 
     # user, password = bandit17_18(ssh_connection(user,password))
     # printCredentials()
