@@ -1,14 +1,7 @@
 #!/usr/bin/python3
 
 import paramiko, os
-
-import zipfile
-import tarfile
-import gzip
-import bz2
-import lzma
-import py7zr
-import shutil
+import lib.recursive_file_decompressor as decompressor
 
 otw_bandit_ssh_url = "bandit.labs.overthewire.org"
 otw_bandit_ssh_port = 2220
@@ -42,108 +35,6 @@ def createSubfolderOnResourcesFolder(resources_path, subfolders):
         os.makedirs(subfolder_path)
     
     return subfolder_path
-
-def detect_compression_type(filepath):
-    with open(filepath, 'rb') as f:
-        file_start = f.read(264)
-
-    if file_start.startswith(b'\x50\x4B\x03\x04'):
-        return 'zip'
-    if file_start.startswith(b'\x1F\x8B'):
-        return 'gz'
-    if file_start.startswith(b'\x42\x5A\x68'):
-        return 'bz2'
-    if file_start.startswith(b'\xFD\x37\x7A\x58\x5A\x00'):
-        return 'xz'
-    if file_start.startswith(b'\x37\x7A\xBC\xAF\x27\x1C'):
-        return '7z'
-    if len(file_start) >= 264 and file_start[257:262] == b'ustar':
-        return 'tar'
-    return None
-
-def extract_zip(filepath, output_dir):
-    with zipfile.ZipFile(filepath, 'r') as archive:
-        archive.extractall(output_dir)
-
-def extract_tar(filepath, output_dir, mode='r:*'):
-    with tarfile.open(filepath, mode) as archive:
-        archive.extractall(output_dir)
-
-def extract_gz(filepath, output_dir):
-    out_file = os.path.join(output_dir, os.path.splitext(os.path.basename(filepath))[0])
-    with gzip.open(filepath, 'rb') as f_in, open(out_file, 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-def extract_bz2(filepath, output_dir):
-    out_file = os.path.join(output_dir, os.path.splitext(os.path.basename(filepath))[0])
-    with bz2.open(filepath, 'rb') as f_in, open(out_file, 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-def extract_xz(filepath, output_dir):
-    out_file = os.path.join(output_dir, os.path.splitext(os.path.basename(filepath))[0])
-    with lzma.open(filepath, 'rb') as f_in, open(out_file, 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-def extract_7z(filepath, output_dir):
-    with py7zr.SevenZipFile(filepath, mode='r') as archive:
-        archive.extractall(path=output_dir)
-
-def extract_file(filepath, output_dir):
-    os.makedirs(output_dir, exist_ok=True)
-    filetype = detect_compression_type(filepath)
-
-    if filetype == 'zip':
-        extract_zip(filepath, output_dir)
-    elif filetype == 'tar':
-        extract_tar(filepath, output_dir, 'r:')
-    elif filetype == 'tar.gz':
-        extract_tar(filepath, output_dir, 'r:gz')
-    elif filetype == 'tar.bz2':
-        extract_tar(filepath, output_dir, 'r:bz2')
-    elif filetype == 'tar.xz':
-        extract_tar(filepath, output_dir, 'r:xz')
-    elif filetype == 'gz':
-        extract_gz(filepath, output_dir)
-    elif filetype == 'bz2':
-        extract_bz2(filepath, output_dir)
-    elif filetype == 'xz':
-        extract_xz(filepath, output_dir)
-    elif filetype == '7z':
-        extract_7z(filepath, output_dir)
-    else:
-        raise ValueError(f"❌ Tipo de archivo no soportado o no comprimido: {filepath}")
-
-    print(f"✅ Extraído: {filepath} → {output_dir}")
-
-def find_next_compressed_file(path):
-    for root, _, files in os.walk(path):
-        for file in files:
-            full_path = os.path.join(root, file)
-            if detect_compression_type(full_path):
-                return full_path
-    return None
-
-def decompress_until_plain_text(initial_path, work_dir="temp_output"):
-    current_path = os.path.abspath(initial_path)
-    iteration = 0
-
-    while True:
-        filetype = detect_compression_type(current_path)
-
-        if not filetype:
-            print(f"🏁 Archivo final no comprimido detectado: {current_path}")
-            break
-
-        extract_dir = os.path.join(work_dir, f"step_{iteration}")
-        extract_file(current_path, extract_dir)
-
-        next_file = find_next_compressed_file(extract_dir)
-        if not next_file:
-            print(f"🏁 Archivo final extraído sin más compresión en: {extract_dir}")
-            break
-
-        current_path = next_file
-        iteration += 1
 
 # DONE
 def bandit0_1(client):
@@ -316,21 +207,18 @@ def bandit12_13(client):
     resources_path = createResourcesFolder()
     subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit12_13')
     
-    # Funciona, descomentar al terminar el flujo
-    # stdin, stdout, stderr = client.exec_command("mktemp -d")
-    # temp_dir = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
     
-    # TEMPORAL, quitar antes de commitear
-    # temp_dir = '/tmp/tmp.dOsroA9Mbo' # Sustituir por lo de arriba
+    client.exec_command('cat ~/data.txt | xxd -r > '+temp_dir+'/data')
     
-    # client.exec_command('cat ~/data.txt | xxd -r > '+temp_dir+'/data')
+    sftp = client.open_sftp()
+    sftp.get(temp_dir+'/data',os.path.join(subfolder_path,'data.gz'))
     
-    # sftp = client.open_sftp()
-    # sftp.get(temp_dir+'/data',os.path.join(subfolder_path,'data.gz'))
-    
-    decompress_until_plain_text(os.path.join(subfolder_path,'data.gz'))
-    
-    next_password = 'PENDIENTE'
+    file_name = decompressor.decompress_until_plain_text(os.path.join(subfolder_path,'data.gz'), os.path.join(subfolder_path,'temp_output'))
+    file = open(file_name, "r")
+
+    next_password = file.read().split()[-1]
 
     client.close()
 
