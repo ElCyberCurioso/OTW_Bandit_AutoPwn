@@ -356,19 +356,29 @@ def bandit19_20(client):
 
     return next_user, next_password
 
+# DONE
 def bandit20_21(client):
 
     next_user = "bandit21"
     
-    client2 = ssh_connection(user,password)
-    stdin2, stdout2, stderr2 = client2.exec_command("nc -nlvp 4444")
-
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("./suconnect 4444")
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
     
-    print(stdout2.read().decode().strip())
+    utils_path = os.path.join(os.path.dirname(__file__),'utils')
     
-    next_password = 'PENDIENTE'       
+    sftp = client.open_sftp()
+    sftp.put(os.path.join(utils_path,'bandit21_password.sh'), temp_dir + '/script.sh')
+        
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit20")
+    current_password = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("chmod +x " + temp_dir + "/script.sh")
+    
+    stdin, stdout, stderr = client.exec_command(temp_dir + "/script.sh \"" + current_password + "\" \"" + temp_dir + "/log.txt\" \"" + temp_dir + "\"")
+    stdout.channel.recv_exit_status() # Wait until the command finish
+    
+    stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/log.txt")
+    next_password = stdout.read().decode().strip()
 
     client.close()
 
@@ -523,8 +533,8 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit20"
-    password = "0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO"
+    user = "bandit21"
+    password = "EeoULMCra2q0dSkYj561DX7s1CpBuOBt"
     # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit16_17\\id_rsa"
 
     # user, password = bandit11_12(ssh_connection(user,password))
@@ -554,11 +564,11 @@ if __name__ == '__main__':
     # user, password = bandit19_20(ssh_connection(user,password))
     # printCredentials()
 
-    user, password = bandit20_21(ssh_connection(user,password))
-    printCredentials()
-
-    # user, password = bandit21_22(ssh_connection(user,password))
+    # user, password = bandit20_21(ssh_connection(user,password))
     # printCredentials()
+
+    user, password = bandit21_22(ssh_connection(user,password))
+    printCredentials()
 
 
     ##############################################################################
