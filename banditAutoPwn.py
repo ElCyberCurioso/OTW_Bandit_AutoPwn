@@ -545,9 +545,20 @@ def bandit26_27(client):
 def bandit27_28(client):
 
     next_user = "bandit28"
+    
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    # temp_dir = stdout.read().decode().strip()
+    temp_dir = "/tmp/tmp.X1vugnj7qw"
+    print("Temp dir: " + temp_dir)
+    
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit24")
+    current_password = stdout.read().decode().strip()
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("whoami")
+    stdin, stdout, stderr = client.exec_command("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo" + temp_dir)
+    stdin, stdout, stderr = client.exec_command(current_password)
+    
+    stdin, stdout, stderr = client.exec_command("cat repo/README | awk 'NF{print $NF}'")
     next_password = stdout.read().decode().strip()
 
     client.close()
