@@ -542,25 +542,51 @@ def bandit26_27(client):
 
     return next_user, next_password
 
+# DONE
 def bandit27_28(client):
 
     next_user = "bandit28"
     
     stdin, stdout, stderr = client.exec_command("mktemp -d")
-    # temp_dir = stdout.read().decode().strip()
-    temp_dir = "/tmp/tmp.X1vugnj7qw"
+    temp_dir = stdout.read().decode().strip()
     print("Temp dir: " + temp_dir)
     
-    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit24")
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/bandit27")
     current_password = stdout.read().decode().strip()
-
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo" + temp_dir)
-    stdin, stdout, stderr = client.exec_command(current_password)
     
-    stdin, stdout, stderr = client.exec_command("cat repo/README | awk 'NF{print $NF}'")
-    next_password = stdout.read().decode().strip()
+    channel = client.invoke_shell()
+    time.sleep(1)
 
+    channel.send("id\n")
+    time.sleep(1)
+
+    channel.send("whoami\n")
+    time.sleep(1)
+    
+    # channel.send("cat /etc/bandit_pass/bandit26 > " + temp_dir + "/pass.txt \n")
+    channel.send("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo " + temp_dir + "\n")
+    time.sleep(1)
+    
+    channel.send(current_password + "\n")
+    time.sleep(1)
+
+    # Leer todo el output que queda en el buffer
+    output = ""
+    start_time = time.time()
+    while True:
+        if channel.recv_ready():
+            output += channel.recv(1024).decode(errors="ignore")
+        if time.time() - start_time > 5:  # espera de 5 seg
+            break
+        time.sleep(0.2)
+
+    # Cerrar sesión
+    channel.send("exit\n")
+    
+    # Uncomment when git clone will be working
+    stdin, stdout, stderr = client.exec_command("cat " + temp_dir + "/README | awk 'NF{print $NF}'")
+    next_password = stdout.read().decode().strip()    
+        
     client.close()
 
     return next_user, next_password
@@ -570,7 +596,7 @@ def bandit28_29(client):
     next_user = "bandit29"
 
     # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
+    stdin, stdout, stderr = client.exec_command("whoami")
     next_password = stdout.read().decode().strip()
 
     client.close()
@@ -630,8 +656,8 @@ def printCredentials():
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit27"
-    password = "upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB"
+    user = "bandit28"
+    password = "Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN"
     # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit25_26\\id_rsa"
 
     # user, password = bandit22_23(ssh_connection(user, password))
@@ -649,11 +675,11 @@ if __name__ == '__main__':
     # user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
     # printCredentials()
     
-    user, password = bandit27_28(ssh_connection(user, password))
-    printCredentials()
-    
-    # user, password = bandit28_29(ssh_connection(user, password))
+    # user, password = bandit27_28(ssh_connection(user, password))
     # printCredentials()
+    
+    user, password = bandit28_29(ssh_connection(user, password))
+    printCredentials()
     
     # user, password = bandit29_30(ssh_connection(user, password))
     # printCredentials()
