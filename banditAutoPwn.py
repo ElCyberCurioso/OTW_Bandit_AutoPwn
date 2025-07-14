@@ -2,12 +2,20 @@
 
 import paramiko, os, time
 import lib.recursive_file_decompressor as decompressor
+from paramiko_expect import SSHClientInteraction
 
 otw_bandit_ssh_url = "bandit.labs.overthewire.org"
 otw_bandit_ssh_port = 2220
 
-user = "bandit0"
-password = "bandit0"
+default_user = "bandit0"
+default_password = "bandit0"
+
+# Pending to develop
+def check_modules_installed():
+    print("Test")
+
+def printCredentials():
+    print(f"[+] Credentials for {user}: {password}")
 
 def ssh_connection(username, password, use_ssh_key=False, sshkey_file=None):
     
@@ -73,9 +81,12 @@ def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
     channel.send("exit\n")
 
 # Pending to implement into all methods
-def make_temp_directory(client):
+def make_temp_directory():
+    client = ssh_connection(default_user, default_password)
+    
     stdin, stdout, stderr = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("chmod 777 " + temp_dir)
     return temp_dir
 
 # Pending to implement into all methods
@@ -595,7 +606,7 @@ def bandit27_28(client):
     next_user = "bandit28"
     repo_url = "ssh://bandit27-git@localhost:2220/home/bandit27-git/repo"
     
-    temp_dir = make_temp_directory(client)
+    temp_dir = make_temp_directory()
     current_password = get_current_password(client)
     
     git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
@@ -613,7 +624,7 @@ def bandit28_29(client):
     next_user = "bandit29"
     repo_url = "ssh://bandit28-git@localhost:2220/home/bandit28-git/repo"
     
-    temp_dir = make_temp_directory(client)
+    temp_dir = make_temp_directory()
     current_password = get_current_password(client)
     
     git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
@@ -632,12 +643,10 @@ def bandit29_30(client):
     next_user = "bandit30"
     repo_url = "ssh://bandit29-git@localhost:2220/home/bandit29-git/repo"
     
-    # temp_dir = make_temp_directory(client)
-    temp_dir = "/tmp/tmp.nzdjnfFwxd"
-    print("Temp dir: " + temp_dir)
+    temp_dir = make_temp_directory()
     current_password = get_current_password(client)
     
-    # git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
+    git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
 
     stdin, stdout, stderr = client.exec_command("cd " + temp_dir + " && git checkout dev")
     
@@ -654,7 +663,7 @@ def bandit30_31(client):
     next_user = "bandit31"
     repo_url = "ssh://bandit30-git@localhost:2220/home/bandit30-git/repo"
     
-    temp_dir = make_temp_directory(client)
+    temp_dir = make_temp_directory()
     current_password = get_current_password(client)
     
     git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
@@ -667,83 +676,104 @@ def bandit30_31(client):
 
     return next_user, next_password
 
+# DONE
 def bandit31_32(client):
 
     next_user = "bandit32"
     repo_url = "ssh://bandit31-git@localhost:2220/home/bandit31-git/repo"
     
     temp_dir = make_temp_directory(client)
-    print("Temp dir: " + temp_dir)
     current_password = get_current_password(client)
     
     git_clone_repo_bandit(client,temp_dir,repo_url,current_password)
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("whoami")
-    next_password = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("cd " + temp_dir + " && cat README.md | grep 'Content' | awk -F ':' '{print $2}' | xargs")
+    key_file_content = stdout.read().decode().strip()
+    
+    stdin, stdout, stderr = client.exec_command("cd " + temp_dir + " && echo '" + key_file_content + "' > " + temp_dir + "/key.txt")
+    stdin, stdout, stderr = client.exec_command("cd " + temp_dir + " && git add -f key.txt")
+    stdin, stdout, stderr = client.exec_command("cd " + temp_dir + " && git commit -m \"Commit file key.txt\"")
+    
+    # Git push + ssh login
+    channel = client.invoke_shell()
+    time.sleep(1)
 
+    channel.send("id\n")
+    time.sleep(1)
+
+    channel.send("whoami\n")
+    time.sleep(1)
+    
+    channel.send("cd " + temp_dir + " && GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git push -u origin master\n")
+    time.sleep(1)
+    
+    channel.send(current_password + "\n")
+    time.sleep(1)
+
+    # Read buffer output
+    output = ""
+    start_time = time.time()
+    while True:
+        if channel.recv_ready():
+            output += channel.recv(1024).decode(errors="ignore")
+        if time.time() - start_time > 5:  # espera de 5 seg
+            break
+        time.sleep(0.2)
+    
+    next_password = ""
+    # Filter output to retrieve password for next level
+    for i,line in enumerate(output.splitlines()):
+        if "Well done!" in line:
+            # Print next line and retrieve last string after split it by spaces
+            next_password = output.splitlines()[i+1].split(" ", 1)[-1]
+    
+    # Close connection
+    channel.send("exit\n")
+    
     client.close()
-
+    
     return next_user, next_password
 
+# DONE
 def bandit32_33(client):
 
     next_user = "bandit33"
+    
+    temp_dir = make_temp_directory()
+    # temp_dir = "/tmp/tmp.d1EBr5Tdm5"
+    print("Temp dir: " + temp_dir)
 
-    # Process to obtain the password
-    stdin, stdout, stderr = client.exec_command("")
-    next_password = stdout.read().decode().strip()
+    output = ""
+    channel = client.invoke_shell()
+    channel.send("$0\n")
+    channel.send(f"cat /etc/bandit_pass/{next_user}\n")
+    time.sleep(0.5)
+    if channel.recv_ready():
+        output = channel.recv(5000).decode()
+    
+    next_password = output.strip().splitlines()[-2]
 
+    channel.close()
     client.close()
-
     return next_user, next_password
 
-def printCredentials():
-    print(f"[+] Credentials for {user}: {password}")
+def bandit33_34(client):
+
+    next_user = "bandit34"
+    
+    stdin, stdout, stderr = client.exec_command("whoami")
+    next_password = stdout.read().decode().strip()
+    
+    client.close()
+    return next_user, next_password
 
 if __name__ == '__main__':
     # DEBUG
-    user = "bandit31"
-    password = "fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy"
+    user = "bandit33"
+    password = ""
     # password = "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit25_26\\id_rsa"
-
-    # user, password = bandit22_23(ssh_connection(user, password))
-    # printCredentials()
     
-    # user, password = bandit23_24(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit24_25(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit25_26(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
-    # printCredentials()
-    
-    # user, password = bandit27_28(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit28_29(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit29_30(ssh_connection(user, password))
-    # printCredentials()
-    
-    # user, password = bandit30_31(ssh_connection(user, password))
-    # printCredentials()
-    
-    user, password = bandit31_32(ssh_connection(user, password))
-    printCredentials()
-    
-    # user, password = bandit32_33(ssh_connection(user, password))
-    # printCredentials()
-
-
-    ##############################################################################
-
-    # user, password = bandit0_1(ssh_connection(user, password))
+    # user, password = bandit0_1(ssh_connection(default_user, default_password))
     # printCredentials()
 
     # user, password = bandit1_2(ssh_connection(user,password))
@@ -807,4 +837,40 @@ if __name__ == '__main__':
     # printCredentials()
 
     # user, password = bandit21_22(ssh_connection(user,password))
+    # printCredentials()
+    
+    # user, password = bandit22_23(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit23_24(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit24_25(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit25_26(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit26_27(ssh_connection(user, password,use_ssh_key=True,sshkey_file=password))
+    # printCredentials()
+    
+    # user, password = bandit27_28(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit28_29(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit29_30(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit30_31(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit31_32(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit32_33(ssh_connection(user, password))
+    # printCredentials()
+    
+    # user, password = bandit33_34(ssh_connection(user, password))
     # printCredentials()
