@@ -73,17 +73,3 @@ def print_boxed(text):
     for line in lines:
         print(f'| {line.ljust(max_length)} |')
     print(border)
-
-# Example
-# update_info_for_user("bandit1", new_password="", new_temp_folder="", new_notes="")
-# print_all_info()
-# print_users_info()
-# print_temp_folder_info()
-# print_notes_info()
-
-# get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=["user","password", "url"])
-
-#def check_imported_modules():
-# modulename = 'asdas'
-# if modulename not in sys.modules:
-#     print('You have not imported the {} module'.format(modulename))

@@ -2,7 +2,6 @@
 
 import paramiko, os, time
 import lib.recursive_file_decompressor as decompressor
-from paramiko_expect import SSHClientInteraction
 
 otw_bandit_ssh_url = "bandit.labs.overthewire.org"
 otw_bandit_ssh_port = 2220
