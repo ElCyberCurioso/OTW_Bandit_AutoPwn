@@ -26,6 +26,16 @@ modify_menu = """
 Choose an option:
 """
 
+list_menu = """
+--- List Info Menu ---
+1. List credentials (user + password + temp_folder)
+2. List guiding info (user + details + url)
+3. List notes (user + notes)
+4. List tags (user + tags)
+5. Back
+Choose an option:
+"""
+
 hack_menu = """
 --- Hack Menu ---
 1. Indicate user to hack

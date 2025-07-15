@@ -36,10 +36,10 @@ def main_menu():
             hack_menu()
         elif key == '2':
             utilities.clear_screen()
-            utilities.print_table("user","password","url","temp_folder","notes")
+            list_menu()
         elif key == '3':
             utilities.clear_screen()
-            utilities.print_table("user","password","url","temp_folder","notes")
+            utilities.print_table("user","password","temp_folder","notes")
             modify_menu()
         elif key == '4':
             utilities.clear_screen()
@@ -60,6 +60,28 @@ def hack_menu():
             utilities.hack_user()
             utilities.clear_screen()
         elif key == '2':
+            utilities.clear_screen()
+            break
+        else:
+            print(menu_texts.invalid_option)
+
+def list_menu():
+    while True:
+        print(menu_texts.list_menu)
+        key = get_key()
+        if key == '1':
+            utilities.clear_screen()
+            utilities.print_table("user","password","temp_folder")
+        elif key == '2':
+            utilities.clear_screen()
+            utilities.print_table("user","details","url")
+        elif key == '3':
+            utilities.clear_screen()
+            utilities.print_table("user","notes")
+        elif key == '4':
+            utilities.clear_screen()
+            utilities.print_table("user","tags")
+        elif key == '5':
             utilities.clear_screen()
             break
         else:
