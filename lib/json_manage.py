@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import sys
 
 json_info_file = ".info.json"
 
@@ -55,11 +56,24 @@ def get_custom_data_json(as_list=True, is_print=False, fields=[], is_markdown=Fa
         df = pd.DataFrame(data, columns=fields)
         if is_print:
             if is_markdown:
+                print_boxed("List of: " + str(fields) + "\n")
                 print(df.to_markdown(index=False))
             else:
+                print_boxed("List of: " + str(fields) + "\n")
                 print(df)
         else:
             return df # .to_markdown(index=False)
+
+def print_boxed(text):
+    lines = text.split('\n')
+    max_length = max(len(line) for line in lines)
+    border = '+' + '-' * (max_length + 2) + '+'
+
+    print("\n")
+    print(border)
+    for line in lines:
+        print(f'| {line.ljust(max_length)} |')
+    print(border)
 
 # Example
 # update_info_for_user("bandit1", new_password="", new_temp_folder="", new_notes="")
@@ -69,3 +83,8 @@ def get_custom_data_json(as_list=True, is_print=False, fields=[], is_markdown=Fa
 # print_notes_info()
 
 # get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=["user","password", "url"])
+
+#def check_imported_modules():
+# modulename = 'asdas'
+# if modulename not in sys.modules:
+#     print('You have not imported the {} module'.format(modulename))
