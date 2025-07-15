@@ -10,6 +10,27 @@ otw_bandit_ssh_port = 2220
 default_user = "bandit0"
 default_password = "bandit0"
 
+def banner():
+    font = """
+   ___                _____ _        __        ___          
+  / _ \__   _____ _ _|_   _| |__   __\ \      / (_)_ __ ___ 
+ | | | \ \ / / _ \ '__|| | | '_ \ / _ \ \ /\ / /| | '__/ _ \\
+ | |_| |\ V /  __/ |   | | | | | |  __/\ V  V / | | | |  __/
+  \___/  \_/ \___|_|   |_| |_| |_|\___| \_/\_/  |_|_|  \___|
+  ____                  _ _ _                               
+ | __ )  __ _ _ __   __| (_) |_                             
+ |  _ \ / _` | '_ \ / _` | | __|                            
+ | |_) | (_| | | | | (_| | | |_                             
+ |____/ \__,_|_| |_|\__,_|_|\__|                            
+     _         _        ______        ___   _               
+    / \  _   _| |_ ___ |  _ \ \      / / \ | |              
+   / _ \| | | | __/ _ \| |_) \ \ /\ / /|  \| |              
+  / ___ \ |_| | || (_) |  __/ \ V  V / | |\  |              
+ /_/   \_\__,_|\__\___/|_|     \_/\_/  |_| \_|              
+                                                            
+"""
+    print(font)
+
 # Pending to develop
 def check_modules_installed():
     print("Test")
@@ -101,7 +122,6 @@ def get_current_password(client):
     current_password = stdout.read().decode().strip()
     return current_password
 
-# DONE
 def bandit0_1(client):
 
     next_user = "bandit1"
@@ -114,7 +134,6 @@ def bandit0_1(client):
 
     return next_user, next_password
 
-# DONE
 def bandit1_2(client):
 
     next_user = "bandit2"
@@ -127,7 +146,6 @@ def bandit1_2(client):
 
     return next_user, next_password
 
-# DONE
 def bandit2_3(client):
 
     next_user = "bandit3"
@@ -140,7 +158,6 @@ def bandit2_3(client):
 
     return next_user, next_password
 
-# DONE
 def bandit3_4(client):
 
     next_user = "bandit4"
@@ -155,7 +172,6 @@ def bandit3_4(client):
 
     return next_user, next_password
 
-# DONE
 def bandit4_5(client):
 
     next_user = "bandit5"
@@ -168,7 +184,6 @@ def bandit4_5(client):
 
     return next_user, next_password
 
-# DONE
 def bandit5_6(client):
 
     next_user = "bandit6"
@@ -184,7 +199,6 @@ def bandit5_6(client):
 
     return next_user, next_password
 
-# DONE
 def bandit6_7(client):
 
     next_user = "bandit7"
@@ -200,7 +214,6 @@ def bandit6_7(client):
 
     return next_user, next_password
 
-# DONE
 def bandit7_8(client):
 
     next_user = "bandit8"
@@ -213,7 +226,6 @@ def bandit7_8(client):
 
     return next_user, next_password
 
-# DONE
 def bandit8_9(client):
 
     next_user = "bandit9"
@@ -226,7 +238,6 @@ def bandit8_9(client):
 
     return next_user, next_password
 
-# DONE
 def bandit9_10(client):
 
     next_user = "bandit10"
@@ -239,7 +250,6 @@ def bandit9_10(client):
 
     return next_user, next_password
 
-# DONE
 def bandit10_11(client):
 
     next_user = "bandit11"
@@ -252,7 +262,6 @@ def bandit10_11(client):
 
     return next_user, next_password
 
-# DONE
 def bandit11_12(client):
 
     next_user = "bandit12"
@@ -265,7 +274,6 @@ def bandit11_12(client):
 
     return next_user, next_password
 
-# DONE
 def bandit12_13(client):
 
     next_user = "bandit13"
@@ -290,7 +298,6 @@ def bandit12_13(client):
 
     return next_user, next_password
 
-# DONE
 def bandit13_14(client):
 
     next_user = "bandit14"
@@ -308,7 +315,6 @@ def bandit13_14(client):
 
     return next_user, next_password
 
-# DONE
 def bandit14_15(client):
 
     next_user = "bandit15"
@@ -324,7 +330,6 @@ def bandit14_15(client):
 
     return next_user, next_password
 
-# DONE
 def bandit15_16(client):
 
     next_user = "bandit16"
@@ -340,7 +345,6 @@ def bandit15_16(client):
 
     return next_user, next_password
 
-# DONE
 def bandit16_17(client):
 
     next_user = "bandit17"
@@ -375,7 +379,6 @@ def bandit16_17(client):
 
     return next_user, next_password
 
-# DONE
 def bandit17_18(client):
 
     next_user = "bandit18"
@@ -388,7 +391,6 @@ def bandit17_18(client):
 
     return next_user, next_password
 
-# DONE
 def bandit18_19(client):
 
     next_user = "bandit19"
@@ -401,7 +403,6 @@ def bandit18_19(client):
 
     return next_user, next_password
 
-# DONE
 def bandit19_20(client):
 
     next_user = "bandit20"
@@ -414,7 +415,6 @@ def bandit19_20(client):
 
     return next_user, next_password
 
-# DONE
 def bandit20_21(client):
 
     next_user = "bandit21"
@@ -442,7 +442,6 @@ def bandit20_21(client):
 
     return next_user, next_password
 
-# DONE
 def bandit21_22(client):
 
     next_user = "bandit22"
@@ -458,7 +457,6 @@ def bandit21_22(client):
 
     return next_user, next_password
 
-# DONE
 def bandit22_23(client):
 
     next_user = "bandit23"
@@ -474,7 +472,6 @@ def bandit22_23(client):
 
     return next_user, next_password
 
-# DONE
 def bandit23_24(client):
 
     next_user = "bandit24"
@@ -503,7 +500,6 @@ def bandit23_24(client):
 
     return next_user, next_password
 
-# DONE
 def bandit24_25(client):
 
     next_user = "bandit25"
@@ -523,7 +519,6 @@ def bandit24_25(client):
 
     return next_user, next_password
 
-# DONE
 def bandit25_26(client):
 
     next_user = "bandit26"
@@ -541,7 +536,6 @@ def bandit25_26(client):
 
     return next_user, next_password
 
-# DONE
 def bandit26_27(client):
 
     next_user = "bandit27"
@@ -600,7 +594,6 @@ def bandit26_27(client):
 
     return next_user, next_password
 
-# DONE
 def bandit27_28(client):
 
     next_user = "bandit28"
@@ -618,7 +611,6 @@ def bandit27_28(client):
 
     return next_user, next_password
 
-# DONE
 def bandit28_29(client):
 
     next_user = "bandit29"
@@ -637,7 +629,6 @@ def bandit28_29(client):
 
     return next_user, next_password
 
-# DONE
 def bandit29_30(client):
 
     next_user = "bandit30"
@@ -657,7 +648,6 @@ def bandit29_30(client):
 
     return next_user, next_password
 
-# DONE
 def bandit30_31(client):
 
     next_user = "bandit31"
@@ -676,7 +666,6 @@ def bandit30_31(client):
 
     return next_user, next_password
 
-# DONE
 def bandit31_32(client):
 
     next_user = "bandit32"
@@ -734,7 +723,6 @@ def bandit31_32(client):
     
     return next_user, next_password
 
-# DONE
 def bandit32_33(client):
 
     next_user = "bandit33"
@@ -768,6 +756,8 @@ def bandit33_34(client):
     return next_user, next_password
 
 if __name__ == '__main__':
+    banner()
+    
     # DEBUG
     user = "bandit33"
     password = ""
