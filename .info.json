@@ -10,7 +10,7 @@
     {
         "level": 1,
         "user": "bandit1",
-        "password": "test123",
+        "password": "test321",
         "url": "https://overthewire.org/wargames/bandit/bandit1.html",
         "temp_folder": "",
         "notes": ""
@@ -18,7 +18,7 @@
     {
         "level": 2,
         "user": "bandit2",
-        "password": "test",
+        "password": "holamundo",
         "url": "https://overthewire.org/wargames/bandit/bandit2.html",
         "temp_folder": "",
         "notes": ""
@@ -26,7 +26,7 @@
     {
         "level": 3,
         "user": "bandit3",
-        "password": "",
+        "password": "testtest",
         "url": "https://overthewire.org/wargames/bandit/bandit3.html",
         "temp_folder": "",
         "notes": ""

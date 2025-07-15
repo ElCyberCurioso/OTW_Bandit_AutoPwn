@@ -56,20 +56,19 @@ def get_custom_data_json(as_list=True, is_print=False, fields=[], is_markdown=Fa
         df = pd.DataFrame(data, columns=fields)
         if is_print:
             if is_markdown:
-                print_boxed("List of: " + str(fields) + "\n")
-                print(df.to_markdown(index=False))
+                print_boxed("List of: " + str(fields))
+                print("\n"+df.to_markdown(index=False)+"\n")
             else:
-                print_boxed("List of: " + str(fields) + "\n")
-                print(df)
+                print_boxed("List of: " + str(fields))
+                print("\n"+df+"\n")
         else:
-            return df # .to_markdown(index=False)
+            return df
 
 def print_boxed(text):
     lines = text.split('\n')
     max_length = max(len(line) for line in lines)
     border = '+' + '-' * (max_length + 2) + '+'
 
-    print("\n")
     print(border)
     for line in lines:
         print(f'| {line.ljust(max_length)} |')
