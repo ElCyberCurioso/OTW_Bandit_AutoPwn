@@ -1,7 +1,8 @@
 from sys import exit
 
 import lib.json_manage as json_manage
-import lib.menu_texts as menu_texts
+import lib.constants as constants
+import exploitation_chain as exploitation_chain
 
 import signal, os
 
@@ -13,8 +14,8 @@ def exit_handler(sig=None, frame=None):
 
 # Setup exit handler
 def setup_signal_handlers():
-    signal.signal(signal.SIGINT, exit_handler)   # Ctrl+C
-    signal.signal(signal.SIGTERM, exit_handler)  # kill
+    signal.signal(signal.SIGINT, exit_handler)  # Ctrl+C
+    signal.signal(signal.SIGTERM, exit_handler) # kill
 
 # Cleans screen after an action
 def clear_screen():
@@ -24,20 +25,23 @@ def clear_screen():
         os.system('clear')
 
 # Menu to select user and gets all users (to print them), and other parameters
-def select_user(*fields, show_table=False):
+def select_user(*fields, show_table=False, show_list=True):
     df = json_manage.get_custom_data_json(as_list=False, is_print=False, fields=fields)
     
-    if show_table:
-        json_manage.get_custom_data_json(as_list=False, is_print=True, fields=fields, is_markdown=True)
+    if show_list: # If want to show data in list format (with commas)
+        print_list(*fields)
+    
+    if show_table: # If want to show data in data in tables (pandas markdown tables)
+        print_table(*fields)
         
-    users = df['user'].to_list()
+    users = df['user'].to_list() # Getting users to validate user's input
     while True:
         choice = input("\nIndicate user (or type 'back' to return): ").strip()
         if choice.lower() == 'back':
             return None
         if choice in users:
             return choice
-        print(menu_texts.invalid_user)
+        print(constants.INVALID_USER)
 
 # Update password of a user
 def update_password():
@@ -68,28 +72,30 @@ def hack_user():
 
 # Print banner
 def show_banner():
-    print(menu_texts.banner)
+    print(constants.BANNER)
 
 def print_table(*fields):
     json_manage.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields)
 
-# Pending to implement into all methods
+def print_list(*fields):
+    json_manage.get_custom_data_json(as_list=True, is_print=True, fields=fields)
+
+# Generate a temp folder using bandit0 credentials and giving full permissions to all users
 def make_temp_directory():
-    client = ssh_connection(default_user, default_password)
-    
-    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    client = exploitation_chain.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
+    _, stdout, _ = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()
-    stdin, stdout, stderr = client.exec_command("chmod 777 " + temp_dir)
+    _, stdout, _ = client.exec_command("chmod 777 " + temp_dir)
     return temp_dir
 
-# Pending to implement into all methods
+# Clean a temp directory using an open session
 def clean_temp_directory(client, temp_dir):
-    stdin, stdout, stderr = client.exec_command("rm -rf " + temp_dir)
+    _, _, _ = client.exec_command("rm -rf " + temp_dir)
 
-# Pending to implement into all methods
+# Getting password of a bandit user using an open session
 def get_current_password(client):
-    stdin, stdout, stderr = client.exec_command('whoami')
+    _, stdout, _ = client.exec_command('whoami')
     current_user = stdout.read().decode().strip()
-    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/" + current_user)
+    _, stdout, _ = client.exec_command("cat /etc/bandit_pass/" + current_user)
     current_password = stdout.read().decode().strip()
     return current_password

@@ -44,7 +44,7 @@
     {
         "level": 3,
         "user": "bandit3",
-        "password": "testtest",
+        "password": "test123123",
         "details": "Reading a hidden file in a hidden directory",
         "tags": [
             "hidden-directories",

@@ -1,4 +1,12 @@
-banner = """
+JSON_INFO_FILE = ".info.json"
+
+OTW_BANDIT_SSH_URL = "bandit.labs.overthewire.org"
+OTW_BANDIT_SSH_PORT = 2220
+
+DEFAULT_USER = "bandit0"
+DEFAULT_PASSWORD = "bandit0"
+
+BANNER = """
    ___                _____ _        __        ___          
   / _ \__   _____ _ _|_   _| |__   __\ \      / (_)_ __ ___ 
  | | | \ \ / / _ \ '__|| | | '_ \ / _ \ \ /\ / /| | '__/ _ \\
@@ -17,7 +25,7 @@ banner = """
                                                             
 """
 
-modify_menu = """
+MODIFY_MENU = """
 --- Modify Info Menu ---
 1. Update password
 2. Update folder
@@ -27,7 +35,7 @@ modify_menu = """
 Choose an option:
 """
 
-list_menu = """
+LIST_MENU = """
 --- List Info Menu ---
 1. List credentials (user + password + temp_folder)
 2. List guiding info (user + details + url)
@@ -37,14 +45,14 @@ list_menu = """
 Choose an option:
 """
 
-hack_menu = """
+HACK_MENU = """
 --- Hack Menu ---
 1. Indicate user to hack
 2. Back
 Choose an option:
 """
 
-main_menu = """
+MAIN_MENU = """
 1. Hack bandit user
 2. List info
 3. Modify info
@@ -54,6 +62,5 @@ main_menu = """
 Choose an option:
 """
 
-invalid_option = "Invalid option."
-invalid_user = "Invalid user, please try again!"
-
+INVALID_OPTION = "Invalid option."
+INVALID_USER = "Invalid user, please try again!"

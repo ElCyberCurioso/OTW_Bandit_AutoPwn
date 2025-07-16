@@ -1,7 +1,7 @@
 import lib.json_manage as json_manage
 import lib.check_modules as check_modules
 import lib.utilities as utilities
-import lib.menu_texts as menu_texts
+import lib.constants as constants
 
 import os
 
@@ -28,7 +28,7 @@ def main_menu():
     utilities.show_banner()
     while True:
         json_manage.print_boxed("Main menu")
-        print(menu_texts.main_menu)
+        print(constants.MAIN_MENU)
         key = get_key()
         if key == '1':
             utilities.clear_screen()
@@ -50,11 +50,11 @@ def main_menu():
             print("Goodbye!")
             break
         else:
-            print(menu_texts.invalid_option)
+            print(constants.INVALID_OPTION)
 
 def hack_menu():
     while True:
-        print(menu_texts.hack_menu)
+        print(constants.HACK_MENU)
         key = get_key()
         if key == '1':
             utilities.hack_user()
@@ -63,11 +63,11 @@ def hack_menu():
             utilities.clear_screen()
             break
         else:
-            print(menu_texts.invalid_option)
+            print(constants.INVALID_OPTION)
 
 def list_menu():
     while True:
-        print(menu_texts.list_menu)
+        print(constants.LIST_MENU)
         key = get_key()
         if key == '1':
             utilities.clear_screen()
@@ -85,11 +85,11 @@ def list_menu():
             utilities.clear_screen()
             break
         else:
-            print(menu_texts.invalid_option)
+            print(constants.INVALID_OPTION)
 
 def modify_menu():
     while True:
-        print(menu_texts.modify_menu)
+        print(constants.MODIFY_MENU)
         key = get_key()
         if key == '1':
             utilities.clear_screen()
@@ -107,7 +107,7 @@ def modify_menu():
             utilities.clear_screen()
             break
         else:
-            print(menu_texts.invalid_option)
+            print(constants.INVALID_OPTION)
 
 if __name__ == "__main__":
     # check_modules.check_installed_modules()
