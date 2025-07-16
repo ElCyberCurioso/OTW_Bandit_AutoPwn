@@ -2,6 +2,7 @@ import lib.json_manage as json_manage
 import lib.check_modules as check_modules
 import lib.utilities as utilities
 import lib.constants as constants
+import args_handler as args_handler
 
 import os
 
@@ -111,6 +112,7 @@ def modify_menu():
 
 if __name__ == "__main__":
     # check_modules.check_installed_modules()
-    utilities.setup_signal_handlers()
-    utilities.clear_screen()
-    main_menu()
+    utilities.setup_signal_handlers() # Start exit handler
+    utilities.clear_screen() # Clear screen before display menu
+    args_handler.main_handlers() # Start agrs handler
+    main_menu() # Start main menu

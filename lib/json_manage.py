@@ -31,7 +31,7 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
             
             for key, value in changes.items():
                 # If changes are found, values are updated
-                if not entry.get(key) or entry[key] != value:
+                if value and entry[key] != value:
                     print(key + ": " + entry[key] + " -> " + value)
                     entry[key] = value
                     updated = True
