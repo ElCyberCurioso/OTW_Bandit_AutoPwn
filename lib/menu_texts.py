@@ -20,9 +20,10 @@ banner = """
 modify_menu = """
 --- Modify Info Menu ---
 1. Update password
-2. Indicate temp folder
-3. Insert notes
-4. Back
+2. Update folder
+3. Update notes
+4. List info
+5. Back
 Choose an option:
 """
 

@@ -24,9 +24,12 @@ def clear_screen():
         os.system('clear')
 
 # Menu to select user and gets all users (to print them), and other parameters
-def select_user(*fields):
+def select_user(*fields, show_table=False):
     df = json_manage.get_custom_data_json(as_list=False, is_print=False, fields=fields)
-    json_manage.get_custom_data_json(as_list=False, is_print=True, fields=fields, is_markdown=True)
+    
+    if show_table:
+        json_manage.get_custom_data_json(as_list=False, is_print=True, fields=fields, is_markdown=True)
+        
     users = df['user'].to_list()
     while True:
         choice = input("\nIndicate user (or type 'back' to return): ").strip()
@@ -69,4 +72,24 @@ def show_banner():
 
 def print_table(*fields):
     json_manage.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields)
+
+# Pending to implement into all methods
+def make_temp_directory():
+    client = ssh_connection(default_user, default_password)
     
+    stdin, stdout, stderr = client.exec_command("mktemp -d")
+    temp_dir = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("chmod 777 " + temp_dir)
+    return temp_dir
+
+# Pending to implement into all methods
+def clean_temp_directory(client, temp_dir):
+    stdin, stdout, stderr = client.exec_command("rm -rf " + temp_dir)
+
+# Pending to implement into all methods
+def get_current_password(client):
+    stdin, stdout, stderr = client.exec_command('whoami')
+    current_user = stdout.read().decode().strip()
+    stdin, stdout, stderr = client.exec_command("cat /etc/bandit_pass/" + current_user)
+    current_password = stdout.read().decode().strip()
+    return current_password

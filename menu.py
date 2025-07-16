@@ -39,7 +39,7 @@ def main_menu():
             list_menu()
         elif key == '3':
             utilities.clear_screen()
-            utilities.print_table("user","password","temp_folder","notes")
+            # utilities.print_table("user","password","temp_folder","notes")
             modify_menu()
         elif key == '4':
             utilities.clear_screen()
@@ -94,16 +94,16 @@ def modify_menu():
         if key == '1':
             utilities.clear_screen()
             utilities.update_password()
-            utilities.clear_screen()
         elif key == '2':
             utilities.clear_screen()
             utilities.update_temp_folder()
-            utilities.clear_screen()
         elif key == '3':
             utilities.clear_screen()
             utilities.update_notes()
-            utilities.clear_screen()
         elif key == '4':
+            utilities.clear_screen()
+            list_menu()
+        elif key == '5':
             utilities.clear_screen()
             break
         else:

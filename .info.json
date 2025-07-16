@@ -4,7 +4,11 @@
         "user": "bandit0",
         "password": "bandit0",
         "details": "Reading a file with 'cat'",
-        "tags": ["file-read", "basic", "linux-commands"],
+        "tags": [
+            "file-read",
+            "basic",
+            "linux-commands"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit0.html",
         "temp_folder": "",
         "notes": ""
@@ -14,7 +18,11 @@
         "user": "bandit1",
         "password": "test321",
         "details": "Viewing hidden file with a dash prefix",
-        "tags": ["hidden-files", "file-read", "linux-commands"],
+        "tags": [
+            "hidden-files",
+            "file-read",
+            "linux-commands"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit1.html",
         "temp_folder": "",
         "notes": ""
@@ -22,9 +30,13 @@
     {
         "level": 2,
         "user": "bandit2",
-        "password": "holamundo",
+        "password": "testtest1",
         "details": "Reading a file with spaces in its name",
-        "tags": ["file-read", "escaping", "special-characters"],
+        "tags": [
+            "file-read",
+            "escaping",
+            "special-characters"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit2.html",
         "temp_folder": "",
         "notes": ""
@@ -34,7 +46,11 @@
         "user": "bandit3",
         "password": "testtest",
         "details": "Reading a hidden file in a hidden directory",
-        "tags": ["hidden-directories", "file-read", "navigation"],
+        "tags": [
+            "hidden-directories",
+            "file-read",
+            "navigation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit3.html",
         "temp_folder": "",
         "notes": ""
@@ -44,7 +60,11 @@
         "user": "bandit4",
         "password": "",
         "details": "Reading printable strings from a binary",
-        "tags": ["strings", "binary-analysis", "file-read"],
+        "tags": [
+            "strings",
+            "binary-analysis",
+            "file-read"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit4.html",
         "temp_folder": "",
         "notes": ""
@@ -54,7 +74,11 @@
         "user": "bandit5",
         "password": "",
         "details": "Finding a file with specific permissions in '/var'",
-        "tags": ["find-command", "permissions", "file-discovery"],
+        "tags": [
+            "find-command",
+            "permissions",
+            "file-discovery"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit5.html",
         "temp_folder": "",
         "notes": ""
@@ -64,7 +88,11 @@
         "user": "bandit6",
         "password": "",
         "details": "Finding a file by owner and size on the filesystem",
-        "tags": ["find-command", "privilege-escalation", "file-search"],
+        "tags": [
+            "find-command",
+            "privilege-escalation",
+            "file-search"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit6.html",
         "temp_folder": "",
         "notes": ""
@@ -74,7 +102,11 @@
         "user": "bandit7",
         "password": "",
         "details": "Decoding Base64 encoded content inside a file",
-        "tags": ["base64", "encoding", "decoding"],
+        "tags": [
+            "base64",
+            "encoding",
+            "decoding"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit7.html",
         "temp_folder": "",
         "notes": ""
@@ -84,7 +116,11 @@
         "user": "bandit8",
         "password": "",
         "details": "Decoding a file encoded with ROT13",
-        "tags": ["rot13", "encoding", "decoding"],
+        "tags": [
+            "rot13",
+            "encoding",
+            "decoding"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit8.html",
         "temp_folder": "",
         "notes": ""
@@ -94,7 +130,11 @@
         "user": "bandit9",
         "password": "",
         "details": "Extracting password from a hexdump",
-        "tags": ["hexdump", "data-recovery", "file-analysis"],
+        "tags": [
+            "hexdump",
+            "data-recovery",
+            "file-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit9.html",
         "temp_folder": "",
         "notes": ""
@@ -104,7 +144,11 @@
         "user": "bandit10",
         "password": "",
         "details": "Filtering a file for lines starting with specific characters",
-        "tags": ["grep", "text-processing", "filtering"],
+        "tags": [
+            "grep",
+            "text-processing",
+            "filtering"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit10.html",
         "temp_folder": "",
         "notes": ""
@@ -114,7 +158,12 @@
         "user": "bandit11",
         "password": "",
         "details": "Multiple levels of decoding and decompressing a file",
-        "tags": ["base64", "gzip", "bzip2", "multi-step-decoding"],
+        "tags": [
+            "base64",
+            "gzip",
+            "bzip2",
+            "multi-step-decoding"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit11.html",
         "temp_folder": "/tmp/tmp...asda",
         "notes": ""
@@ -124,7 +173,11 @@
         "user": "bandit12",
         "password": "",
         "details": "Using provided SSH private key for authentication",
-        "tags": ["ssh", "private-key", "authentication"],
+        "tags": [
+            "ssh",
+            "private-key",
+            "authentication"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit12.html",
         "temp_folder": "",
         "notes": ""
@@ -134,7 +187,11 @@
         "user": "bandit13",
         "password": "estoesunaprueba",
         "details": "Logging in with the SSH key",
-        "tags": ["ssh", "authentication", "private-key-login"],
+        "tags": [
+            "ssh",
+            "authentication",
+            "private-key-login"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit13.html",
         "temp_folder": "",
         "notes": ""
@@ -144,7 +201,11 @@
         "user": "bandit14",
         "password": "",
         "details": "Connecting to localhost with netcat to retrieve password",
-        "tags": ["netcat", "networking", "port-communication"],
+        "tags": [
+            "netcat",
+            "networking",
+            "port-communication"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit14.html",
         "temp_folder": "",
         "notes": ""
@@ -154,7 +215,11 @@
         "user": "bandit15",
         "password": "",
         "details": "Using OpenSSL client to read data from server",
-        "tags": ["openssl", "ssl", "client-server"],
+        "tags": [
+            "openssl",
+            "ssl",
+            "client-server"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit15.html",
         "temp_folder": "",
         "notes": ""
@@ -164,7 +229,11 @@
         "user": "bandit16",
         "password": "",
         "details": "Port scanning with nmap to find open services",
-        "tags": ["nmap", "port-scanning", "service-discovery"],
+        "tags": [
+            "nmap",
+            "port-scanning",
+            "service-discovery"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit16.html",
         "temp_folder": "",
         "notes": ""
@@ -174,7 +243,11 @@
         "user": "bandit17",
         "password": "",
         "details": "Reading the password from /etc/bandit_pass",
-        "tags": ["file-read", "password-retrieval", "etc-directory"],
+        "tags": [
+            "file-read",
+            "password-retrieval",
+            "etc-directory"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit17.html",
         "temp_folder": "",
         "notes": ""
@@ -184,7 +257,11 @@
         "user": "bandit18",
         "password": "",
         "details": "Running a setuid binary with correct argument",
-        "tags": ["setuid", "privilege-escalation", "binary-exploitation"],
+        "tags": [
+            "setuid",
+            "privilege-escalation",
+            "binary-exploitation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit18.html",
         "temp_folder": "",
         "notes": ""
@@ -194,7 +271,11 @@
         "user": "bandit19",
         "password": "",
         "details": "Capturing password using ltrace on a binary",
-        "tags": ["ltrace", "function-tracing", "binary-analysis"],
+        "tags": [
+            "ltrace",
+            "function-tracing",
+            "binary-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit19.html",
         "temp_folder": "",
         "notes": ""
@@ -204,7 +285,11 @@
         "user": "bandit20",
         "password": "",
         "details": "Reading hardcoded password from binary with strings",
-        "tags": ["strings", "binary-analysis", "hardcoded-password"],
+        "tags": [
+            "strings",
+            "binary-analysis",
+            "hardcoded-password"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit20.html",
         "temp_folder": "",
         "notes": ""
@@ -214,7 +299,11 @@
         "user": "bandit21",
         "password": "",
         "details": "Connecting via SSH on a non-standard port",
-        "tags": ["ssh", "non-standard-port", "networking"],
+        "tags": [
+            "ssh",
+            "non-standard-port",
+            "networking"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit21.html",
         "temp_folder": "",
         "notes": ""
@@ -224,7 +313,11 @@
         "user": "bandit22",
         "password": "",
         "details": "Exploiting cron job writing to tmp folder",
-        "tags": ["cron", "cronjob", "privilege-escalation"],
+        "tags": [
+            "cron",
+            "cronjob",
+            "privilege-escalation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit22.html",
         "temp_folder": "",
         "notes": ""
@@ -234,7 +327,11 @@
         "user": "bandit23",
         "password": "",
         "details": "Abusing cronjob creating a file in /tmp",
-        "tags": ["cron", "file-creation", "privilege-escalation"],
+        "tags": [
+            "cron",
+            "file-creation",
+            "privilege-escalation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit23.html",
         "temp_folder": "",
         "notes": ""
@@ -244,7 +341,11 @@
         "user": "bandit24",
         "password": "",
         "details": "Crafting a script executed by cron",
-        "tags": ["cron", "script-injection", "privilege-escalation"],
+        "tags": [
+            "cron",
+            "script-injection",
+            "privilege-escalation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit24.html",
         "temp_folder": "",
         "notes": ""
@@ -254,7 +355,11 @@
         "user": "bandit25",
         "password": "",
         "details": "Exploiting environment variable injection in a script",
-        "tags": ["env-variables", "script-injection", "privilege-escalation"],
+        "tags": [
+            "env-variables",
+            "script-injection",
+            "privilege-escalation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit25.html",
         "temp_folder": "",
         "notes": ""
@@ -264,7 +369,11 @@
         "user": "bandit26",
         "password": "",
         "details": "Using symbolic link to trick a script execution",
-        "tags": ["symlink", "path-traversal", "privilege-escalation"],
+        "tags": [
+            "symlink",
+            "path-traversal",
+            "privilege-escalation"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit26.html",
         "temp_folder": "",
         "notes": ""
@@ -274,7 +383,11 @@
         "user": "bandit27",
         "password": "",
         "details": "Analyzing Go binary to extract hardcoded password",
-        "tags": ["go-binary", "binary-analysis", "hardcoded-password"],
+        "tags": [
+            "go-binary",
+            "binary-analysis",
+            "hardcoded-password"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit27.html",
         "temp_folder": "",
         "notes": ""
@@ -284,7 +397,11 @@
         "user": "bandit28",
         "password": "",
         "details": "Using git log to find deleted passwords",
-        "tags": ["git", "version-control", "history-analysis"],
+        "tags": [
+            "git",
+            "version-control",
+            "history-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit28.html",
         "temp_folder": "",
         "notes": ""
@@ -294,7 +411,11 @@
         "user": "bandit29",
         "password": "",
         "details": "Inspecting git branches and commits for credentials",
-        "tags": ["git", "branches", "commit-analysis"],
+        "tags": [
+            "git",
+            "branches",
+            "commit-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit29.html",
         "temp_folder": "",
         "notes": ""
@@ -304,7 +425,11 @@
         "user": "bandit30",
         "password": "",
         "details": "Checking git tags for hidden password",
-        "tags": ["git", "tags", "metadata-analysis"],
+        "tags": [
+            "git",
+            "tags",
+            "metadata-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit30.html",
         "temp_folder": "",
         "notes": ""
@@ -314,7 +439,11 @@
         "user": "bandit31",
         "password": "",
         "details": "Extracting password from git stash",
-        "tags": ["git", "stash", "version-control-analysis"],
+        "tags": [
+            "git",
+            "stash",
+            "version-control-analysis"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit31.html",
         "temp_folder": "",
         "notes": ""
@@ -324,7 +453,11 @@
         "user": "bandit32",
         "password": "",
         "details": "Using SSH private key to login as next user",
-        "tags": ["ssh", "private-key", "authentication"],
+        "tags": [
+            "ssh",
+            "private-key",
+            "authentication"
+        ],
         "url": "https://overthewire.org/wargames/bandit/bandit32.html",
         "temp_folder": "",
         "notes": ""

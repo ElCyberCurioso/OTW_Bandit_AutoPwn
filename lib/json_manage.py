@@ -32,6 +32,7 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
             for key, value in changes.items():
                 # If changes are found, values are updated
                 if not entry.get(key) or entry[key] != value:
+                    print(key + ": " + entry[key] + " -> " + value)
                     entry[key] = value
                     updated = True
             # Changes are saved into .json file
@@ -41,15 +42,16 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
 
 def get_custom_data_json(as_list=True, is_print=False, fields=[], is_markdown=False):
     data = get_info_json()
-    if as_list:
-        # result = []
-        # for p in data:
-        #     for column in p:
-        #         if column in fields:
-        #             result.append(p)
-        
+    if as_list:        
         if is_print:
-            print(data)
+            if len(fields) > 0:
+                if len(fields) == 1:
+                    print(", ".join([entry[fields[0]] for entry in data]))
+                else:
+                    print()
+            else:
+                print(data)
+            
         else:
             return data
     else:
@@ -73,3 +75,6 @@ def print_boxed(text):
     for line in lines:
         print(f'| {line.ljust(max_length)} |')
     print(border)
+
+
+# get_custom_data_json(as_list=True, is_print=True, fields=["password"], is_markdown=True)
