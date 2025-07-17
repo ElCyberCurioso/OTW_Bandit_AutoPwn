@@ -145,11 +145,13 @@ def get_custom_data_json(user=None, as_list=True, is_print=False, fields=None, i
     data = get_info_json()
     data = _filter_data_by_user(data, user)
 
+    # Treat info as list
     if as_list:
         if is_print:
             _print_list_data(data, fields)
         else:
             return data
+    # Treat info as DataFrame
     else:
         data = _format_list_fields(data, fields)
         df = _get_dataframe(data, fields)
@@ -167,5 +169,3 @@ def print_boxed(text):
     for line in lines:
         print(f'| {line.ljust(max_length)} |')
     print(border)
-
-# get_custom_data_json(as_list=True, is_print=True, fields=["user"], is_markdown=True)

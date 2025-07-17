@@ -2,7 +2,6 @@ from sys import exit
 
 import lib.json_manage as json_manage
 import lib.constants as constants
-import exploitation_chain as exploitation_chain
 
 import signal, os
 
@@ -79,6 +78,7 @@ def print_list(*fields, user=None):
 
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
 def make_temp_directory():
+    import exploitation_chain
     client = exploitation_chain.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
     _, stdout, _ = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()

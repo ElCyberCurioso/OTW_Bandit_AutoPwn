@@ -4,6 +4,7 @@ import menu as menu
 import lib.utilities as utilities
 import lib.constants as constants
 import lib.json_manage as json_manage
+import exploitation_chain as ec
 
 def handle_menu(args):
     # validate_user(args.user)
@@ -11,7 +12,7 @@ def handle_menu(args):
 
 def handle_hack(args):
     utilities.validate_user(args.user)
-    print(f"[HACK] Special hack mode activated for user {args.user}\n")
+    ec.main(args.user)
 
 def handle_edit(args):
     password = ""
@@ -57,7 +58,6 @@ def handle_list(args):
 
     fields = get_selected_fields(args)
     utilities.print_table(fields, user=args.user)
-    
 
 def handle_export(args):
     print("[EXPORT] Exporting data\n")
