@@ -8,6 +8,59 @@ def validate_user(user):
         print(f"[ERROR] Invalid user: {user}")
         sys.exit(1)
 
+def handle_edit(args):
+    validate_user(args.user)
+    print(f"[EDIT] Editing user {args.user}")
+    if args.password:
+        print(f"- Changing password: {args.password}")
+    if args.temp_folder:
+        print(f"- Changing temp folder: {args.temp_folder}")
+    if args.note:
+        print(f"- Changing note: {args.note}")
+
+def handle_delete(args):
+    validate_user(args.user)
+    print(f"[DELETE] Deleting data for user {args.user}")
+    if args.password:
+        print("- Deleting password")
+    if args.temp_folder:
+        print("- Deleting temp folder")
+    if args.note:
+        print("- Deleting note")
+
+def handle_list(args):
+    if args.user:
+        validate_user(args.user)
+        print(f"[LIST] Listing data for user {args.user}")
+    else:
+        print("[LIST] Listing data for all users")
+    if args.credentials:
+        print("- Listing credentials")
+    if args.info:
+        print("- Listing information")
+    if args.notes:
+        print("- Listing notes")
+    if args.temp_folder:
+        print("- Listing temp folders")
+
+def handle_export(args):
+    print("[EXPORT] Exporting data")
+    if args.pdf:
+        print(f"- Exporting to PDF: {args.pdf}")
+    if args.excel:
+        print(f"- Exporting to Excel: {args.excel}")
+    if args.fields:
+        valid_fields = {"user", "password", "details", "tags", "url", "temp_folder", "notes"}
+        selected_fields = {f.strip() for f in args.fields.split(",")}
+        if not selected_fields.issubset(valid_fields):
+            print(f"[ERROR] Invalid fields: {selected_fields - valid_fields}")
+            sys.exit(1)
+        print(f"- Exporting fields: {', '.join(selected_fields)}")
+
+def handle_hack(args):
+    validate_user(args.user)
+    print(f"[HACK] Special hack mode activated for user {args.user}")
+
 def main():
     parser = argparse.ArgumentParser(description="User management tool with advanced options.")
     subparsers = parser.add_subparsers(dest="mode", required=True, help="Operation mode")
@@ -46,58 +99,19 @@ def main():
 
     args = parser.parse_args()
 
-    if args.mode == "edit":
-        validate_user(args.user)
-        print(f"[EDIT] Editing user {args.user}")
-        if args.password:
-            print(f"- Changing password: {args.password}")
-        if args.temp_folder:
-            print(f"- Changing temp folder: {args.temp_folder}")
-        if args.note:
-            print(f"- Changing note: {args.note}")
+    mode_handlers = {
+        "edit": handle_edit,
+        "delete": handle_delete,
+        "list": handle_list,
+        "export": handle_export,
+        "hack": handle_hack,
+    }
 
-    elif args.mode == "delete":
-        validate_user(args.user)
-        print(f"[DELETE] Deleting data for user {args.user}")
-        if args.password:
-            print("- Deleting password")
-        if args.temp_folder:
-            print("- Deleting temp folder")
-        if args.note:
-            print("- Deleting note")
-
-    elif args.mode == "list":
-        if args.user:
-            validate_user(args.user)
-            print(f"[LIST] Listing data for user {args.user}")
-        else:
-            print("[LIST] Listing data for all users")
-        if args.credentials:
-            print("- Listing credentials")
-        if args.info:
-            print("- Listing information")
-        if args.notes:
-            print("- Listing notes")
-        if args.temp_folder:
-            print("- Listing temp folders")
-
-    elif args.mode == "export":
-        print("[EXPORT] Exporting data")
-        if args.pdf:
-            print(f"- Exporting to PDF: {args.pdf}")
-        if args.excel:
-            print(f"- Exporting to Excel: {args.excel}")
-        if args.fields:
-            valid_fields = {"user", "password", "details", "tags", "url", "temp_folder", "notes"}
-            selected_fields = {f.strip() for f in args.fields.split(",")}
-            if not selected_fields.issubset(valid_fields):
-                print(f"[ERROR] Invalid fields: {selected_fields - valid_fields}")
-                sys.exit(1)
-            print(f"- Exporting fields: {', '.join(selected_fields)}")
-
-    elif args.mode == "hack":
-        validate_user(args.user)
-        print(f"[HACK] Special hack mode activated for user {args.user}")
+    handler = mode_handlers.get(args.mode)
+    if handler:
+        handler(args)
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     main()

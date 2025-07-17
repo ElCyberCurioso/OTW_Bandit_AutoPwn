@@ -2,7 +2,7 @@ import lib.json_manage as json_manage
 import lib.check_modules as check_modules
 import lib.utilities as utilities
 import lib.constants as constants
-import args_handler as args_handler
+import otw_bandit_autopwn as otw_bandit_autopwn
 
 import os
 
@@ -26,6 +26,9 @@ else:
 
 # Manage main menu
 def main_menu():
+    utilities.setup_signal_handlers() # Start exit handler
+    utilities.clear_screen() # Clear screen before display menu
+    
     utilities.show_banner()
     while True:
         json_manage.print_boxed("Main menu")
@@ -110,9 +113,7 @@ def modify_menu():
         else:
             print(constants.INVALID_OPTION)
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # check_modules.check_installed_modules()
-    utilities.setup_signal_handlers() # Start exit handler
-    utilities.clear_screen() # Clear screen before display menu
-    args_handler.main_handlers() # Start agrs handler
+    
     main_menu() # Start main menu

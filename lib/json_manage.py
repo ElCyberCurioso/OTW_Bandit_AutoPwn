@@ -48,6 +48,7 @@ def _print_data(data):
 
 def _print_dataframe(df, fields, is_markdown):
     print_boxed("List of: " + str(fields))
+    
     if is_markdown:
         print("\n" + df.to_markdown(index=False) + "\n")
     else:
@@ -62,17 +63,39 @@ def _print_list_data(data, fields):
     else:
         _print_data(data)
 
-def get_custom_data_json(as_list=True, is_print=False, fields=None, is_markdown=False):
+def _filter_data_by_user(data, user):
+    if user:
+        return [item for item in data if item['user'] == user]
+    return data
+
+def _format_list_fields(data, fields):
+    for entry in data:
+        for field in fields:
+            if field in entry and isinstance(entry[field], list):
+                entry[field] = ", ".join(str(x) for x in entry[field])
+    return data
+
+def _get_dataframe(data, fields):
+    return pd.DataFrame(data, columns=fields)
+
+def get_custom_data_json(user=None, as_list=True, is_print=False, fields=None, is_markdown=False):
     if fields is None:
         fields = []
+    # Asegura que fields sea una lista de strings, no una lista de listas
+    if any(isinstance(f, list) for f in fields):
+        # Aplana la lista si hay listas anidadas
+        fields = [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
     data = get_info_json()
+    data = _filter_data_by_user(data, user)
+
     if as_list:
         if is_print:
             _print_list_data(data, fields)
         else:
             return data
     else:
-        df = pd.DataFrame(data, columns=fields)
+        data = _format_list_fields(data, fields)
+        df = _get_dataframe(data, fields)
         if is_print:
             _print_dataframe(df, fields, is_markdown)
         else:

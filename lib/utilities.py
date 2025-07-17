@@ -74,11 +74,11 @@ def hack_user():
 def show_banner():
     print(constants.BANNER)
 
-def print_table(*fields):
-    json_manage.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields)
+def print_table(*fields, user=None):
+    json_manage.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, user=user)
 
-def print_list(*fields):
-    json_manage.get_custom_data_json(as_list=True, is_print=True, fields=fields)
+def print_list(*fields, user=None):
+    json_manage.get_custom_data_json(as_list=True, is_print=True, fields=fields, user=user)
 
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
 def make_temp_directory():
