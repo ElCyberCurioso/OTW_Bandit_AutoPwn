@@ -3,6 +3,7 @@ import sys
 import menu as menu
 import lib.utilities as utilities
 import lib.constants as constants
+import lib.json_manage as json_manage
 
 # VALID_USERS = ["bandit1", "bandit2", "bandit3"]
 
@@ -20,24 +21,34 @@ def handle_hack(args):
     print(f"[HACK] Special hack mode activated for user {args.user}\n")
 
 def handle_edit(args):
-    # validate_user(args.user)
-    print(f"[EDIT] Editing user {args.user}\n")
+    password = ""
+    temp_folder = ""
+    notes = ""
+    
     if args.password:
-        print(f"- Changing password: {args.password}\n")
+        password = args.password
     if args.temp_folder:
-        print(f"- Changing temp folder: {args.temp_folder}\n")
+        temp_folder = args.temp_folder
     if args.note:
-        print(f"- Changing note: {args.note}\n")
+        notes = args.note
+    
+    json_manage.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes)
 
 def handle_delete(args):
+    password = ""
+    temp_folder = ""
+    notes = ""
     # validate_user(args.user)
     print(f"[DELETE] Deleting data for user {args.user}\n")
+    
     if args.password:
-        print("- Deleting password\n")
+        password = args.password
     if args.temp_folder:
-        print("- Deleting temp folder\n")
-    if args.note:
-        print("- Deleting note\n")
+        temp_folder = args.temp_folder
+    if args.notes:
+        notes = args.notes
+    
+    json_manage.update_info_for_user(args.user, new_password=args.password, new_temp_folder=temp_folder, new_notes=notes)
 
 def handle_list(args):
     fields = []

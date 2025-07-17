@@ -16,8 +16,8 @@
         "details": "Viewing hidden file with a dash prefix",
         "tags": "hidden-files, file-read, linux-commands",
         "url": "https://overthewire.org/wargames/bandit/bandit1.html",
-        "temp_folder": "",
-        "notes": ""
+        "temp_folder": "estoesunaprueba",
+        "notes": "probandolosargumentos"
     },
     {
         "level": 2,

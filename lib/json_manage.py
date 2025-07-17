@@ -17,28 +17,55 @@ def save_credentials_json(data, file_path=constants.JSON_INFO_FILE):
 
 # Update properties of a level on each execution
 def update_info_for_user(user_to_update, new_password="", new_temp_folder="", new_notes=""):
-    data = get_info_json()
+    new_values = {}
     
-    # For every bandit user
+    data = get_info_json()
+    entry = _find_user_entry(data, user_to_update)
+    if entry is None:
+        print(f"User '{user_to_update}' not found.")
+        return
+
+    if new_password:
+        new_values.update({"password": new_password})
+    
+    if new_password:
+        new_values.update({"temp_folder": new_temp_folder})
+    
+    if new_password:
+        new_values.update({"notes": new_notes})
+    
+    changes, updated = _update_entry_fields(entry, new_values)
+
+    if not updated:
+        print("No changes detected.")
+        return
+
+    if _confirm_changes(changes):
+        save_credentials_json(data)
+
+def _find_user_entry(data, user_to_update):
     for entry in data:
         if entry["user"] == user_to_update:
-            changes = {
-                "password": new_password,
-                "temp_folder": new_temp_folder,
-                "notes": new_notes
-            }
-            updated = False
-            
-            for key, value in changes.items():
-                # If changes are found, values are updated
-                if value and entry[key] != value:
-                    print(key + ": " + entry[key] + " -> " + value)
-                    entry[key] = value
-                    updated = True
-            # Changes are saved into .json file
-            if updated:
-                save_credentials_json(data)
-            break
+            return entry
+    return None
+
+def _update_entry_fields(entry, new_values):
+    changes = ""
+    updated = False
+    for key, value in new_values.items():
+        if value and entry[key] != value:
+            changes += f"{key}: {entry[key]} -> {value}\n"
+            entry[key] = value
+            updated = True
+    return changes, updated
+
+def _confirm_changes(changes):
+    while True:
+        print(changes)
+        confirm = input("Confirm changes (y/n)? ").strip().lower()
+        if confirm in ("y", "n"):
+            return confirm == "y"
+        print("\n Invalid option! Please enter a valid option...")
 
 def _print_single_field(data, field):
     print(", ".join([entry[field] for entry in data]))
