@@ -9,7 +9,7 @@ import signal, os
 # Script exit handler
 def exit_handler(sig=None, frame=None):
     # Handle any cleanup here
-    print('\n\nExiting...')
+    print('\nExiting...')
     exit(0)
 
 # Setup exit handler
@@ -25,16 +25,13 @@ def clear_screen():
         os.system('clear')
 
 # Menu to select user and gets all users (to print them), and other parameters
-def select_user(*fields, show_table=False, show_list=True):
-    df = json_manage.get_custom_data_json(as_list=False, is_print=False, fields=fields)
-    
-    if show_list: # If want to show data in list format (with commas)
+def select_user(*fields, show_list_table=True):
+    if show_list_table: # If want to show data in list format (with commas)
         print_list(*fields)
-    
-    if show_table: # If want to show data in data in tables (pandas markdown tables)
+    else: # If want to show data in data in tables (pandas markdown tables)
         print_table(*fields)
         
-    users = df['user'].to_list() # Getting users to validate user's input
+    users = constants.BANDIT_USERS # Getting users to validate user's input
     while True:
         choice = input("\nIndicate user (or type 'back' to return): ").strip()
         if choice.lower() == 'back':
@@ -66,7 +63,7 @@ def update_notes():
 
 # Action pending to implement
 def hack_user():
-    user = select_user("user","password","temp_folder","notes")
+    user = select_user("user","password","temp_folder","notes", show_list_table=False)
     if user:
         print(f"[*] Simulating hack for {user}... (Here should be your hack logic)")
 

@@ -1,8 +1,8 @@
 import json
 import pandas as pd
-import sys
 
 import lib.constants as constants
+import lib.utilities as utilities
 
 # Load info from JSON info file
 def get_info_json(file_path=constants.JSON_INFO_FILE):
@@ -47,12 +47,10 @@ def delete_info_for_user(user_to_update, fields=[]):
     changes = ""
     updated = False
     
+    utilities.validate_user(user_to_update)
+    
     data = get_info_json()
     entry = _find_user_entry(data, user_to_update)
-    
-    if entry is None:
-        print(f"User '{user_to_update}' not found.")
-        return
     
     for key in fields:
         
@@ -97,6 +95,9 @@ def _confirm_changes(changes):
 def _print_single_field(data, field):
     print(", ".join([entry[field] for entry in data]))
 
+def _print_double_fields(data, fields):
+    print(", ".join([entry[fields[0]] + ":" + entry[fields[1]] for entry in data]))
+
 def _print_data(data):
     print(data)
 
@@ -110,8 +111,10 @@ def _print_dataframe(df, fields, is_markdown):
 
 def _print_list_data(data, fields):
     if fields:
-        if len(fields) == 1:
+        if len(fields) == 1: # If filtered by one field
             _print_single_field(data, fields[0])
+        elif len(fields) == 2: # If filtered by two fields
+            _print_double_fields(data, fields)
         else:
             _print_data([{field: entry.get(field, "") for field in fields} for entry in data])
     else:

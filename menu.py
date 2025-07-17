@@ -36,14 +36,12 @@ def main_menu():
         key = get_key()
         if key == '1':
             utilities.clear_screen()
-            utilities.print_table("user","password")
             hack_menu()
         elif key == '2':
             utilities.clear_screen()
             list_menu()
         elif key == '3':
             utilities.clear_screen()
-            # utilities.print_table("user","password","temp_folder","notes")
             modify_menu()
         elif key == '4':
             utilities.clear_screen()
@@ -51,7 +49,7 @@ def main_menu():
             utilities.clear_screen()
             utilities.show_banner()
         elif key == '6':
-            print("Goodbye!")
+            print("See you next time!")
             break
         else:
             print(constants.INVALID_OPTION)
