@@ -24,7 +24,7 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
     if entry is None:
         print(f"User '{user_to_update}' not found.")
         return
-
+    
     if new_password:
         new_values.update({"password": new_password})
     
@@ -40,6 +40,33 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
         print("No changes detected.")
         return
 
+    if _confirm_changes(changes):
+        save_credentials_json(data)
+
+def delete_info_for_user(user_to_update, fields=[]):
+    changes = ""
+    updated = False
+    
+    data = get_info_json()
+    entry = _find_user_entry(data, user_to_update)
+    
+    if entry is None:
+        print(f"User '{user_to_update}' not found.")
+        return
+    
+    for key in fields:
+        
+        if not entry[key]:
+            changes += f"{key}: already empty\n"
+        else:
+            changes += f"{key}: {entry[key]} -> \"\" (empty)\n"
+            entry[key] = ""
+            updated = True
+    
+    if not updated:
+        print("No changes detected.")
+        return
+    
     if _confirm_changes(changes):
         save_credentials_json(data)
 

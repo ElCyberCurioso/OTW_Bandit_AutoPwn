@@ -12,12 +12,12 @@
     {
         "level": 1,
         "user": "bandit1",
-        "password": "test321",
+        "password": "",
         "details": "Viewing hidden file with a dash prefix",
         "tags": "hidden-files, file-read, linux-commands",
         "url": "https://overthewire.org/wargames/bandit/bandit1.html",
-        "temp_folder": "estoesunaprueba",
-        "notes": "probandolosargumentos"
+        "temp_folder": "",
+        "notes": ""
     },
     {
         "level": 2,

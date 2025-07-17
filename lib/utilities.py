@@ -99,3 +99,8 @@ def get_current_password(client):
     _, stdout, _ = client.exec_command("cat /etc/bandit_pass/" + current_user)
     current_password = stdout.read().decode().strip()
     return current_password
+
+def validate_user(user):
+    if user not in constants.BANDIT_USERS:
+        print(f"[ERROR] Invalid user: {user}")
+        exit(0)

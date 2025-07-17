@@ -1,6 +1,7 @@
 import argparse
 
 import utilities_args as utilities_args
+import lib.constants as constants
 
 def main():
     parser = argparse.ArgumentParser(description="User management tool with advanced options.")
@@ -13,25 +14,26 @@ def main():
     edit_parser = subparsers.add_parser("edit", help="Edit user data")
     edit_parser.add_argument("-p", "--password", metavar="PASSWORD", help="Change password")
     edit_parser.add_argument("-t", "--temp-folder", metavar="FOLDER", help="Change temp folder")
-    edit_parser.add_argument("-n", "--note", metavar="NOTE", help="Change note")
-    edit_parser.add_argument("user", help="Target user")
+    edit_parser.add_argument("-n", "--notes", metavar="NOTE", help="Change notes")
+    edit_parser.add_argument("user", help=constants.TARGET_USER)
 
     # Delete Mode
     delete_parser = subparsers.add_parser("delete", help="Delete user data")
     delete_parser.add_argument("-p", "--password", action="store_true", help="Delete password")
     delete_parser.add_argument("-t", "--temp-folder", action="store_true", help="Delete temp folder")
-    delete_parser.add_argument("-n", "--note", action="store_true", help="Delete note")
-    delete_parser.add_argument("user", help="Target user")
+    delete_parser.add_argument("-n", "--notes", action="store_true", help="Delete notes")
+    delete_parser.add_argument("user", help=constants.TARGET_USER)
 
     # List Mode
     list_parser = subparsers.add_parser("list", help="List user data")
+    list_parser.add_argument("-s", "--users", action="store_true", help="List users")
     list_parser.add_argument("-p", "--password", action="store_true", help="List passwords")
     list_parser.add_argument("-d", "--details", action="store_true", help="List details")
     list_parser.add_argument("-t", "--tags", action="store_true", help="List tags")
     list_parser.add_argument("-u", "--url", action="store_true", help="List URLs")
     list_parser.add_argument("-f", "--temp-folder", action="store_true", help="List temp folders asigned to users")
     list_parser.add_argument("-n", "--notes", action="store_true", help="List notes")
-    list_parser.add_argument("user", nargs="?", help="Target user (optional)")
+    list_parser.add_argument("user", nargs="?", help=constants.TARGET_USER)
 
     # Export Mode
     export_parser = subparsers.add_parser("export", help="Export user data")
@@ -41,7 +43,7 @@ def main():
 
     # Hack Mode
     hack_parser = subparsers.add_parser("hack", help="Special hack mode (for testing)")
-    hack_parser.add_argument("user", help="Target user")
+    hack_parser.add_argument("user", help=constants.TARGET_USER)
 
     args = parser.parse_args()
 

@@ -64,3 +64,13 @@ Choose an option:
 
 INVALID_OPTION = "Invalid option."
 INVALID_USER = "Invalid user, please try again!"
+TARGET_USER = "Target user (optional)"
+
+BANDIT_USERS = [
+    "bandit0", "bandit1", "bandit2", "bandit3", "bandit4", "bandit5",
+    "bandit6", "bandit7", "bandit8", "bandit9", "bandit10", "bandit11",
+    "bandit12", "bandit13", "bandit14", "bandit15", "bandit16", "bandit17",
+    "bandit18", "bandit19", "bandit20", "bandit21", "bandit22", "bandit23",
+    "bandit24", "bandit25", "bandit26", "bandit27", "bandit28", "bandit29",
+    "bandit30", "bandit31", "bandit32", "bandit33"
+]
