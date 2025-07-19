@@ -3,3 +3,4 @@ lib/__pycache__/*
 bandit26_27_funcional.py
 lib/text_formatter.py
 __pycache__/*
+.info.json

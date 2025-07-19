@@ -22,7 +22,7 @@
     {
         "level": 2,
         "user": "bandit2",
-        "password": "testtest1",
+        "password": "",
         "details": "Reading a file with spaces in its name",
         "tags": "file-read, escaping, special-characters",
         "url": "https://overthewire.org/wargames/bandit/bandit2.html",
@@ -32,7 +32,7 @@
     {
         "level": 3,
         "user": "bandit3",
-        "password": "test123123",
+        "password": "",
         "details": "Reading a hidden file in a hidden directory",
         "tags": "hidden-directories, file-read, navigation",
         "url": "https://overthewire.org/wargames/bandit/bandit3.html",

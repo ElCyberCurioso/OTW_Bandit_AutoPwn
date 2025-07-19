@@ -7,7 +7,7 @@ import lib.json_manage as json_manage
 import exploitation_chain as ec
 
 def handle_menu(args):
-    # validate_user(args.user)
+    utilities.validate_user(args.user)
     menu.main_menu()
 
 def handle_hack(args):
@@ -30,7 +30,7 @@ def handle_edit(args):
 
 def handle_delete(args):
     fields = []
-    # validate_user(args.user)
+    utilities.validate_user(args.user)
     
     if args.password:
         fields.append("password")
@@ -51,7 +51,7 @@ def get_selected_fields(args):
 
 def handle_list(args):
     if args.user:
-        # validate_user(args.user)
+        utilities.validate_user(args.user)
         print(f"[LIST] Listing data for user {args.user}\n")
     else:
         print("[LIST] Listing data for all users\n")
