@@ -77,9 +77,13 @@ def print_list(*fields, user=None):
     json_manage.get_custom_data_json(as_list=True, is_print=True, fields=fields, user=user)
 
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
-def make_temp_directory():
+def make_temp_directory(existing_client=None):
     import exploitation_chain
-    client = exploitation_chain.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
+    if not existing_client:
+        client = exploitation_chain.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
+    else:
+        client = existing_client
+    
     _, stdout, _ = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()
     _, stdout, _ = client.exec_command("chmod 777 " + temp_dir)

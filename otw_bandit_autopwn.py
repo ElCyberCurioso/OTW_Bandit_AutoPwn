@@ -15,6 +15,7 @@ def main():
     edit_parser.add_argument("-p", "--password", metavar="PASSWORD", help="Change password")
     edit_parser.add_argument("-t", "--temp-folder", metavar="FOLDER", help="Change temp folder")
     edit_parser.add_argument("-n", "--notes", metavar="NOTE", help="Change notes")
+    edit_parser.add_argument("-s", "--sshkey", metavar="SSHKEY", help="Change sshkey")
     edit_parser.add_argument("user", help=constants.TARGET_USER)
 
     # Delete Mode

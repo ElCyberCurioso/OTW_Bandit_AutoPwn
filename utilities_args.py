@@ -18,6 +18,7 @@ def handle_edit(args):
     password = ""
     temp_folder = ""
     notes = ""
+    sshkey = ""
     
     if args.password:
         password = args.password
@@ -25,8 +26,10 @@ def handle_edit(args):
         temp_folder = args.temp_folder
     if args.notes:
         notes = args.notes
+    if args.sshkey:
+        sshkey = args.sshkey
     
-    json_manage.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes)
+    json_manage.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes, new_sshkey=sshkey)
 
 def handle_delete(args):
     fields = []

@@ -16,7 +16,7 @@ def save_credentials_json(data, file_path=constants.JSON_INFO_FILE):
         json.dump(data, f, indent=4)
 
 # Update properties of a level on each execution
-def update_info_for_user(user_to_update, new_password="", new_temp_folder="", new_notes=""):
+def update_info_for_user(user_to_update, new_password="", new_temp_folder="", new_notes="", new_sshkey=""):
     new_values = {}
     
     data = get_info_json()
@@ -28,11 +28,14 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
     if new_password:
         new_values.update({"password": new_password})
     
-    if new_password:
+    if new_temp_folder:
         new_values.update({"temp_folder": new_temp_folder})
     
-    if new_password:
+    if new_notes:
         new_values.update({"notes": new_notes})
+    
+    if new_sshkey:
+        new_values.update({"sshkey": new_sshkey})
     
     changes, updated = _update_entry_fields(entry, new_values)
 
