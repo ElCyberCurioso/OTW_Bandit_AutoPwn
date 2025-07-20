@@ -4,7 +4,7 @@ import lib.json_manage as json_manage
 import lib.constants as constants
 import exploitation_chain as ec
 
-import signal, os
+import signal, os, base64
 
 # Script exit handler
 def exit_handler(sig=None, frame=None):
@@ -65,8 +65,12 @@ def update_notes():
 def update_sshkey():
     user = select_user("user","sshkey")
     if user:
-        sshkey = input(f"Enter sshkey for {user}: ").strip()
-        json_manage.update_info_for_user(user, new_sshkey=sshkey)
+        sshkey_file = input(f"Enter sshkey (path) for {user}: \n").strip()
+        if os.path.isfile(sshkey_file): # If file exists
+            file = open(sshkey_file, "r")
+            b64_sshkey = base64.b64encode(file.read())
+            file.close()
+            json_manage.update_info_for_user(user, new_sshkey=b64_sshkey)
 
 # Action pending to implement
 def hack_user():

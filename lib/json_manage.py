@@ -1,4 +1,4 @@
-import json
+import json, os, base64
 import pandas as pd
 
 import lib.constants as constants
@@ -34,8 +34,11 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
     if new_notes:
         new_values.update({"notes": new_notes})
     
-    if new_sshkey:
-        new_values.update({"sshkey": new_sshkey})
+    if new_sshkey and os.path.isfile(new_sshkey): # If file exists
+        file = open(new_sshkey, "r")
+        b64_sshkey = base64.b64encode(file.read().encode("ascii"))
+        new_values.update({"sshkey": b64_sshkey.decode("ascii")})
+        file.close()
     
     changes, updated = _update_entry_fields(entry, new_values)
 
