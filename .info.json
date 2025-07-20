@@ -128,7 +128,7 @@
         "tags": "base64, gzip, bzip2, multi-step-decoding",
         "url": "https://overthewire.org/wargames/bandit/bandit11.html",
         "sshkey": "",
-        "temp_folder": "/tmp/tmp...asda",
+        "temp_folder": "",
         "notes": ""
     },
     {
@@ -182,7 +182,7 @@
         "details": "Port scanning with nmap to find open services",
         "tags": "nmap, port-scanning, service-discovery",
         "url": "https://overthewire.org/wargames/bandit/bandit16.html",
-        "sshkey": "D:\\Proyectos\\owt_bandit_autopwn\\OWT_Bandit_AutoPwn\\resources\\bandit13_14\\id_rsa",
+        "sshkey": "",
         "temp_folder": "",
         "notes": ""
     },

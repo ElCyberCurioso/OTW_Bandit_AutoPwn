@@ -1,7 +1,9 @@
-import argparse
+import argparse, os, shutil
 
 import utilities_args as utilities_args
 import lib.constants as constants
+import lib.check_modules as check_modules
+import lib.utilities as utilities
 
 def main():
     parser = argparse.ArgumentParser(description="User management tool with advanced options.")
@@ -63,5 +65,41 @@ def main():
     else:
         parser.print_help()
 
+def ensure_file_exists(filename: str, source_folder: str):
+    """
+    Checks if a file exists in the script's directory.
+    If not, copies it from the source folder.
+
+    :param filename: Name of the file to check
+    :param source_folder: Path to the folder to copy the file from if missing
+    """
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    utils_path = os.path.join(current_path, source_folder)
+    
+    destination = os.path.join(current_path, filename)
+    source = os.path.join(utils_path, filename)
+
+    if not os.path.isfile(destination):
+        if os.path.isfile(source):
+            shutil.copy2(source, destination)
+            print(f"📄 File '{filename}' copied from '{source_folder}' to main folder.")
+        else:
+            print(f"❌ File '{filename}' not found in source folder '{source_folder}'.")
+            raise FileNotFoundError(f"Source file '{filename}' not found in '{source_folder}'.")
+
 if __name__ == "__main__":
+    # Check the installed modules in order to install the necessary ones.
+    required = {
+        'argparse': 'argparse',
+        'pandas': 'pandas',
+        'paramiko': 'paramiko',
+        'bz2': 'bz2file',
+        'lzma': 'python-lzma',
+        'py7zr': 'py7zr'
+    }
+    check_modules.check_and_install_modules(required)
+    
+    # Check if .info.json exists
+    ensure_file_exists(".info.json", "utils")
+    
     main()

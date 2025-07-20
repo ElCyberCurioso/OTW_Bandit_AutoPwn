@@ -54,23 +54,23 @@ def get_selected_fields(args):
 def handle_list(args):
     if args.user:
         utilities.validate_user(args.user)
-        print(f"[LIST] Listing data for user {args.user}\n")
+        print(f"📋​ Listing data for user {args.user}\n")
     else:
-        print("[LIST] Listing data for all users\n")
+        print("📋​ Listing data for all users\n")
 
     fields = get_selected_fields(args)
     utilities.print_table(fields, user=args.user)
 
 def handle_export(args):
-    print("[EXPORT] Exporting data\n")
+    print("📎 Exporting data\n")
     if args.pdf:
-        print(f"- Exporting to PDF: {args.pdf}\n")
+        print(f"​📁​ Exporting to PDF: {args.pdf}\n")
     if args.excel:
-        print(f"- Exporting to Excel: {args.excel}\n")
+        print(f"​📁​ Exporting to Excel: {args.excel}\n")
     if args.fields:
         valid_fields = {"user", "password", "details", "tags", "url", "temp_folder", "notes"}
         selected_fields = {f.strip() for f in args.fields.split(",")}
         if not selected_fields.issubset(valid_fields):
-            print(f"[ERROR] Invalid fields: {selected_fields - valid_fields}")
+            print(f"❌​ Invalid fields: {selected_fields - valid_fields}")
             sys.exit(1)
-        print(f"- Exporting fields: {', '.join(selected_fields)}")
+        print(f"​📁​ Exporting fields: {', '.join(selected_fields)}")
