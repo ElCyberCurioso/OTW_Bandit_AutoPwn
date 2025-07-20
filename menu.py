@@ -60,7 +60,6 @@ def hack_menu():
         key = get_key()
         if key == '1':
             utilities.hack_user()
-            utilities.clear_screen()
         elif key == '2':
             utilities.clear_screen()
             break
@@ -104,8 +103,11 @@ def modify_menu():
             utilities.update_notes()
         elif key == '4':
             utilities.clear_screen()
-            list_menu()
+            utilities.update_sshkey()
         elif key == '5':
+            utilities.clear_screen()
+            list_menu()
+        elif key == '6':
             utilities.clear_screen()
             break
         else:

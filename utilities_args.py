@@ -6,8 +6,7 @@ import lib.constants as constants
 import lib.json_manage as json_manage
 import exploitation_chain as ec
 
-def handle_menu(args):
-    utilities.validate_user(args.user)
+def handle_menu(_):
     menu.main_menu()
 
 def handle_hack(args):

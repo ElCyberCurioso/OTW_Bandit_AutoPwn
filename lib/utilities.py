@@ -2,6 +2,7 @@ from sys import exit
 
 import lib.json_manage as json_manage
 import lib.constants as constants
+import exploitation_chain as ec
 
 import signal, os
 
@@ -60,11 +61,18 @@ def update_notes():
         new_notes = input(f"Enter notes for {user}: ").strip()
         json_manage.update_info_for_user(user, new_notes=new_notes)
 
+# Update sshkey of a user
+def update_sshkey():
+    user = select_user("user","sshkey")
+    if user:
+        sshkey = input(f"Enter sshkey for {user}: ").strip()
+        json_manage.update_info_for_user(user, new_sshkey=sshkey)
+
 # Action pending to implement
 def hack_user():
     user = select_user("user","password","temp_folder","notes", show_list_table=False)
     if user:
-        print(f"[*] Simulating hack for {user}... (Here should be your hack logic)")
+        ec.main(user)
 
 # Print banner
 def show_banner():

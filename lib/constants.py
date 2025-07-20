@@ -30,8 +30,9 @@ MODIFY_MENU = """
 1. Update password
 2. Update folder
 3. Update notes
-4. List info
-5. Back
+4. Update sshkey
+5. List info
+6. Back
 Choose an option:
 """
 
