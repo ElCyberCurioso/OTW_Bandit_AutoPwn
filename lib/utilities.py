@@ -1,8 +1,8 @@
 from sys import exit
 
-import lib.json_manage as json_manage
 import lib.constants as constants
-import exploitation_chain as ec
+import lib.exploitation_chain as ec
+import lib.data_utilities as data_utilities
 
 import signal, os, base64
 
@@ -45,32 +45,29 @@ def update_password():
     user = select_user("user","password")
     if user:
         new_pass = input(f"Enter new password for {user}: ").strip()
-        json_manage.update_info_for_user(user, new_password=new_pass)
+        data_utilities.update_info_for_user(user, new_password=new_pass)
      
 # Update temp folder of a user
 def update_temp_folder():
     user = select_user("user","temp_folder")
     if user:
         new_temp_folder = input(f"Enter temp folder for {user}: ").strip()
-        json_manage.update_info_for_user(user, new_temp_folder=new_temp_folder)
+        data_utilities.update_info_for_user(user, new_temp_folder=new_temp_folder)
 
 # Update notes of a user
 def update_notes():
     user = select_user("user","notes")
     if user:
         new_notes = input(f"Enter notes for {user}: ").strip()
-        json_manage.update_info_for_user(user, new_notes=new_notes)
+        data_utilities.update_info_for_user(user, new_notes=new_notes)
 
 # Update sshkey of a user
 def update_sshkey():
     user = select_user("user","sshkey")
     if user:
-        sshkey_file = input(f"Enter sshkey (path) for {user}: \n").strip()
+        sshkey_file = input(f"Enter sshkey (file path) for {user}: \n").strip()
         if os.path.isfile(sshkey_file): # If file exists
-            file = open(sshkey_file, "r")
-            b64_sshkey = base64.b64encode(file.read())
-            file.close()
-            json_manage.update_info_for_user(user, new_sshkey=b64_sshkey)
+            data_utilities.update_info_for_user(user, new_sshkey=sshkey_file)
 
 # Action pending to implement
 def hack_user():
@@ -82,50 +79,23 @@ def hack_user():
 def show_banner():
     print(constants.BANNER)
 
+# Print as pandas table
 def print_table(*fields, user=None):
-    json_manage.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, user=user)
-
-def print_list(*fields, user=None):
-    json_manage.get_custom_data_json(as_list=True, is_print=True, fields=fields, user=user)
-
-# Generate a temp folder using bandit0 credentials and giving full permissions to all users
-def make_temp_directory(existing_client=None):
-    import exploitation_chain
-    if not existing_client:
-        client = exploitation_chain.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
-    else:
-        client = existing_client
+    data_utilities.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, user=user)
     
-    _, stdout, _ = client.exec_command("mktemp -d")
-    temp_dir = stdout.read().decode().strip()
-    _, stdout, _ = client.exec_command("chmod 777 " + temp_dir)
-    return temp_dir
+# Print as list
+def print_list(*fields, user=None):
+    data_utilities.get_custom_data_json(as_list=True, is_print=True, fields=fields, user=user)
 
-# Clean a temp directory using an open session
-def clean_temp_directory(client, temp_dir):
-    _, _, _ = client.exec_command("rm -rf " + temp_dir)
-
-# Getting password of a bandit user using an open session
-def get_current_password(client):
-    _, stdout, _ = client.exec_command('whoami')
-    current_user = stdout.read().decode().strip()
-    _, stdout, _ = client.exec_command("cat /etc/bandit_pass/" + current_user)
-    current_password = stdout.read().decode().strip()
-    return current_password
-
+# Check if user exists
 def validate_user(user):
     if user not in constants.BANDIT_USERS:
-        print(f"[ERROR] Invalid user: {user}")
+        print(f"❌ Invalid user: {user}")
         exit(0)
-        
-def check_file_exists(this_file, file_name, file_directory=None):
-    if file_directory:
-        search_path = file_directory
-    else:
-        search_path = os.path.dirname(os.path.abspath(this_file))
-        
-    file = os.path.join(search_path, file_name)
-    if os.path.isfile(file):
-        return file, search_path, True
-    else:
-        return file, search_path, False
+
+# Get base64 text of file content
+def get_b64_file_content(file_path):
+    file = open(file_path, "r")
+    b64_sshkey = base64.b64encode(file.read().encode("ascii"))
+    file.close()
+    return b64_sshkey.decode("ascii")

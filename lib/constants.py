@@ -25,8 +25,19 @@ BANNER = """
                                                             
 """
 
-MODIFY_MENU = """
---- Modify Info Menu ---
+EDIT_MENU = """
+--- EDIT Info Menu ---
+1. Update password 🔑
+2. Update folder ​📁​
+3. Update notes 📝​
+4. Update sshkey ​🔐​
+5. List info ​📋​
+6. Back ​🔙​
+Choose an option:
+"""
+
+DELETE_MENU = """
+--- DELETE Info Menu ---
 1. Update password 🔑
 2. Update folder ​📁​
 3. Update notes 📝​
@@ -37,7 +48,7 @@ Choose an option:
 """
 
 LIST_MENU = """
---- List Info Menu ---
+--- LIST Info Menu ---
 1. List credentials (user + password + temp_folder)
 2. List guiding info (user + details + url)
 3. List notes (user + notes)
@@ -47,7 +58,7 @@ Choose an option:
 """
 
 HACK_MENU = """
---- Hack Menu ---
+--- HACK Menu ---
 1. Indicate user to hack ​​🗃️​
 2. Back ​🔙​
 Choose an option:

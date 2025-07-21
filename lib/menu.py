@@ -1,8 +1,6 @@
-import lib.json_manage as json_manage
-import lib.check_modules as check_modules
 import lib.utilities as utilities
 import lib.constants as constants
-import otw_bandit_autopwn as otw_bandit_autopwn
+import lib.data_utilities as data_utilities
 
 import os
 
@@ -24,14 +22,14 @@ else:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
 
-# Manage main menu
+# Method that handles MAIN menu
 def main_menu():
     utilities.setup_signal_handlers() # Start exit handler
     utilities.clear_screen() # Clear screen before display menu
     
     utilities.show_banner()
     while True:
-        json_manage.print_boxed("Main menu")
+        data_utilities.print_boxed("Main menu")
         print(constants.MAIN_MENU)
         key = get_key()
         if key == '1':
@@ -42,18 +40,19 @@ def main_menu():
             list_menu()
         elif key == '3':
             utilities.clear_screen()
-            modify_menu()
+            edit_menu()
         elif key == '4':
             utilities.clear_screen()
         elif key == '5':
             utilities.clear_screen()
             utilities.show_banner()
         elif key == '6':
-            print("See you next time!")
+            print("👋​ See you next time!​")
             break
         else:
             print(constants.INVALID_OPTION)
 
+# Method that handles HACK menu
 def hack_menu():
     while True:
         print(constants.HACK_MENU)
@@ -66,6 +65,7 @@ def hack_menu():
         else:
             print(constants.INVALID_OPTION)
 
+# Method that handles LIST menu
 def list_menu():
     while True:
         print(constants.LIST_MENU)
@@ -88,9 +88,10 @@ def list_menu():
         else:
             print(constants.INVALID_OPTION)
 
-def modify_menu():
+# Method that handles EDIT menu
+def edit_menu():
     while True:
-        print(constants.MODIFY_MENU)
+        print(constants.EDIT_MENU)
         key = get_key()
         if key == '1':
             utilities.clear_screen()
@@ -112,8 +113,29 @@ def modify_menu():
             break
         else:
             print(constants.INVALID_OPTION)
-
-# if __name__ == "__main__":
-    # check_modules.check_installed_modules()
-    
-    main_menu() # Start main menu
+            
+# Method that handles DELETE menu
+def delete_menu():
+    while True:
+        print(constants.DELETE_MENU)
+        key = get_key()
+        if key == '1':
+            utilities.clear_screen()
+            utilities.update_password()
+        elif key == '2':
+            utilities.clear_screen()
+            utilities.update_temp_folder()
+        elif key == '3':
+            utilities.clear_screen()
+            utilities.update_notes()
+        elif key == '4':
+            utilities.clear_screen()
+            utilities.update_sshkey()
+        elif key == '5':
+            utilities.clear_screen()
+            list_menu()
+        elif key == '6':
+            utilities.clear_screen()
+            break
+        else:
+            print(constants.INVALID_OPTION)

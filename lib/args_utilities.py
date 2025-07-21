@@ -1,19 +1,21 @@
 import sys
 
-import menu as menu
+import lib.menu as menu
 import lib.utilities as utilities
-import lib.constants as constants
-import lib.json_manage as json_manage
-import exploitation_chain as ec
-import lib.export as export
+import lib.exploitation_chain as ec
+import lib.export_utilities as export_utilities
+import lib.data_utilities as data_utilities
+import lib.local_utilities as local_utilities
 
 def handle_menu(_):
     menu.main_menu()
 
+# Method that handles HACK mode
 def handle_hack(args):
     utilities.validate_user(args.user)
     ec.main(args.user)
 
+# Method that handles EDIT mode
 def handle_edit(args):
     password = ""
     temp_folder = ""
@@ -29,8 +31,9 @@ def handle_edit(args):
     if args.sshkey:
         sshkey = args.sshkey
     
-    json_manage.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes, new_sshkey=sshkey)
+    data_utilities.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes, new_sshkey=sshkey)
 
+# Method that handles DELETE mode
 def handle_delete(args):
     fields = []
     utilities.validate_user(args.user)
@@ -42,7 +45,7 @@ def handle_delete(args):
     if args.notes:
         fields.append("notes")
     
-    json_manage.delete_info_for_user(args.user, fields)
+    data_utilities.delete_info_for_user(args.user, fields)
 
 def get_selected_fields(args):
     field_names = ["user", "password", "details", "tags", "url", "temp_folder", "notes"]
@@ -52,6 +55,7 @@ def get_selected_fields(args):
         return field_names
     return [name for flag, name in zip(selected_flags, field_names) if flag]
 
+# Method that handles LIST mode
 def handle_list(args):
     if args.user:
         utilities.validate_user(args.user)
@@ -68,13 +72,13 @@ def _export_to_pdf(df, filename, user):
     if not filename.endswith(".pdf"):
         filename = filename + ".pdf"
     
-    _, _, file_exists = utilities.check_file_exists(__file__, filename)
+    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
     if file_exists:
         print("\n❌​ File exist already!")
         return
     
     print(f"​\n✔️ Exporting to PDF: {filename}\n")
-    export.export_to_pdf(df, filename)
+    export_utilities.export_to_pdf(df, filename)
 
 def _export_to_excel(df, filename, user):
     if user:
@@ -82,14 +86,15 @@ def _export_to_excel(df, filename, user):
     if not filename.endswith(".xlsx"):
         filename = filename + ".xlsx"
     
-    _, _, file_exists = utilities.check_file_exists(__file__, filename)
+    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
     if file_exists:
         print("\n❌​ File exist already!")
         return
     
     print(f"​\n✔️ Exporting to Excel: {filename}\n")
-    export.export_to_excel(df, filename)
+    export_utilities.export_to_excel(df, filename)
 
+# Method that handles EXPORT mode
 def handle_export(args):
     print("📎 Exporting data")
     invalid_fields = []
@@ -108,7 +113,7 @@ def handle_export(args):
     if args.user:
         utilities.validate_user(args.user)
 
-    df = json_manage.get_custom_data_json(user=args.user, as_list=False, is_print=False, fields=array_selected_fields)
+    df = data_utilities.get_custom_data_json(user=args.user, as_list=False, is_print=False, fields=array_selected_fields)
 
     if args.pdf:
         _export_to_pdf(df, args.pdf, args.user)

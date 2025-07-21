@@ -100,7 +100,6 @@ def decompress_until_plain_text(initial_path, work_dir):
         filetype = detect_compression_type(current_path)
 
         if not filetype:
-            # print(f"Final extracted file without compression: {current_path}")
             break
 
         extract_dir = os.path.join(work_dir, f"step_{iteration}")
@@ -108,8 +107,6 @@ def decompress_until_plain_text(initial_path, work_dir):
 
         next_file = find_next_compressed_file(extract_dir)
         if not next_file:
-            # print(f"Final extracted file without compression: {extract_dir}")
-            # break
             return get_file_in_path(extract_dir)
 
         current_path = next_file

@@ -1,12 +1,12 @@
-import argparse, os, shutil
+import argparse
 
-import utilities_args as utilities_args
+import lib.args_utilities as args_utilities
 import lib.constants as constants
 import lib.check_modules as check_modules
-import lib.utilities as utilities
+import lib.local_utilities as local_utilities
 
 def main():
-    
+    # In order to get parameters in the same order that are indicated, this class must be called by the argument declaration
     class CustomAction(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             if 'ordered_args' not in namespace:
@@ -61,12 +61,12 @@ def main():
     args = parser.parse_args()
 
     mode_handlers = {
-        "menu": utilities_args.handle_menu,
-        "edit": utilities_args.handle_edit,
-        "delete": utilities_args.handle_delete,
-        "list": utilities_args.handle_list,
-        "export": utilities_args.handle_export,
-        "hack": utilities_args.handle_hack
+        "menu": args_utilities.handle_menu,
+        "edit": args_utilities.handle_edit,
+        "delete": args_utilities.handle_delete,
+        "list": args_utilities.handle_list,
+        "export": args_utilities.handle_export,
+        "hack": args_utilities.handle_hack
     }
 
     handler = mode_handlers.get(args.mode)
@@ -74,21 +74,6 @@ def main():
         handler(args)
     else:
         parser.print_help()
-
-def ensure_file_exists(file_name, source_folder):
-    file_current_path, _, file_exists_current_dir = utilities.check_file_exists(__file__, file_name)
-    file_source_path, _, file_exists_source_dir = utilities.check_file_exists(__file__, file_name, source_folder)
-    
-    # If file not found in current directory
-    if not file_exists_current_dir:
-        # But is found in source directory
-        if file_exists_source_dir:
-            # Copy to the current directory
-            shutil.copy2(file_source_path, file_current_path)
-            print(f"📄 File '{file_name}' copied from '{source_folder}' to main folder.")
-        else:
-            print(f"❌ File '{file_name}' not found in source folder '{source_folder}'.")
-            raise FileNotFoundError(f"Source file '{file_name}' not found in '{source_folder}'.")
 
 if __name__ == "__main__":
     # Check the installed modules in order to install the necessary ones.
@@ -102,9 +87,12 @@ if __name__ == "__main__":
         "fpdf": "fpdf",
         "openpyxl": "openpyxl"
     }
+    
+    # Check if required modules are installed
+    # If not, ask permissions and try to install them
     check_modules.check_and_install_modules(required)
     
     # Check if .info.json exists
-    ensure_file_exists(".info.json", "utils")
+    local_utilities.get_file_if_not_exists(".info.json", "utils")
     
     main()
