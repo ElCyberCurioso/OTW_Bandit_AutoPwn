@@ -20,8 +20,8 @@ Perfect for beginners who want to learn basic Linux and scripting techniques.
 ## ⚡ Quick Installation
 
 ```bash
-git clone https://github.com/ElCyberCurioso/OWT_Bandit_AutoPwn.git
-cd OWT_Bandit_AutoPwn
+git clone https://github.com/ElCyberCurioso/OTW_Bandit_AutoPwn.git
+cd OTW_Bandit_AutoPwn
 pip install -r requirements.txt
 python3 main.py
 ```
