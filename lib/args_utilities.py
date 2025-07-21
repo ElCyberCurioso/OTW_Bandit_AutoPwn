@@ -77,7 +77,7 @@ def _export_to_pdf(df, filename, user):
         print("\n❌​ File exist already!")
         return
     
-    print(f"​\n✔️ Exporting to PDF: {filename}\n")
+    print(f"​\n✔️​  Exporting to PDF: {filename}\n")
     export_utilities.export_to_pdf(df, filename)
 
 def _export_to_excel(df, filename, user):

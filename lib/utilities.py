@@ -41,33 +41,42 @@ def select_user(*fields, show_list_table=True):
         print(constants.INVALID_USER)
 
 # Update password of a user
-def update_password():
-    user = select_user("user","password")
+def update_password(fields):
+    user = select_user(fields)
     if user:
         new_pass = input(f"Enter new password for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_password=new_pass)
      
 # Update temp folder of a user
-def update_temp_folder():
-    user = select_user("user","temp_folder")
+def update_temp_folder(fields):
+    user = select_user(fields)
     if user:
         new_temp_folder = input(f"Enter temp folder for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_temp_folder=new_temp_folder)
 
 # Update notes of a user
-def update_notes():
-    user = select_user("user","notes")
+def update_notes(fields):
+    user = select_user(fields)
     if user:
         new_notes = input(f"Enter notes for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_notes=new_notes)
 
 # Update sshkey of a user
-def update_sshkey():
-    user = select_user("user","sshkey")
+def update_sshkey(fields):
+    user = select_user(fields)
     if user:
         sshkey_file = input(f"Enter sshkey (file path) for {user}: \n").strip()
         if os.path.isfile(sshkey_file): # If file exists
             data_utilities.update_info_for_user(user, new_sshkey=sshkey_file)
+
+# Delete field of a user
+def delete_field(field):
+    user = select_user("user", field)
+    if user:
+        print(f"Deleting {user} field of user {user}")
+        confirm = input("Confirm changes (y/n)? ").strip().lower()
+        if confirm == "y":
+            data_utilities.delete_info_for_user(field)        
 
 # Action pending to implement
 def hack_user():

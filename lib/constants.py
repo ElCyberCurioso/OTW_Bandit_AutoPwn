@@ -27,50 +27,50 @@ BANNER = """
 
 EDIT_MENU = """
 --- EDIT Info Menu ---
-1. Update password 🔑
-2. Update folder ​📁​
-3. Update notes 📝​
-4. Update sshkey ​🔐​
-5. List info ​📋​
-6. Back ​🔙​
+1️⃣​  Update password 🔑
+2️⃣  Update temp folder ​📁​
+3️⃣  Update notes 📝​
+4️⃣  Update sshkey ​🔐​
+5️⃣  List info ​📋​
+6️⃣  Back ​🔙​
 Choose an option:
 """
 
 DELETE_MENU = """
 --- DELETE Info Menu ---
-1. Update password 🔑
-2. Update folder ​📁​
-3. Update notes 📝​
-4. Update sshkey ​🔐​
-5. List info ​📋​
-6. Back ​🔙​
+1️⃣  Delete password 🔑
+2️⃣  Delete temp folder ​📁​
+3️⃣  Delete notes 📝​
+4️⃣  Delete sshkey ​🔐​
+5️⃣  Back ​🔙​
 Choose an option:
 """
 
 LIST_MENU = """
 --- LIST Info Menu ---
-1. List credentials (user + password + temp_folder)
-2. List guiding info (user + details + url)
-3. List notes (user + notes)
-4. List tags (user + tags)
-5. Back ​🔙​
+1️⃣  List credentials (user + password + temp_folder)
+2️⃣  List guiding info (user + details + url)
+3️⃣  List notes (user + notes)
+4️⃣  List tags (user + tags)
+5️⃣  Back ​🔙​
 Choose an option:
 """
 
 HACK_MENU = """
 --- HACK Menu ---
-1. Indicate user to hack ​​🗃️​
-2. Back ​🔙​
+1️⃣  Indicate user to hack ​​🗃️​
+2️⃣  Back ​🔙​
 Choose an option:
 """
 
 MAIN_MENU = """
-1. Hack bandit user 👨‍💻
-2. List info 📋​
-3. Modify info ​✒️​
-4. Clean screen 🧹​
-5. Show banner ​🏴‍☠️​
-6. Exit ​🚀​
+1️⃣  Hack bandit user 👨‍💻
+2️⃣  List info 📋​
+3️⃣  Edit info ​✒️​
+4️⃣  Delete info 🧼​
+5️⃣  Clean screen 🧹​
+6️⃣  Show banner ​🏴‍☠️​
+7️⃣  Exit ​🚀​
 Choose an option:
 """
 

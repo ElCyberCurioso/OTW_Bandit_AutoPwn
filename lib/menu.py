@@ -43,10 +43,13 @@ def main_menu():
             edit_menu()
         elif key == '4':
             utilities.clear_screen()
+            delete_menu()
         elif key == '5':
             utilities.clear_screen()
-            utilities.show_banner()
         elif key == '6':
+            utilities.clear_screen()
+            utilities.show_banner()
+        elif key == '7':
             print("👋​ See you next time!​")
             break
         else:
@@ -95,16 +98,16 @@ def edit_menu():
         key = get_key()
         if key == '1':
             utilities.clear_screen()
-            utilities.update_password()
+            utilities.update_password(["user","password"])
         elif key == '2':
             utilities.clear_screen()
-            utilities.update_temp_folder()
+            utilities.update_temp_folder(["user","temp_folder"])
         elif key == '3':
             utilities.clear_screen()
-            utilities.update_notes()
+            utilities.update_notes(["user","notes"])
         elif key == '4':
             utilities.clear_screen()
-            utilities.update_sshkey()
+            utilities.update_sshkey(["user","sshkey"])
         elif key == '5':
             utilities.clear_screen()
             list_menu()
@@ -121,20 +124,17 @@ def delete_menu():
         key = get_key()
         if key == '1':
             utilities.clear_screen()
-            utilities.update_password()
+            utilities.delete_field("password")
         elif key == '2':
             utilities.clear_screen()
-            utilities.update_temp_folder()
+            utilities.delete_field("temp_folder")
         elif key == '3':
             utilities.clear_screen()
-            utilities.update_notes()
+            utilities.delete_field("notes")
         elif key == '4':
             utilities.clear_screen()
-            utilities.update_sshkey()
+            utilities.delete_field("sshkey")
         elif key == '5':
-            utilities.clear_screen()
-            list_menu()
-        elif key == '6':
             utilities.clear_screen()
             break
         else:
