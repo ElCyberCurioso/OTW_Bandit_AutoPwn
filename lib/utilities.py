@@ -73,10 +73,7 @@ def update_sshkey(fields):
 def delete_field(field):
     user = select_user("user", field)
     if user:
-        print(f"Deleting {user} field of user {user}")
-        confirm = input("Confirm changes (y/n)? ").strip().lower()
-        if confirm == "y":
-            data_utilities.delete_info_for_user(field)        
+        data_utilities.delete_info_for_user(user, field)        
 
 # Action pending to implement
 def hack_user():

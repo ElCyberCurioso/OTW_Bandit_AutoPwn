@@ -46,7 +46,6 @@ def delete_info_for_user(user_to_update, fields=[]):
         return
     
     for key in fields:
-        
         if not entry[key]:
             changes += f"{key}: already empty\n"
         else:

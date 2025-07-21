@@ -124,16 +124,16 @@ def delete_menu():
         key = get_key()
         if key == '1':
             utilities.clear_screen()
-            utilities.delete_field("password")
+            utilities.delete_field(["password"])
         elif key == '2':
             utilities.clear_screen()
-            utilities.delete_field("temp_folder")
+            utilities.delete_field(["temp_folder"])
         elif key == '3':
             utilities.clear_screen()
-            utilities.delete_field("notes")
+            utilities.delete_field(["notes"])
         elif key == '4':
             utilities.clear_screen()
-            utilities.delete_field("sshkey")
+            utilities.delete_field(["sshkey"])
         elif key == '5':
             utilities.clear_screen()
             break
