@@ -35,9 +35,7 @@ python3 main.py
 
 ## 🕹️ How to Use
 
-1️⃣ Interactive menu to navigate (`main.py menu`)\
-
-With interactive menu:
+### **Interactive menu** to navigate (`main.py menu`)
 
 ```
    ___                _____ _        __        ___
@@ -70,7 +68,7 @@ With interactive menu:
 7️⃣  Exit ​🚀​
 ```
 
-HACK Menu:
+- **HACK** Menu:
 
 ```
 --- HACK Menu ---
@@ -94,7 +92,7 @@ Indicate user (or type 'back' to return): bandit1
 ✅​ Reached target user: bandit1:test321123
 ```
 
-LIST menu:
+- **LIST** menu:
 
 ```
 --- LIST Info Menu ---
@@ -152,7 +150,7 @@ LIST menu:
 ...
 ```
 
-EDIT menu:
+- **EDIT** menu:
 
 ```
 --- EDIT Info Menu ---      
@@ -173,7 +171,7 @@ password: test321123 -> test123321
 Confirm changes (y/n)? y
 ```
 
-DELETE menu:
+- **DELETE** menu:
 
 ```
 --- DELETE Info Menu ---    
@@ -191,12 +189,10 @@ password: test123321 -> "" (empty)
 Confirm changes (y/n)? y
 ```
 
-2️⃣ Parameters (`main.py edit/delete/list/export/hack`)\
-
-With parameters:
+### **Parameters** (`main.py edit/delete/list/export/hack`)
 
 ```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py -h  
+PS C:\OTW_Bandit_AutoPwn> python .\main.py -h  
 usage: main.py [-h] {menu,edit,delete,list,export,hack} ...
 
 User management tool with advanced options.
@@ -215,20 +211,10 @@ options:
   -h, --help            show this help message and exit
 ```
 
-MENU mode help:
+- **EDIT** mode:
 
 ```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py menu -h
-usage: main.py menu [-h]
-
-options:
-  -h, --help  show this help message and exit
-```
-
-EDIT mode help:
-
-```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py edit -h
+PS C:\OTW_Bandit_AutoPwn> python .\main.py edit -h
 usage: main.py edit [-h] [-p PASSWORD] [-t FOLDER] [-n NOTE] [-s SSHKEY] user
 
 positional arguments:
@@ -246,10 +232,10 @@ options:
                         Change sshkey
 ```
 
-DELETE mode help:
+- **DELETE** mode:
 
 ```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py delete -h
+PS C:\OTW_Bandit_AutoPwn> python .\main.py delete -h
 usage: main.py delete [-h] [-p] [-t] [-n] user
 
 positional arguments:
@@ -262,10 +248,10 @@ options:
   -n, --notes        Delete notes
 ```
 
-LIST mode help:
+- **LIST** mode:
 
 ```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py list -h  
+PS C:\OTW_Bandit_AutoPwn> python .\main.py list -h  
 usage: main.py list [-h] [-s] [-p] [-d] [-t] [-u] [-f] [-n] [user]
 
 positional arguments:
@@ -282,10 +268,10 @@ options:
   -n, --notes        List notes
 ```
 
-EXPORT mode help:
+- **EXPORT** mode:
 
 ```
-PS C:\OWT_Bandit_AutoPwn> python .\main.py export -h
+PS C:\OTW_Bandit_AutoPwn> python .\main.py export -h
 usage: main.py export [-h] [-p PDF_FILE] [-e EXCEL_FILE] [-f FIELDS] [user]
 
 positional arguments:
@@ -330,12 +316,6 @@ options:
  ├── README.md
  └── requirements.txt
 ```
-
-## 🧩 Roadmap / TODO
-
-- Improve edit mode
-- Improve list menu
-- Improve menu
 
 ## 📝 License
 
