@@ -2,16 +2,12 @@
 
 **Automate your Bandit challenges with Python + Pandas**
 
----
-
 ## 📌 Description
 
 **OTW\_Bandit\_AutoPwn** is an automated tool designed to solve challenges from the [**OverTheWire Bandit**](https://overthewire.org/wargames/bandit/) wargame.\
 It uses Python and Pandas to manage users, passwords, and automate SSH command execution for solving levels.
 
 Perfect for beginners who want to learn basic Linux and scripting techniques.
-
----
 
 ## 🛠️ Features
 
@@ -21,8 +17,6 @@ Perfect for beginners who want to learn basic Linux and scripting techniques.
 - 📊 Uses Pandas to read, edit, and save user data
 - 🔐 Options to view, edit, and add users
 
----
-
 ## ⚡ Quick Installation
 
 ```bash
@@ -31,8 +25,6 @@ cd OWT_Bandit_AutoPwn
 python otw_bandit_autopwn.py --help
 ```
 
----
-
 ## 🎮 Requirements
 
 - Python 3.10+
@@ -40,17 +32,13 @@ python otw_bandit_autopwn.py --help
 - Paramiko or SSH libraries (if required)
 - Internet connection (for SSH access)
 
----
-
 ## 🕹️ How to Use
 
 1️⃣ Run `otw_bandit_autopwn.py`\
 2️⃣ Use the interactive menu to navigate (`otw_bandit_autopwn.py menu`) or with parameters (`otw_bandit_autopwn.py edit/delete/list/export/hack`)\
-3️⃣ Add or edit users as needed\ (editor mode)
-3️⃣ List saved info\ (list mode)
-4️⃣ Let the tool automate level solving for you (hack mode)
-
----
+3️⃣ Add or edit users as needed (editor mode)\
+3️⃣ List saved info\ (list mode)\
+4️⃣ Let the tool automate level solving for you (hack mode)\
 
 ## 📂 Project Structure
 
@@ -73,22 +61,16 @@ python otw_bandit_autopwn.py --help
  ├── menu.py
  ├── otw_bandit_autopwn.py
  └── README.md
-
 ```
-
----
 
 ## 🧩 Roadmap / TODO
 
--
-
----
+- Improve edit mode
+- Improve menu
 
 ## 📝 License
 
 MIT License — free to use and modify.\
-
----
 
 ## 🐾 Follow Me / Contact
 

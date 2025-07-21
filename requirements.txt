@@ -1,0 +1,6 @@
+argparse
+pandas
+paramiko
+bz2file
+python-lzma
+py7zr
