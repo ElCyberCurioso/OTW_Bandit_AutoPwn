@@ -117,3 +117,15 @@ def validate_user(user):
     if user not in constants.BANDIT_USERS:
         print(f"[ERROR] Invalid user: {user}")
         exit(0)
+        
+def check_file_exists(this_file, file_name, file_directory=None):
+    if file_directory:
+        search_path = file_directory
+    else:
+        search_path = os.path.dirname(os.path.abspath(this_file))
+        
+    file = os.path.join(search_path, file_name)
+    if os.path.isfile(file):
+        return file, search_path, True
+    else:
+        return file, search_path, False

@@ -5,6 +5,7 @@ import lib.utilities as utilities
 import lib.constants as constants
 import lib.json_manage as json_manage
 import exploitation_chain as ec
+import lib.export as export
 
 def handle_menu(_):
     menu.main_menu()
@@ -61,16 +62,56 @@ def handle_list(args):
     fields = get_selected_fields(args)
     utilities.print_table(fields, user=args.user)
 
+def _export_to_pdf(df, filename, user):
+    if user:
+        filename = filename + "_" + user
+    if not filename.endswith(".pdf"):
+        filename = filename + ".pdf"
+    
+    _, _, file_exists = utilities.check_file_exists(__file__, filename)
+    if file_exists:
+        print("\n❌​ File exist already!")
+        return
+    
+    print(f"​\n✔️ Exporting to PDF: {filename}\n")
+    export.export_to_pdf(df, filename)
+
+def _export_to_excel(df, filename, user):
+    if user:
+        filename = filename + "_" + user
+    if not filename.endswith(".xlsx"):
+        filename = filename + ".xlsx"
+    
+    _, _, file_exists = utilities.check_file_exists(__file__, filename)
+    if file_exists:
+        print("\n❌​ File exist already!")
+        return
+    
+    print(f"​\n✔️ Exporting to Excel: {filename}\n")
+    export.export_to_excel(df, filename)
+
 def handle_export(args):
-    print("📎 Exporting data\n")
-    if args.pdf:
-        print(f"​📁​ Exporting to PDF: {args.pdf}\n")
-    if args.excel:
-        print(f"​📁​ Exporting to Excel: {args.excel}\n")
-    if args.fields:
-        valid_fields = {"user", "password", "details", "tags", "url", "temp_folder", "notes"}
-        selected_fields = {f.strip() for f in args.fields.split(",")}
-        if not selected_fields.issubset(valid_fields):
-            print(f"❌​ Invalid fields: {selected_fields - valid_fields}")
+    print("📎 Exporting data")
+    invalid_fields = []
+    array_selected_fields = []
+
+    if args.ordered_args:
+        valid_fields = {"user", "password", "details", "tags", "url", "sshkey", "temp_folder", "notes"}
+        selected_fields = args.ordered_args[0][1]
+        array_selected_fields = selected_fields.split(',')
+        invalid_fields = [field for field in array_selected_fields if field not in valid_fields]
+        if invalid_fields:
+            print(f"❌​ Invalid fields: {invalid_fields}")
             sys.exit(1)
-        print(f"​📁​ Exporting fields: {', '.join(selected_fields)}")
+        print(f"​\n📁​ Exporting fields: {selected_fields}")
+
+    if args.user:
+        utilities.validate_user(args.user)
+
+    df = json_manage.get_custom_data_json(user=args.user, as_list=False, is_print=False, fields=array_selected_fields)
+
+    if args.pdf:
+        _export_to_pdf(df, args.pdf, args.user)
+    if args.excel:
+        _export_to_excel(df, args.excel, args.user)
+        

@@ -6,6 +6,15 @@ import lib.check_modules as check_modules
 import lib.utilities as utilities
 
 def main():
+    
+    class CustomAction(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            if 'ordered_args' not in namespace:
+                setattr(namespace, 'ordered_args', [])
+            previous = namespace.ordered_args
+            previous.append((self.dest, values))
+            setattr(namespace, 'ordered_args', previous)
+    
     parser = argparse.ArgumentParser(description="User management tool with advanced options.")
     subparsers = parser.add_subparsers(dest="mode", required=True, help="Operation mode")
 
@@ -40,9 +49,10 @@ def main():
 
     # Export Mode
     export_parser = subparsers.add_parser("export", help="Export user data")
-    export_parser.add_argument("--pdf", metavar="PDF_FILE", help="Export to PDF")
+    export_parser.add_argument("-p","--pdf", metavar="PDF_FILE", help="Export to PDF")
     export_parser.add_argument("-e", "--excel", metavar="EXCEL_FILE", help="Export to Excel")
-    export_parser.add_argument("-f", "--fields", metavar="FIELDS", help='Fields to export: "user","password","details","tags","url","temp_folder","notes"')
+    export_parser.add_argument("-f", "--fields", metavar="FIELDS", help='Fields to export: "user","password","details","tags","url","sshkey","temp_folder","notes"', action=CustomAction)
+    export_parser.add_argument("user", nargs="?", help=constants.TARGET_USER)
 
     # Hack Mode
     hack_parser = subparsers.add_parser("hack", help="Special hack mode (for testing)")
@@ -65,37 +75,32 @@ def main():
     else:
         parser.print_help()
 
-def ensure_file_exists(filename: str, source_folder: str):
-    """
-    Checks if a file exists in the script's directory.
-    If not, copies it from the source folder.
-
-    :param filename: Name of the file to check
-    :param source_folder: Path to the folder to copy the file from if missing
-    """
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    utils_path = os.path.join(current_path, source_folder)
+def ensure_file_exists(file_name, source_folder):
+    file_current_path, _, file_exists_current_dir = utilities.check_file_exists(__file__, file_name)
+    file_source_path, _, file_exists_source_dir = utilities.check_file_exists(__file__, file_name, source_folder)
     
-    destination = os.path.join(current_path, filename)
-    source = os.path.join(utils_path, filename)
-
-    if not os.path.isfile(destination):
-        if os.path.isfile(source):
-            shutil.copy2(source, destination)
-            print(f"📄 File '{filename}' copied from '{source_folder}' to main folder.")
+    # If file not found in current directory
+    if not file_exists_current_dir:
+        # But is found in source directory
+        if file_exists_source_dir:
+            # Copy to the current directory
+            shutil.copy2(file_source_path, file_current_path)
+            print(f"📄 File '{file_name}' copied from '{source_folder}' to main folder.")
         else:
-            print(f"❌ File '{filename}' not found in source folder '{source_folder}'.")
-            raise FileNotFoundError(f"Source file '{filename}' not found in '{source_folder}'.")
+            print(f"❌ File '{file_name}' not found in source folder '{source_folder}'.")
+            raise FileNotFoundError(f"Source file '{file_name}' not found in '{source_folder}'.")
 
 if __name__ == "__main__":
     # Check the installed modules in order to install the necessary ones.
     required = {
-        'argparse': 'argparse',
-        'pandas': 'pandas',
-        'paramiko': 'paramiko',
-        'bz2': 'bz2file',
-        'lzma': 'python-lzma',
-        'py7zr': 'py7zr'
+        "argparse": "argparse",
+        "pandas": "pandas",
+        "paramiko": "paramiko",
+        "bz2": "bz2file",
+        "lzma": "python-lzma",
+        "py7zr": "py7zr",
+        "fpdf": "fpdf",
+        "openpyxl": "openpyxl"
     }
     check_modules.check_and_install_modules(required)
     
