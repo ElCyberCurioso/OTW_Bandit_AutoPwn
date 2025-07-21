@@ -2,46 +2,35 @@ import paramiko, time
 
 import lib.constants as constants
 
-def wait_for_ssh_to_be_ready(host, port, timeout, retry_interval):
-    client = paramiko.client.SSHClient()
+def connect_ssh_with_retries(username, password, max_retries=5, retry_delay=5, pkey=None):
+    client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    retry_interval = float(retry_interval)
-    timeout = int(timeout)
-    timeout_start = time.time()
-    while time.time() < timeout_start + timeout:
-        time.sleep(retry_interval)
+    
+    retries = 0
+    while True:
         try:
-            client.connect(host, int(port), allow_agent=False,
-                           look_for_keys=False)
-        except paramiko.ssh_exception.SSHException as e:
-            # socket is open, but not SSH service responded
-            if e.message == 'Error reading SSH protocol banner':
-                print(e)
-                continue
-            print('SSH transport is available!')
-            break
-        except paramiko.ssh_exception.NoValidConnectionsError as e:
-            print('SSH transport is not ready...')
-            continue
+            if pkey:
+                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, pkey=pkey, timeout=10)
+                return client
+            else:
+                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, timeout=10)
+                return client
+            
+        except (paramiko.ssh_exception.SSHException, ConnectionResetError):
+            print("[!] Error while connecting")
+            retries += 1
+            if retries >= max_retries:
+                print("[!] Max retries reached. Aborting...")
+                raise
+            print(f"[*] Retry in {retry_delay} seconds... (Retry {retries}/{max_retries})")
+            time.sleep(retry_delay)
 
 # Manage to open ssh connection with password or sshkey file and retrieve a client object with the successful connection
 def ssh_connection(username, password):
-    client = paramiko.SSHClient()
-    
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.load_system_host_keys()
-
-    client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password)
-
+    client = connect_ssh_with_retries(username, password)
     return client
 
 # Manage to open ssh connection with an sshkey and retrieve a client object with the successful connection
 def ssh_connection_sshkey(username, pkey):
-    client = paramiko.SSHClient()
-    
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.load_system_host_keys()
-
-    client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password="", pkey=pkey)
-
+    client = connect_ssh_with_retries(username, "", pkey=pkey)
     return client
