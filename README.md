@@ -196,7 +196,7 @@ Confirm changes (y/n)? y
 With parameters:
 
 ```
-PS D:\OWT_Bandit_AutoPwn> python .\main.py -h  
+PS C:\OWT_Bandit_AutoPwn> python .\main.py -h  
 usage: main.py [-h] {menu,edit,delete,list,export,hack} ...
 
 User management tool with advanced options.
@@ -218,7 +218,7 @@ options:
 MENU mode help:
 
 ```
-PS D:\Proyectos\owt_bandit_autopwn\OWT_Bandit_AutoPwn> python .\main.py menu -h
+PS C:\OWT_Bandit_AutoPwn> python .\main.py menu -h
 usage: main.py menu [-h]
 
 options:
@@ -228,7 +228,7 @@ options:
 EDIT mode help:
 
 ```
-PS D:\Proyectos\owt_bandit_autopwn\OWT_Bandit_AutoPwn> python .\main.py edit -h
+PS C:\OWT_Bandit_AutoPwn> python .\main.py edit -h
 usage: main.py edit [-h] [-p PASSWORD] [-t FOLDER] [-n NOTE] [-s SSHKEY] user
 
 positional arguments:
@@ -249,7 +249,7 @@ options:
 DELETE mode help:
 
 ```
-PS D:\Proyectos\owt_bandit_autopwn\OWT_Bandit_AutoPwn> python .\main.py delete -h
+PS C:\OWT_Bandit_AutoPwn> python .\main.py delete -h
 usage: main.py delete [-h] [-p] [-t] [-n] user
 
 positional arguments:
@@ -265,7 +265,7 @@ options:
 LIST mode help:
 
 ```
-PS D:\Proyectos\owt_bandit_autopwn\OWT_Bandit_AutoPwn> python .\main.py list -h  
+PS C:\OWT_Bandit_AutoPwn> python .\main.py list -h  
 usage: main.py list [-h] [-s] [-p] [-d] [-t] [-u] [-f] [-n] [user]
 
 positional arguments:
@@ -285,7 +285,7 @@ options:
 EXPORT mode help:
 
 ```
-PS D:\Proyectos\owt_bandit_autopwn\OWT_Bandit_AutoPwn> python .\main.py export -h
+PS C:\OWT_Bandit_AutoPwn> python .\main.py export -h
 usage: main.py export [-h] [-p PDF_FILE] [-e EXCEL_FILE] [-f FIELDS] [user]
 
 positional arguments:
