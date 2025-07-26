@@ -84,16 +84,33 @@ def _confirm_changes(changes):
             return confirm == "y"
         print("\n❌ Invalid option! Please enter a valid one...")
 
-# Method called when a single field will be printed: bandit0, bandit1,...
-def _print_single_field(data, field):
-    print(", ".join([entry[field] for entry in data]))
+# Method called to print a list
+def _print_fields(data, fields, cols):
+    
+    if len(fields) == 1:
+        values = [entry[fields[0]] for entry in data]
+    elif len(fields) == 2:
+        values = [entry[fields[0]] + ":" + entry[fields[1]] for entry in data]
+    
+    # Generate all strings to be displayed (index + value)
+    formatted_values = [f"{v}" for _, v in enumerate(values)]
 
-# Method called when a couple of fields will be printed: bandit0:bandit0, bandit1:<pass>,...
-def _print_double_fields(data, fields):
-    print(", ".join([entry[fields[0]] + ":" + entry[fields[1]] for entry in data]))
+    # Determine the maximum width among all formatted entries
+    max_width = max(len(s) for s in formatted_values) + 2  # Add padding between columns
 
-def _print_data(data):
-    print(data)
+    # Calculate how many rows are needed
+    rows, extra = divmod(len(values), cols)
+    if extra > 0:
+        rows += 1  # Add one more row if there are leftover items
+
+    # Print each row
+    for row in range(rows):
+        line = ""
+        for col in range(cols):
+            i = col * rows + row  # Calculate the index for column-major order
+            if i < len(formatted_values):
+                line += formatted_values[i].ljust(max_width)  # Left-align each column entry
+        print(line)
 
 def _print_dataframe(df, fields, is_markdown):
     print_boxed("List of: " + str(fields))
@@ -103,16 +120,11 @@ def _print_dataframe(df, fields, is_markdown):
     else:
         print("\n" + str(df) + "\n")
 
-def _print_list_data(data, fields):
+def _print_list_data(data, fields, cols):
     if fields:
-        if len(fields) == 1: # If filtered by one field
-            _print_single_field(data, fields[0])
-        elif len(fields) == 2: # If filtered by two fields
-            _print_double_fields(data, fields)
-        else:
-            _print_data([{field: entry.get(field, "") for field in fields} for entry in data])
+        _print_fields(data, fields, cols)
     else:
-        _print_data(data)
+        print(data)
 
 def _filter_data_by_user(data, user):
     if user:
@@ -129,7 +141,7 @@ def _format_list_fields(data, fields):
 def _get_dataframe(data, fields):
     return pd.DataFrame(data, columns=fields)
 
-def get_custom_data_json(user=None, as_list=True, is_print=False, fields=None, is_markdown=False):
+def get_custom_data_json(cols=None, user=None, as_list=True, is_print=False, fields=None, is_markdown=False):
     if fields is None:
         fields = []
     # Checks if fields is a string list, not a list of lists
@@ -142,7 +154,7 @@ def get_custom_data_json(user=None, as_list=True, is_print=False, fields=None, i
     # Treat info as list
     if as_list:
         if is_print:
-            _print_list_data(data, fields)
+            _print_list_data(data, fields, cols)
         else:
             return data
     # Treat info as DataFrame

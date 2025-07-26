@@ -19,17 +19,18 @@ def setup_signal_handlers():
 
 # Cleans screen after an action
 def clear_screen():
-    if os.name == 'nt': # Windows
-        os.system('cls')
+    if os.name == "nt": # Windows
+        os.system("cls")
     else: # Linux
         os.system('clear')
 
 # Menu to select user and gets all users (to print them), and other parameters
-def select_user(*fields, show_list_table=True):
+def select_user(fields, show_list_table=True, cols=3):
     if show_list_table: # If want to show data in list format (with commas)
-        print_list(*fields)
+        # Show user besides other fields
+        print_list(cols, fields)
     else: # If want to show data in data in tables (pandas markdown tables)
-        print_table(*fields)
+        print_table(fields)
         
     users = constants.BANDIT_USERS # Getting users to validate user's input
     while True:
@@ -42,42 +43,47 @@ def select_user(*fields, show_list_table=True):
 
 # Update password of a user
 def update_password(fields):
-    user = select_user(fields)
+    columns_to_show = 3 # In how many columns wrap results
+    user = select_user(fields, cols=columns_to_show)
     if user:
         new_pass = input(f"Enter new password for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_password=new_pass)
      
 # Update temp folder of a user
 def update_temp_folder(fields):
-    user = select_user(fields)
+    columns_to_show = 3 # In how many columns wrap results
+    user = select_user(fields, cols=columns_to_show)
     if user:
         new_temp_folder = input(f"Enter temp folder for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_temp_folder=new_temp_folder)
 
 # Update notes of a user
 def update_notes(fields):
-    user = select_user(fields)
+    columns_to_show = 3 # In how many columns wrap results
+    user = select_user(fields, cols=columns_to_show)
     if user:
         new_notes = input(f"Enter notes for {user}: ").strip()
         data_utilities.update_info_for_user(user, new_notes=new_notes)
 
 # Update sshkey of a user
 def update_sshkey(fields):
-    user = select_user(fields)
+    columns_to_show = 3 # In how many columns wrap results
+    user = select_user(fields, cols=columns_to_show)
     if user:
         sshkey_file = input(f"Enter sshkey (file path) for {user}: \n").strip()
         if os.path.isfile(sshkey_file): # If file exists
             data_utilities.update_info_for_user(user, new_sshkey=sshkey_file)
 
 # Delete field of a user
-def delete_field(field):
-    user = select_user("user", field)
+def delete_field(fields_to_show, fields_to_delete):
+    columns_to_show = 3 # In how many columns wrap results
+    user = select_user(fields_to_show, cols=columns_to_show)
     if user:
-        data_utilities.delete_info_for_user(user, field)        
+        data_utilities.delete_info_for_user(user, fields_to_delete)
 
 # Action pending to implement
 def hack_user():
-    user = select_user("user","password","temp_folder","notes", show_list_table=False)
+    user = select_user(["password","temp_folder","notes"], show_list_table=False)
     if user:
         ec.main(user)
 
@@ -86,12 +92,12 @@ def show_banner():
     print(constants.BANNER)
 
 # Print as pandas table
-def print_table(*fields, user=None):
+def print_table(fields, user=None):
     data_utilities.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, user=user)
     
 # Print as list
-def print_list(*fields, user=None):
-    data_utilities.get_custom_data_json(as_list=True, is_print=True, fields=fields, user=user)
+def print_list(cols, fields, user=None):
+    data_utilities.get_custom_data_json(cols, as_list=True, is_print=True, fields=fields, user=user)
 
 # Check if user exists
 def validate_user(user):
