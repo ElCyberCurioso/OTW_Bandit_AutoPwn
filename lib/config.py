@@ -2,42 +2,36 @@ import lib.constants as constants
 from simple_term_menu import TerminalMenu
 
 # Main menu config
-main_menu_title = "  Main Menu.\n  Press Q or Esc to quit. \n"
+main_menu_cursor = "~$ "
+main_left_space = " " * len(main_menu_cursor)
+main_menu_title = main_left_space + "Main Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
 main_menu_items = constants.MAIN_MENU
-main_menu_cursor = "$ "
-main_menu_cursor_style = ("fg_red", "bold")
-main_menu_style = ("bg_green", "fg_black")
-
-# Hack menu config
-hack_menu_title = "  HACK Info Menu.\n  Press Q or Esc to quit. \n"
-hack_menu_items = constants.HACK_MENU
-hack_menu_cursor = main_menu_cursor
-hack_menu_cursor_style = main_menu_cursor_style
-hack_menu_style = main_menu_style
+main_menu_cursor_style = ("fg_green",)
+main_menu_style = ("bg_green", "fg_black", "italics")
 
 # List menu config
-list_menu_title = "  LIST Info Menu.\n  Press Q or Esc to quit. \n"
+list_menu_title = main_left_space + "LIST Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
 list_menu_items = constants.LIST_MENU
 list_menu_cursor = main_menu_cursor
 list_menu_cursor_style = main_menu_cursor_style
 list_menu_style = main_menu_style
 
 # Edit menu config
-edit_menu_title = "  EDIT Info Menu.\n  Press Q or Esc to quit. \n"
+edit_menu_title = main_left_space + "EDIT Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
 edit_menu_items = constants.EDIT_MENU
 edit_menu_cursor = main_menu_cursor
 edit_menu_cursor_style = main_menu_cursor_style
 edit_menu_style = main_menu_style
 
 # Delete menu config
-delete_menu_title = "  DELETE Info Menu.\n  Press Q or Esc to quit. \n"
+delete_menu_title = main_left_space + "DELETE Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
 delete_menu_items = constants.DELETE_MENU
 delete_menu_cursor = main_menu_cursor
 delete_menu_cursor_style = main_menu_cursor_style
 delete_menu_style = main_menu_style
 
 # Input user menu config
-select_user_menu_title = "  Select User Menu.\n  Press Q or Esc to quit. \n"
+select_user_menu_title = "Select User Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
 select_user_menu_items = constants.SELECT_USER_MENU
 select_user_menu_cursor = main_menu_cursor
 select_user_menu_cursor_style = main_menu_cursor_style
@@ -49,7 +43,7 @@ def main_menu_config():
 
     main_menu = TerminalMenu(
         menu_entries=main_menu_items,
-        title=main_menu_title,
+        title=constants.BANNER + "\n" + main_menu_title,
         menu_cursor=main_menu_cursor,
         menu_cursor_style=main_menu_cursor_style,
         menu_highlight_style=main_menu_style,
@@ -59,34 +53,17 @@ def main_menu_config():
     
     return main_menu, main_menu_exit
 
-# Method that handles HACK menu
-def hack_menu_config():
-    hack_menu_exit = False
-
-    hack_menu = TerminalMenu(
-        menu_entries=hack_menu_items,
-        title=hack_menu_title,
-        menu_cursor=hack_menu_cursor,
-        menu_cursor_style=hack_menu_cursor_style,
-        menu_highlight_style=hack_menu_style,
-        cycle_cursor=True,
-        clear_screen=True,
-    )
-    
-    return hack_menu, hack_menu_exit
-
 # Method that handles LIST menu
 def list_menu_config():
     list_menu_exit = False
-
+    
     list_menu = TerminalMenu(
-        menu_entries=list_menu_items,
+        constants.LIST_MENU,
         title=list_menu_title,
-        menu_cursor=list_menu_cursor,
-        menu_cursor_style=list_menu_cursor_style,
-        menu_highlight_style=list_menu_style,
+        multi_select=True,
+        show_multi_select_hint=True,
         cycle_cursor=True,
-        clear_screen=True,
+        clear_screen=False,
     )
     
     return list_menu, list_menu_exit
@@ -124,12 +101,12 @@ def delete_menu_config():
     return delete_menu, delete_menu_exit
 
 # Method that handles SELECT USER menu
-def select_user_menu_config():
+def select_user_menu_config(next_text, next_title):
     select_user_menu_exit = False
 
     select_user_menu = TerminalMenu(
-        menu_entries=select_user_menu_items,
-        title=select_user_menu_title,
+        menu_entries=[next_text if x == "<default_text>" else x for x in select_user_menu_items], # Change <default_text> with next_text parameter in menu entries array
+        title=main_left_space + next_title + " > " + select_user_menu_title,
         menu_cursor=select_user_menu_cursor,
         menu_cursor_style=select_user_menu_cursor_style,
         menu_highlight_style=select_user_menu_style,

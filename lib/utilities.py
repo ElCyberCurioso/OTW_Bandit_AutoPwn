@@ -83,7 +83,7 @@ def delete_field(fields_to_show, fields_to_delete):
 
 # Action pending to implement
 def hack_user():
-    user = select_user(["password","temp_folder","notes"], show_list_table=False)
+    user = select_user(["user","password"])
     if user:
         ec.main(user)
 

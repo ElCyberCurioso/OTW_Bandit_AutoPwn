@@ -2,35 +2,17 @@ import lib.constants as constants
 import lib.config as config
 import lib.utilities as utilities
 
-# Method that handles HACK menu
-def hack_menu():
-    hack_menu, hack_menu_back = config.hack_menu_config()
-    
-    while not hack_menu_back:
-        hack_sel = hack_menu.show()
-        if hack_sel == 0:
-            utilities.hack_user()
-        elif hack_sel == 1 or hack_sel == None:
-            hack_menu_back = True
-            print(constants.BACK_TO_MAIN_MENU)
-    hack_menu_back = False
-
 # Method that handles LIST menu
 def list_menu():
     list_menu, list_menu_back = config.list_menu_config()
     
     while not list_menu_back:
         list_sel = list_menu.show()
-        if list_sel == 0:
-            ################
-            print("")
-        elif list_sel == 1:
-            ################
-            print("")
-        elif list_sel == 2 or list_sel == None:
+        if list_sel:
+            utilities.print_table(list_menu.chosen_menu_entries)
+        else:
             list_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
-    list_menu_back = False
 
 # Method that handles EDIT menu
 def edit_menu():
@@ -39,12 +21,16 @@ def edit_menu():
     while not edit_menu_back:
         edit_sel = edit_menu.show()
         if edit_sel == 0:
-            ################
-            print("")
+            select_user_menu(utilities.update_password, constants.EDIT_DELETE_USER_ACTION, constants.EDIT_MENU[edit_sel], ["user","password"])
         elif edit_sel == 1:
-            ################
-            print("")
-        elif edit_sel == 2 or edit_sel == None:
+            select_user_menu(utilities.update_temp_folder, constants.EDIT_DELETE_USER_ACTION, constants.EDIT_MENU[edit_sel], ["user","temp_folder"])
+        elif edit_sel == 2:
+            select_user_menu(utilities.update_notes, constants.EDIT_DELETE_USER_ACTION, constants.EDIT_MENU[edit_sel], ["user","notes"])
+        elif edit_sel == 3:
+            select_user_menu(utilities.update_sshkey, constants.EDIT_DELETE_USER_ACTION, constants.EDIT_MENU[edit_sel], ["user","sshkey"])
+        elif edit_sel == 4:
+            list_menu()
+        elif edit_sel == 5 or edit_sel == None:
             edit_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
     edit_menu_back = False
@@ -56,29 +42,27 @@ def delete_menu():
     while not delete_menu_back:
         delete_sel = delete_menu.show()
         if delete_sel == 0:
-            ################
-            print("")
+            select_user_menu(utilities.delete_field, constants.EDIT_DELETE_USER_ACTION, constants.DELETE_MENU[delete_sel], ["user","password"], ["password"])
         elif delete_sel == 1:
-            ################
-            print("")
-        elif delete_sel == 2 or delete_sel == None:
+            select_user_menu(utilities.delete_field, constants.EDIT_DELETE_USER_ACTION, constants.DELETE_MENU[delete_sel], ["user","temp_folder"], ["temp_folder"])
+        elif delete_sel == 2:
+            select_user_menu(utilities.delete_field, constants.EDIT_DELETE_USER_ACTION, constants.DELETE_MENU[delete_sel], ["user","notes"], ["notes"])
+        elif delete_sel == 3:
+            select_user_menu(utilities.delete_field, constants.EDIT_DELETE_USER_ACTION, constants.DELETE_MENU[delete_sel], ["user","sshkey"], ["sshkey"])
+        elif delete_sel == 4 or delete_sel == None:
             delete_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
     delete_menu_back = False
 
 # Method that handles SELECT USER menu
-def select_user_menu():
-    select_user_menu, select_user_menu_back = config.select_user_menu_config()
+def select_user_menu(next_action, next_text, next_title, *next_parameters):
+    select_user_menu, select_user_menu_back = config.select_user_menu_config(next_text, next_title)
     
     while not select_user_menu_back:
         select_user_sel = select_user_menu.show()
         if select_user_sel == 0:
-            ################
-            print("")
-        elif select_user_sel == 1:
-            ################
-            print("")
-        elif select_user_sel == 2 or select_user_sel == None:
+            next_action(*next_parameters)
+        elif select_user_sel == 1 or select_user_sel == None:
             select_user_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
     select_user_menu_back = False
@@ -93,7 +77,7 @@ def menu():
 
         # Hack Menu option
         if main_sel == 0:
-            hack_menu()
+            select_user_menu(utilities.hack_user, constants.HACK_USER_ACTION, constants.MAIN_MENU[main_sel])
         
         # List Menu option
         elif main_sel == 1:

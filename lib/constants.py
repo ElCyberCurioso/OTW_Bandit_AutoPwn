@@ -24,45 +24,39 @@ BANNER = """
  /_/   \_\__,_|\__\___/|_|     \_/\_/  |_| \_|              
                                                             
 """
-BACK_TO_MAIN_MENU_OPTION = "Back to main menu 🔙"
+
+BACK_TO_MAIN_MENU_OPTION = "Back to main menu"
 
 MAIN_MENU = ["Hack bandit user", "List info", "Edit info", "Delete info", "Exit"]
 
-HACK_MENU = ["Indicate user to hack",
+LIST_MENU = ["user", "password", "details", "tags", "url", "sshkey", "temp_folder"]
+
+EDIT_MENU = ["Update password",
+             "Update temp folder",
+             "Update notes",
+             "Update sshkey",
+             "List info",
              BACK_TO_MAIN_MENU_OPTION]
 
-LIST_MENU = ["List credentials (user + password + temp_folder)",
-             "List guiding info (user + details + url)",
-             "List notes (user + notes)", 
-             "List tags (user + tags)",
-             BACK_TO_MAIN_MENU_OPTION]
-
-EDIT_MENU = ["Update password 🔑",
-             "Update temp folder 📁",
-             "Update notes 📝",
-             "Update sshkey 🔐",
-             "List info 📋",
-             BACK_TO_MAIN_MENU_OPTION]
-
-DELETE_MENU = ["Delete password 🔑",
-               "Delete temp folder 📁",
-               "Delete notes 📝",
-               "Delete sshkey 🔐",
+DELETE_MENU = ["Delete password",
+               "Delete temp folder",
+               "Delete notes",
+               "Delete sshkey",
                BACK_TO_MAIN_MENU_OPTION]
 
 SELECT_USER_MENU = ["<default_text>",
                     BACK_TO_MAIN_MENU_OPTION]
 
-INVALID_OPTION = "Invalid option ⁉️"
-INVALID_USER = "Invalid user, please try again! ‼️"
-TARGET_USER = "Target user (optional) 📜"
+INVALID_OPTION = "Invalid option"
+INVALID_USER = "Invalid user, please try again!"
+TARGET_USER = "Target user (optional)"
 
-HACK_USER_ACTION = "Indicate user to hack 🗃️"
-EDIT_USER_ACTION = "Indicate the user to apply the changes to 🗃️"
-DELETE_ACTION = "Indicate the user to apply the changes to 🗃️"
+HACK_USER_ACTION = "Indicate user to hack"
+EDIT_DELETE_USER_ACTION = "Indicate the user to apply the changes to"
 
 BACK_TO_MAIN_MENU = "Going back to Main Menu"
 
+KEYS_INSTRUCTIONS = "Press Q or Esc to quit. \n"
 
 BANDIT_USERS = [
     "bandit0", "bandit1", "bandit2", "bandit3", "bandit4", "bandit5",
