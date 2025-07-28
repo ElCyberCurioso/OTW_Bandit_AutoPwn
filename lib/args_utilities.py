@@ -8,7 +8,7 @@ import lib.data_utilities as data_utilities
 import lib.local_utilities as local_utilities
 
 def handle_menu(_):
-    menu.main_menu()
+    menu.menu()
 
 # Method that handles HACK mode
 def handle_hack(args):

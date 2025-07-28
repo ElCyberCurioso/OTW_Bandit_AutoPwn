@@ -24,59 +24,45 @@ BANNER = """
  /_/   \_\__,_|\__\___/|_|     \_/\_/  |_| \_|              
                                                             
 """
+BACK_TO_MAIN_MENU_OPTION = "Back to main menu 🔙"
 
-EDIT_MENU = """
---- EDIT Info Menu ---
-1️⃣​  Update password 🔑
-2️⃣  Update temp folder ​📁​
-3️⃣  Update notes 📝​
-4️⃣  Update sshkey ​🔐​
-5️⃣  List info ​📋​
-6️⃣  Back ​🔙​
-Choose an option:
-"""
+MAIN_MENU = ["Hack bandit user", "List info", "Edit info", "Delete info", "Exit"]
 
-DELETE_MENU = """
---- DELETE Info Menu ---
-1️⃣  Delete password 🔑
-2️⃣  Delete temp folder ​📁​
-3️⃣  Delete notes 📝​
-4️⃣  Delete sshkey ​🔐​
-5️⃣  Back ​🔙​
-Choose an option:
-"""
+HACK_MENU = ["Indicate user to hack",
+             BACK_TO_MAIN_MENU_OPTION]
 
-LIST_MENU = """
---- LIST Info Menu ---
-1️⃣  List credentials (user + password + temp_folder)
-2️⃣  List guiding info (user + details + url)
-3️⃣  List notes (user + notes)
-4️⃣  List tags (user + tags)
-5️⃣  Back ​🔙​
-Choose an option:
-"""
+LIST_MENU = ["List credentials (user + password + temp_folder)",
+             "List guiding info (user + details + url)",
+             "List notes (user + notes)", 
+             "List tags (user + tags)",
+             BACK_TO_MAIN_MENU_OPTION]
 
-HACK_MENU = """
---- HACK Menu ---
-1️⃣  Indicate user to hack ​​🗃️​
-2️⃣  Back ​🔙​
-Choose an option:
-"""
+EDIT_MENU = ["Update password 🔑",
+             "Update temp folder 📁",
+             "Update notes 📝",
+             "Update sshkey 🔐",
+             "List info 📋",
+             BACK_TO_MAIN_MENU_OPTION]
 
-MAIN_MENU = """
-1️⃣  Hack bandit user 👨‍💻
-2️⃣  List info 📋​
-3️⃣  Edit info ​✒️​
-4️⃣  Delete info 🧼​
-5️⃣  Clean screen 🧹​
-6️⃣  Show banner ​🏴‍☠️​
-7️⃣  Exit ​🚀​
-Choose an option:
-"""
+DELETE_MENU = ["Delete password 🔑",
+               "Delete temp folder 📁",
+               "Delete notes 📝",
+               "Delete sshkey 🔐",
+               BACK_TO_MAIN_MENU_OPTION]
 
-INVALID_OPTION = "⁉️​ Invalid option."
-INVALID_USER = "‼️​ Invalid user, please try again!"
-TARGET_USER = "📜​ Target user (optional)"
+SELECT_USER_MENU = ["<default_text>",
+                    BACK_TO_MAIN_MENU_OPTION]
+
+INVALID_OPTION = "Invalid option ⁉️"
+INVALID_USER = "Invalid user, please try again! ‼️"
+TARGET_USER = "Target user (optional) 📜"
+
+HACK_USER_ACTION = "Indicate user to hack 🗃️"
+EDIT_USER_ACTION = "Indicate the user to apply the changes to 🗃️"
+DELETE_ACTION = "Indicate the user to apply the changes to 🗃️"
+
+BACK_TO_MAIN_MENU = "Going back to Main Menu"
+
 
 BANDIT_USERS = [
     "bandit0", "bandit1", "bandit2", "bandit3", "bandit4", "bandit5",

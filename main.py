@@ -85,7 +85,8 @@ if __name__ == "__main__":
         "lzma": "python-lzma",
         "py7zr": "py7zr",
         "fpdf": "fpdf",
-        "openpyxl": "openpyxl"
+        "openpyxl": "openpyxl",
+        "simple_term_menu": "simple_term_menu"
     }
     
     # Check if required modules are installed

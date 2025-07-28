@@ -1,141 +1,114 @@
-import lib.utilities as utilities
 import lib.constants as constants
-import lib.data_utilities as data_utilities
-
-import os
-
-# Menu input handler
-if os.name == 'nt':
-    import msvcrt
-    def get_key():
-        return msvcrt.getch().decode('utf-8')
-else:
-    import tty
-    import termios
-    def get_key():
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
-
-# Method that handles MAIN menu
-def main_menu():
-    utilities.setup_signal_handlers() # Start exit handler
-    utilities.clear_screen() # Clear screen before display menu
-    
-    utilities.show_banner()
-    while True:
-        data_utilities.print_boxed("Main menu")
-        print(constants.MAIN_MENU)
-        key = get_key()
-        if key == '1':
-            utilities.clear_screen()
-            hack_menu()
-        elif key == '2':
-            utilities.clear_screen()
-            list_menu()
-        elif key == '3':
-            utilities.clear_screen()
-            edit_menu()
-        elif key == '4':
-            utilities.clear_screen()
-            delete_menu()
-        elif key == '5':
-            utilities.clear_screen()
-        elif key == '6':
-            utilities.clear_screen()
-            utilities.show_banner()
-        elif key == '7':
-            print("👋​ See you next time!​")
-            break
-        else:
-            print(constants.INVALID_OPTION)
+import lib.config as config
+import lib.utilities as utilities
 
 # Method that handles HACK menu
 def hack_menu():
-    while True:
-        print(constants.HACK_MENU)
-        key = get_key()
-        if key == '1':
+    hack_menu, hack_menu_back = config.hack_menu_config()
+    
+    while not hack_menu_back:
+        hack_sel = hack_menu.show()
+        if hack_sel == 0:
             utilities.hack_user()
-        elif key == '2':
-            utilities.clear_screen()
-            break
-        else:
-            print(constants.INVALID_OPTION)
+        elif hack_sel == 1 or hack_sel == None:
+            hack_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+    hack_menu_back = False
 
 # Method that handles LIST menu
 def list_menu():
-    while True:
-        print(constants.LIST_MENU)
-        key = get_key()
-        if key == '1':
-            utilities.clear_screen()
-            utilities.print_table("user","password","temp_folder")
-        elif key == '2':
-            utilities.clear_screen()
-            utilities.print_table("user","details","url")
-        elif key == '3':
-            utilities.clear_screen()
-            utilities.print_table("user","notes")
-        elif key == '4':
-            utilities.clear_screen()
-            utilities.print_table("user","tags")
-        elif key == '5':
-            utilities.clear_screen()
-            break
-        else:
-            print(constants.INVALID_OPTION)
+    list_menu, list_menu_back = config.list_menu_config()
+    
+    while not list_menu_back:
+        list_sel = list_menu.show()
+        if list_sel == 0:
+            ################
+            print("")
+        elif list_sel == 1:
+            ################
+            print("")
+        elif list_sel == 2 or list_sel == None:
+            list_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+    list_menu_back = False
 
 # Method that handles EDIT menu
 def edit_menu():
-    while True:
-        print(constants.EDIT_MENU)
-        key = get_key()
-        if key == '1':
-            utilities.clear_screen()
-            utilities.update_password(["user","password"])
-        elif key == '2':
-            utilities.clear_screen()
-            utilities.update_temp_folder(["user","temp_folder"])
-        elif key == '3':
-            utilities.clear_screen()
-            utilities.update_notes(["user","notes"])
-        elif key == '4':
-            utilities.clear_screen()
-            utilities.update_sshkey(["user","sshkey"])
-        elif key == '5':
-            utilities.clear_screen()
-            list_menu()
-        elif key == '6':
-            utilities.clear_screen()
-            break
-        else:
-            print(constants.INVALID_OPTION)
-            
+    edit_menu, edit_menu_back = config.edit_menu_config()
+    
+    while not edit_menu_back:
+        edit_sel = edit_menu.show()
+        if edit_sel == 0:
+            ################
+            print("")
+        elif edit_sel == 1:
+            ################
+            print("")
+        elif edit_sel == 2 or edit_sel == None:
+            edit_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+    edit_menu_back = False
+
 # Method that handles DELETE menu
 def delete_menu():
-    while True:
-        print(constants.DELETE_MENU)
-        key = get_key()
-        if key == '1':
-            utilities.clear_screen()
-            utilities.delete_field(["password"])
-        elif key == '2':
-            utilities.clear_screen()
-            utilities.delete_field(["temp_folder"])
-        elif key == '3':
-            utilities.clear_screen()
-            utilities.delete_field(["notes"])
-        elif key == '4':
-            utilities.clear_screen()
-            utilities.delete_field(["sshkey"])
-        elif key == '5':
-            utilities.clear_screen()
-            break
-        else:
-            print(constants.INVALID_OPTION)
+    delete_menu, delete_menu_back = config.delete_menu_config()
+    
+    while not delete_menu_back:
+        delete_sel = delete_menu.show()
+        if delete_sel == 0:
+            ################
+            print("")
+        elif delete_sel == 1:
+            ################
+            print("")
+        elif delete_sel == 2 or delete_sel == None:
+            delete_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+    delete_menu_back = False
+
+# Method that handles SELECT USER menu
+def select_user_menu():
+    select_user_menu, select_user_menu_back = config.select_user_menu_config()
+    
+    while not select_user_menu_back:
+        select_user_sel = select_user_menu.show()
+        if select_user_sel == 0:
+            ################
+            print("")
+        elif select_user_sel == 1:
+            ################
+            print("")
+        elif select_user_sel == 2 or select_user_sel == None:
+            select_user_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+    select_user_menu_back = False
+    
+# Method that handles MAIN menu
+def menu():
+    # Recover menu's config
+    main_menu, main_menu_exit = config.main_menu_config()
+    
+    while not main_menu_exit:
+        main_sel = main_menu.show()
+
+        # Hack Menu option
+        if main_sel == 0:
+            hack_menu()
+        
+        # List Menu option
+        elif main_sel == 1:
+            list_menu()
+        
+        # Edit Menu option
+        elif main_sel == 2:
+            edit_menu()
+        
+        # Delete Menu option
+        elif main_sel == 3:
+            delete_menu()
+        
+        # Exiting option
+        elif main_sel == 4 or main_sel == None:
+            main_menu_exit = True
+            print("Exiting....")
+            
