@@ -27,15 +27,16 @@ def get_file_if_not_exists(file_name, source_folder):
         if file_exists_source_dir:
             # Copy to the current directory
             shutil.copy2(file_source_path, file_current_path)
-            print(f"📄 File '{file_name}' copied from '{source_folder}' to main folder.")
+            print(f"File '{file_name}' copied from '{source_folder}' to main folder.")
         else:
-            print(f"❌ File '{file_name}' not found in source folder '{source_folder}'.")
+            print(f"File '{file_name}' not found in source folder '{source_folder}'.")
             raise FileNotFoundError(f"Source file '{file_name}' not found in '{source_folder}'.")
 
 # Create resource folder
 def create_resources_folder():
     current_path = os.path.dirname(__file__)
-    resources_path = os.path.join(current_path,"resources")
+    main_project_path = os.path.join(current_path, "../")
+    resources_path = os.path.join(main_project_path, "resources")
     
     if not os.path.exists(resources_path):
         os.makedirs(resources_path)
@@ -44,7 +45,7 @@ def create_resources_folder():
 
 # Create a bandit folder inside resource folder
 def create_subfolder_on_resources_folder(resources_path, subfolders):
-    subfolder_path = os.path.join(resources_path,subfolders)
+    subfolder_path = os.path.join(resources_path, subfolders)
     
     if not os.path.exists(subfolder_path):
         os.makedirs(subfolder_path)

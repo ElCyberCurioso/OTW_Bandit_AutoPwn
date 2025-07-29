@@ -34,9 +34,13 @@ def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
     # Close connection
     channel.send("exit\n")
 
+# Changes owner and group to indicated one
+def change_owner_temp_directory(client, temp_dir, user):
+    _, _, _ = client.exec_command("chown " + user + ":" + user + " " + temp_dir)
+
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
-def make_temp_directory(user, existing_client=None):
-    if not existing_client:
+def make_temp_directory(user, existing_client=None, credentials_default=False):
+    if not existing_client or credentials_default:
         client = ssh_utilities.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
     else:
         client = existing_client
@@ -59,17 +63,17 @@ def clean_temp_directory(client, temp_dir):
 def get_temp_directory(client, user):
     temp_dir = ""
     
-    user_temp_folder = data_utilities.get_custom_data_json(users=user,fields=["temp_folder"])
-    if user_temp_folder:
+    user_temp_folder = data_utilities.get_custom_data_json(users=user, fields=["temp_folder"])
+    temp_dir = str(user_temp_folder[0])
+    if temp_dir:
         # Check if folder exists
-        temp_dir = str(user_temp_folder[0])
         _, stdout, _ = client.exec_command("ls " + temp_dir + " &>/dev/null && echo 'exists' || echo 'no exists'")
         result = stdout.read().decode().strip()
         
         if result == "no exists":
-            temp_dir = make_temp_directory(user)
+            temp_dir = make_temp_directory(user, existing_client=client)
     else:
-        temp_dir = make_temp_directory(user)
+        temp_dir = make_temp_directory(user, existing_client=client)
     
     clean_temp_directory(client, temp_dir)
     
