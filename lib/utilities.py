@@ -86,7 +86,7 @@ def delete_field(fields_to_show, fields_to_delete):
 
 # Export to PDF or Excel info
 def export_fields(fields, filename, is_pdf, is_excel):
-    users = select_user(fields)
+    users = select_user(fields,show_list_table=False)
     if users:
         export_utilities.export(fields, filename, users, is_pdf, is_excel)
 

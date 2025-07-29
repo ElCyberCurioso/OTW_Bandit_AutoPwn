@@ -5,7 +5,7 @@ import lib.data_utilities as data_utilities
 import lib.local_utilities as local_utilities
 import lib.utilities as utilities
 
-def export_to_pdf(df, filename="output.pdf", title="Reporte"):
+def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=10)
@@ -61,12 +61,11 @@ def manage_pdf(df, filename, users):
         print("\nFile exist already!")
         return
     
-    print(f"​\nExporting to PDF: {filename}\n")
+    print(f"​\nExporting to PDF: {filename}")
     export_to_pdf(df, filename)
 
 # Method that manages Excel exports
 def manage_excel(df, filename, users):
-    print("Len: " + str(len(users)))
     if utilities.count_elements(users) > 1:
         filename = filename + "_" + "all_users"
     else:
@@ -79,16 +78,17 @@ def manage_excel(df, filename, users):
         print("\nFile exist already!")
         return
     
-    print(f"​\nExporting to Excel: {filename}\n")
+    print(f"​\nExporting to Excel: {filename}")
     export_to_excel(df, filename)
 
 # Main export method
 def export(array_selected_fields, filename, users=[], is_pdf=False, is_excel=False):
     df = data_utilities.get_custom_data_json(users=users, as_list=False, is_print=False, fields=array_selected_fields)
     
-    if is_pdf:
-        manage_pdf(df, filename, users)
-    elif is_excel:
-        manage_excel(df, filename, users)
+    if is_pdf or is_excel:
+        if is_pdf:
+            manage_pdf(df, filename, users)
+        if is_excel:
+            manage_excel(df, filename, users)
     else:
         print("Wrong format...")
