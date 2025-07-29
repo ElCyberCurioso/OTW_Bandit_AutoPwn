@@ -11,7 +11,7 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
     data = json_manage.get_info_json()
     entry = _find_user_entry(data, user_to_update)
     if entry is None:
-        print(f"❌ User '{user_to_update}' not found.")
+        print(f"User '{user_to_update}' not found.")
         return
     
     if new_password:
@@ -42,7 +42,7 @@ def delete_info_for_user(user_to_update, fields=[]):
     data = json_manage.get_info_json()
     entry = _find_user_entry(data, user_to_update)
     if entry is None:
-        print(f"❌ User '{user_to_update}' not found.")
+        print(f"User '{user_to_update}' not found.")
         return
     
     for key in fields:
@@ -82,7 +82,7 @@ def _confirm_changes(changes):
         confirm = input("Confirm changes (y/n)? ").strip().lower()
         if confirm in ("y", "n"):
             return confirm == "y"
-        print("\n❌ Invalid option! Please enter a valid one...")
+        print("\nInvalid option! Please enter a valid one...")
 
 # Method called to print a list
 def _print_fields(data, fields, cols):
@@ -126,9 +126,9 @@ def _print_list_data(data, fields, cols):
     else:
         print(data)
 
-def _filter_data_by_user(data, user):
-    if user:
-        return [item for item in data if item['user'] == user]
+def _filter_data_by_user(data, users):
+    if users:
+        return [item for item in data if item['user'] in users]
     return data
 
 def _format_list_fields(data, fields):
@@ -141,7 +141,7 @@ def _format_list_fields(data, fields):
 def _get_dataframe(data, fields):
     return pd.DataFrame(data, columns=fields)
 
-def get_custom_data_json(cols=None, user=None, as_list=True, is_print=False, fields=None, is_markdown=False):
+def get_custom_data_json(cols=None, users=[], as_list=True, is_print=False, fields=None, is_markdown=False):
     if fields is None:
         fields = []
     # Checks if fields is a string list, not a list of lists
@@ -149,7 +149,7 @@ def get_custom_data_json(cols=None, user=None, as_list=True, is_print=False, fie
         # For nested lists
         fields = [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
     data = json_manage.get_info_json()
-    data = _filter_data_by_user(data, user)
+    data = _filter_data_by_user(data, users)
 
     # Treat info as list
     if as_list:

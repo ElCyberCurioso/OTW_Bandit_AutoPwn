@@ -5,7 +5,6 @@ import lib.utilities as utilities
 import lib.exploitation_chain as ec
 import lib.export_utilities as export_utilities
 import lib.data_utilities as data_utilities
-import lib.local_utilities as local_utilities
 
 def handle_menu(_):
     menu.menu()
@@ -59,44 +58,16 @@ def get_selected_fields(args):
 def handle_list(args):
     if args.user:
         utilities.validate_user(args.user)
-        print(f"📋​ Listing data for user {args.user}\n")
+        print(f"Listing data for user {args.user}\n")
     else:
-        print("📋​ Listing data for all users\n")
+        print("Listing data for all users\n")
 
     fields = get_selected_fields(args)
     utilities.print_table(fields, user=args.user)
 
-def _export_to_pdf(df, filename, user):
-    if user:
-        filename = filename + "_" + user
-    if not filename.endswith(".pdf"):
-        filename = filename + ".pdf"
-    
-    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
-    if file_exists:
-        print("\n❌​ File exist already!")
-        return
-    
-    print(f"​\n✔️​  Exporting to PDF: {filename}\n")
-    export_utilities.export_to_pdf(df, filename)
-
-def _export_to_excel(df, filename, user):
-    if user:
-        filename = filename + "_" + user
-    if not filename.endswith(".xlsx"):
-        filename = filename + ".xlsx"
-    
-    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
-    if file_exists:
-        print("\n❌​ File exist already!")
-        return
-    
-    print(f"​\n✔️ Exporting to Excel: {filename}\n")
-    export_utilities.export_to_excel(df, filename)
-
 # Method that handles EXPORT mode
 def handle_export(args):
-    print("📎 Exporting data")
+    print("[+] Exporting data")
     invalid_fields = []
     array_selected_fields = []
 
@@ -106,17 +77,15 @@ def handle_export(args):
         array_selected_fields = selected_fields.split(',')
         invalid_fields = [field for field in array_selected_fields if field not in valid_fields]
         if invalid_fields:
-            print(f"❌​ Invalid fields: {invalid_fields}")
+            print(f"[!] Invalid fields: {invalid_fields}")
             sys.exit(1)
-        print(f"​\n📁​ Exporting fields: {selected_fields}")
+        print(f"​\n[+] Exporting fields: {selected_fields}")
 
     if args.user:
         utilities.validate_user(args.user)
 
-    df = data_utilities.get_custom_data_json(user=args.user, as_list=False, is_print=False, fields=array_selected_fields)
-
     if args.pdf:
-        _export_to_pdf(df, args.pdf, args.user)
+        export_utilities.export(args.user, array_selected_fields, is_pdf=True)
     if args.excel:
-        _export_to_excel(df, args.excel, args.user)
+        export_utilities.export(args.user, array_selected_fields, is_excel=True)
         

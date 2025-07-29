@@ -27,9 +27,11 @@ BANNER = """
 
 BACK_TO_MAIN_MENU_OPTION = "Back to main menu"
 
-MAIN_MENU = ["Hack bandit user", "List info", "Edit info", "Delete info", "Exit"]
+MAIN_MENU = ["Hack bandit user 😈", "List info 🔎", "Edit info 📋", "Delete info 💀", "Export info 💾", "Exit 🚀"]
 
-LIST_MENU = ["user", "password", "details", "tags", "url", "sshkey", "temp_folder"]
+ARRAY_ALL_FIELDS = ["user", "password", "details", "tags", "url", "sshkey", "temp_folder"]
+
+LIST_MENU = ARRAY_ALL_FIELDS
 
 EDIT_MENU = ["Update password",
              "Update temp folder",
@@ -43,6 +45,10 @@ DELETE_MENU = ["Delete password",
                "Delete notes",
                "Delete sshkey",
                BACK_TO_MAIN_MENU_OPTION]
+
+EXPORT_MENU = ["Export to PDF",
+               "Export to Excel",
+               ""]
 
 SELECT_USER_MENU = ["<default_text>",
                     BACK_TO_MAIN_MENU_OPTION]

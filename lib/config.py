@@ -1,4 +1,6 @@
 import lib.constants as constants
+import lib.utilities as utilities
+
 from simple_term_menu import TerminalMenu
 
 # Main menu config
@@ -10,7 +12,7 @@ main_menu_cursor_style = ("fg_green",)
 main_menu_style = ("bg_green", "fg_black", "italics")
 
 # List menu config
-list_menu_title = main_left_space + "LIST Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
+list_menu_title = main_left_space[:-1] + "LIST Info Menu.\n" + main_left_space[:-1] + constants.KEYS_INSTRUCTIONS
 list_menu_items = constants.LIST_MENU
 list_menu_cursor = main_menu_cursor
 list_menu_cursor_style = main_menu_cursor_style
@@ -29,6 +31,13 @@ delete_menu_items = constants.DELETE_MENU
 delete_menu_cursor = main_menu_cursor
 delete_menu_cursor_style = main_menu_cursor_style
 delete_menu_style = main_menu_style
+
+# Export menu config
+export_menu_title = main_left_space[:-1] + "EXPORT Info Menu.\n" + main_left_space[:-1] + constants.KEYS_INSTRUCTIONS
+export_menu_items = utilities.get_export_menu_fields()
+export_menu_cursor = main_menu_cursor
+export_menu_cursor_style = main_menu_cursor_style
+export_menu_style = main_menu_style
 
 # Input user menu config
 select_user_menu_title = "Select User Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
@@ -99,6 +108,22 @@ def delete_menu_config():
     )
 
     return delete_menu, delete_menu_exit
+
+# Method that handles EXPORT menu
+def export_menu_config():
+    export_menu_exit = False
+
+    export_menu = TerminalMenu(
+        utilities.get_export_menu_fields(),
+        title=export_menu_title,
+        multi_select=True,
+        show_multi_select_hint=True,
+        cycle_cursor=True,
+        clear_screen=False,
+        skip_empty_entries=True,
+    )
+
+    return export_menu, export_menu_exit
 
 # Method that handles SELECT USER menu
 def select_user_menu_config(next_text, next_title):

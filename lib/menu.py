@@ -54,6 +54,35 @@ def delete_menu():
             print(constants.BACK_TO_MAIN_MENU)
     delete_menu_back = False
 
+# Method that handles EXPORT menu
+def export_menu():
+    export_menu, export_menu_back = config.export_menu_config()
+    
+    while not export_menu_back:
+        export_sel = export_menu.show()
+        if export_sel:
+            
+            # print("Chosen items: " + str(export_menu.chosen_menu_entries) + "\n" + str(export_sel))
+            formats = export_sel[:2]
+            fields_map = dict(zip(export_sel, export_menu.chosen_menu_entries))
+                        
+            # Check formats to print info
+            if formats[0] in export_sel:
+                is_pdf = True
+            if formats[1] in export_sel:
+                is_excel = True
+            
+            # Recover selected fields to print
+            result = [valor for clave, valor in fields_map.items() if clave not in (0, 1)]
+            
+            filename = input("Indicate filename: ")
+            
+            utilities.export_fields(result, filename, is_pdf, is_excel)
+                
+        else:
+            export_menu_back = True
+            print(constants.BACK_TO_MAIN_MENU)
+
 # Method that handles SELECT USER menu
 def select_user_menu(next_action, next_text, next_title, *next_parameters):
     select_user_menu, select_user_menu_back = config.select_user_menu_config(next_text, next_title)
@@ -91,8 +120,12 @@ def menu():
         elif main_sel == 3:
             delete_menu()
         
+        # Export Menu option
+        elif main_sel == 4:
+            export_menu()
+        
         # Exiting option
-        elif main_sel == 4 or main_sel == None:
+        elif main_sel == 5 or main_sel == None:
             main_menu_exit = True
-            print("Exiting....")
+            print("See you soon! 👋")
             
