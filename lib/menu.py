@@ -116,6 +116,8 @@ def select_user_menu(next_action, next_text, next_title, *next_parameters):
     
 # Method that handles MAIN menu
 def menu():
+    utilities.setup_signal_handlers()
+    
     # Recover menu's config
     main_menu, main_menu_exit = config.main_menu_config()
     
@@ -145,5 +147,5 @@ def menu():
         # Exiting option
         elif main_sel == 5 or main_sel == None:
             main_menu_exit = True
-            print("See you soon! 👋")
+            print(f"\n{constants.EXITING}")
             

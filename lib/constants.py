@@ -64,6 +64,8 @@ BACK_TO_MAIN_MENU = "Going back to Main Menu"
 
 KEYS_INSTRUCTIONS = "Press Q or Esc to quit. \n"
 
+EXITING = "See you soon! 👋"
+
 BANDIT_USERS = [
     "bandit0", "bandit1", "bandit2", "bandit3", "bandit4", "bandit5",
     "bandit6", "bandit7", "bandit8", "bandit9", "bandit10", "bandit11",

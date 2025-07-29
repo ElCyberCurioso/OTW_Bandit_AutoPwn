@@ -10,7 +10,7 @@ import signal, os, base64
 # Script exit handler
 def exit_handler(sig=None, frame=None):
     # Handle any cleanup here
-    print('\nExiting...')
+    print(f"\n{constants.EXITING}")
     exit(0)
 
 # Setup exit handler
@@ -23,7 +23,7 @@ def clear_screen():
     if os.name == "nt": # Windows
         os.system("cls")
     else: # Linux
-        os.system('clear')
+        os.system("clear")
 
 # Menu to select user and gets all users (to print them), and other parameters
 def select_user(fields, show_list_table=True, cols=3):
