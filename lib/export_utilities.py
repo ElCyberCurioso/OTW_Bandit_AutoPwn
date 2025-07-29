@@ -7,16 +7,9 @@ import lib.utilities as utilities
 
 def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     pdf = FPDF()
-    pdf.add_page()
     pdf.set_font("Arial", size=10)
 
-    # Title
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(0, 10, title, ln=True, align='C')
-    pdf.ln(10)
-    
-    # Calculate max width
-    pdf.set_font("Arial", size=10)
+    # Calculate column widths
     col_widths = []
     for col in df.columns:
         max_width = pdf.get_string_width(str(col)) + 4  # Margin
@@ -26,6 +19,22 @@ def export_to_pdf(df, filename="output.pdf", title="Information Report"):
                 max_width = item_width
         col_widths.append(max_width)
 
+    # Determine orientation
+    total_table_width = sum(col_widths)
+    page_width = pdf.w - 2 * pdf.l_margin  # Usable page width
+    # orientation = 'P'
+    if total_table_width > page_width:
+        orientation = 'L'
+        pdf = FPDF(orientation=orientation)
+        pdf.set_font("Arial", size=10)
+        # page_width = pdf.w - 2 * pdf.l_margin
+
+    pdf.add_page()
+    # Title
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(0, 10, title, ln=True, align='C')
+    pdf.ln(10)
+    
     # Header
     pdf.set_font("Arial", 'B', 10)
     for i, col in enumerate(df.columns):
