@@ -5,7 +5,7 @@ import lib.json_manage as json_manage
 import lib.utilities as utilities
 
 # Update properties of a level on each execution
-def update_info_for_user(user_to_update, new_password="", new_temp_folder="", new_notes="", new_sshkey=""):
+def update_info_for_user(user_to_update, is_automated=False, new_password="", new_temp_folder="", new_notes="", new_sshkey=""):
     new_values = {}
     
     data = json_manage.get_info_json()
@@ -32,7 +32,10 @@ def update_info_for_user(user_to_update, new_password="", new_temp_folder="", ne
         print("No changes detected.")
         return
 
-    if _confirm_changes(changes):
+    if not is_automated:
+        if _confirm_changes(changes):
+            json_manage.save_credentials_json(data)
+    else:
         json_manage.save_credentials_json(data)
 
 def delete_info_for_user(user_to_update, fields=[]):
@@ -141,30 +144,39 @@ def _format_list_fields(data, fields):
 def _get_dataframe(data, fields):
     return pd.DataFrame(data, columns=fields)
 
-def get_custom_data_json(cols=None, users=[], as_list=True, is_print=False, fields=None, is_markdown=False):
+def _flatten_fields(fields):
     if fields is None:
-        fields = []
-    # Checks if fields is a string list, not a list of lists
+        return []
     if any(isinstance(f, list) for f in fields):
-        # For nested lists
-        fields = [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
+        return [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
+    return fields
+
+def _handle_list_case(data, fields, cols, is_print, users):
+    if is_print:
+        _print_list_data(data, fields, cols)
+    else:
+        if users:
+            return [data[0].get(field) for field in fields] if data else []
+        else:
+            return data
+
+def _handle_dataframe_case(data, fields, is_print, is_markdown):
+    data = _format_list_fields(data, fields)
+    df = _get_dataframe(data, fields)
+    if is_print:
+        _print_dataframe(df, fields, is_markdown)
+    else:
+        return df
+
+def get_custom_data_json(cols=None, users=[], as_list=True, is_print=False, fields=None, is_markdown=False):
+    fields = _flatten_fields(fields)
     data = json_manage.get_info_json()
     data = _filter_data_by_user(data, users)
 
-    # Treat info as list
     if as_list:
-        if is_print:
-            _print_list_data(data, fields, cols)
-        else:
-            return data
-    # Treat info as DataFrame
+        return _handle_list_case(data, fields, cols, is_print, users)
     else:
-        data = _format_list_fields(data, fields)
-        df = _get_dataframe(data, fields)
-        if is_print:
-            _print_dataframe(df, fields, is_markdown)
-        else:
-            return df
+        return _handle_dataframe_case(data, fields, is_print, is_markdown)
 
 # Print string into a box on console
 #   +-----------+
