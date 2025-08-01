@@ -1,4 +1,4 @@
-import os
+import os, time
 import pandas as pd
 
 import lib.json_manage as json_manage
@@ -41,7 +41,7 @@ def update_info_for_user(user_to_update, is_automated=False, new_password="", ne
 def delete_info_for_user(user_to_update, fields=[]):
     changes = ""
     updated = False
-        
+    
     data = json_manage.get_info_json()
     entry = _find_user_entry(data, user_to_update)
     if entry is None:
@@ -61,7 +61,38 @@ def delete_info_for_user(user_to_update, fields=[]):
         return
     
     if _confirm_changes(changes):
+        print("Performing changes...")
         json_manage.save_credentials_json(data)
+        time.sleep(2)
+
+def delete_all_info_for_users(field=None):
+    changes = ""
+    updated = False
+    key = field[0]
+    
+    data = json_manage.get_info_json()
+
+    if not key:
+        print(f"Field '{key}' not found.")
+        return
+    
+    for entry in data[1:]:
+        if not entry[key]:
+            changes += f"({entry["user"]}) {key}: already empty\n"
+        else:
+            changes += f"({entry["user"]}) {key}: {entry[key]} -> \"\" (empty)\n"
+            entry[key] = ""
+            updated = True
+    
+    if not updated:
+        print("No changes detected. Exiting...")
+        time.sleep(2)
+        return
+    
+    if _confirm_changes(changes):
+        print("Performing changes...")
+        json_manage.save_credentials_json(data)
+        time.sleep(2)
 
 def _find_user_entry(data, user_to_update):
     for entry in data:

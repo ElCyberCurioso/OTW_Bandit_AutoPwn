@@ -5,7 +5,7 @@ import lib.exploitation_chain as ec
 import lib.data_utilities as data_utilities
 import lib.export_utilities as export_utilities
 
-import signal, os, base64
+import signal, os, base64, time
 
 # Script exit handler
 def exit_handler(sig=None, frame=None):
@@ -33,7 +33,7 @@ def select_user(fields, show_list_table=True, cols=3):
     else: # If want to show data in data in tables (pandas markdown tables)
         print_table(fields)
         
-    users = constants.BANDIT_USERS # Getting users to validate user's input
+    users = constants.BANDIT_USERS[1:] # Getting users to validate user's input, but not including bandit0
     while True:
         choice = input("\nIndicate a user or 'all' (type 'back' to return): ").strip().lower()
         if choice == "back":
@@ -82,7 +82,10 @@ def delete_field(fields_to_show, fields_to_delete):
     columns_to_show = 3 # In how many columns wrap results
     user = select_user(fields_to_show, cols=columns_to_show)
     if user:
-        data_utilities.delete_info_for_user(user, fields_to_delete)
+        if user == constants.BANDIT_USERS[1:]: # All users
+            data_utilities.delete_all_info_for_users(fields_to_delete)
+        else:
+            data_utilities.delete_info_for_user(user, fields_to_delete)
 
 # Export to PDF or Excel info
 def export_fields(fields, filename, is_pdf, is_excel):
