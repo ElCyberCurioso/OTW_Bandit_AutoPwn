@@ -57,7 +57,7 @@ def main_menu_config():
         menu_cursor_style=main_menu_cursor_style,
         menu_highlight_style=main_menu_style,
         cycle_cursor=True,
-        clear_screen=True,
+        clear_screen=False,
     )
     
     return main_menu, main_menu_exit
@@ -136,7 +136,7 @@ def select_user_menu_config(next_text, next_title):
         menu_cursor_style=select_user_menu_cursor_style,
         menu_highlight_style=select_user_menu_style,
         cycle_cursor=True,
-        clear_screen=True,
+        clear_screen=False,
     )
 
     return select_user_menu, select_user_menu_exit

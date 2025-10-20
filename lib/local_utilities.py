@@ -14,15 +14,15 @@ def check_file_exists(this_file, file_name, file_directory=None):
         return file, search_path, False
 
 # Copy file file_name from source_folder if doesnt exist on current folder
-def get_file_if_not_exists(file_name, source_folder):
+def get_file_if_not_exists(file_name, source_folder, main_folder):
     # Check if exists on the current directory
-    file_current_path, _, file_exists_current_dir = check_file_exists(__file__, file_name)
-    
-    # Check if exists on the source directory
-    file_source_path, _, file_exists_source_dir = check_file_exists(__file__, file_name, source_folder)
-    
+    file_current_path, _, file_exists_current_dir = check_file_exists(__file__, file_name, file_directory=main_folder)
+        
     # If file not found in current directory
     if not file_exists_current_dir:
+        # Check if exists on the source directory
+        file_source_path, _, file_exists_source_dir = check_file_exists(__file__, file_name, source_folder)
+        
         # But is found in source directory
         if file_exists_source_dir:
             # Copy to the current directory

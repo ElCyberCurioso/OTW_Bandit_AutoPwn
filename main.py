@@ -1,4 +1,4 @@
-import argparse
+import argparse, os
 
 import lib.args_utilities as args_utilities
 import lib.constants as constants
@@ -94,6 +94,6 @@ if __name__ == "__main__":
     check_modules.check_and_install_modules(required)
     
     # Check if .info.json exists
-    local_utilities.get_file_if_not_exists(".info.json", "utils")
+    local_utilities.get_file_if_not_exists(constants.JSON_INFO_FILE, "utils", os.path.dirname(os.path.abspath(__file__)))
     
     main()

@@ -1,4 +1,5 @@
 JSON_INFO_FILE = ".info.json"
+EXPORT_FOLDER = "exports"
 
 OTW_BANDIT_SSH_URL = "bandit.labs.overthewire.org"
 OTW_BANDIT_SSH_PORT = 2220

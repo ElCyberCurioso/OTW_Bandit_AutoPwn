@@ -1,9 +1,11 @@
 import pandas as pd
 from fpdf import FPDF
+import time
 
 import lib.data_utilities as data_utilities
 import lib.local_utilities as local_utilities
 import lib.utilities as utilities
+import lib.constants as constants
 
 def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     pdf = FPDF()
@@ -56,7 +58,7 @@ def export_to_excel(data, filename="output.xlsx"):
     df.to_excel(filename, index=False)
 
 # Method that manages PDF exports
-def manage_pdf(df, filename, users):
+def manage_pdf(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     if utilities.count_elements(users) > 1:
         filename = filename + "_" + "all_users"
     else:
@@ -65,16 +67,19 @@ def manage_pdf(df, filename, users):
     if not filename.endswith(".pdf"):
         filename = filename + ".pdf"
     
-    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
+    _, _, file_exists = local_utilities.check_file_exists(__file__, filename, file_directory=export_folder)
     if file_exists:
         print("\nFile exist already!")
+        time.sleep(1)
         return
     
-    print(f"​\nExporting to PDF: {filename}")
-    export_to_pdf(df, filename)
+    filepath = export_folder + "/" + filename
+    
+    print(f"​\nExporting to PDF: {filepath}")
+    export_to_pdf(df, filepath)
 
 # Method that manages Excel exports
-def manage_excel(df, filename, users):
+def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     if utilities.count_elements(users) > 1:
         filename = filename + "_" + "all_users"
     else:
@@ -82,13 +87,16 @@ def manage_excel(df, filename, users):
     if not filename.endswith(".xlsx"):
         filename = filename + ".xlsx"
     
-    _, _, file_exists = local_utilities.check_file_exists(__file__, filename)
+    _, _, file_exists = local_utilities.check_file_exists(__file__, filename, file_directory=export_folder)
     if file_exists:
         print("\nFile exist already!")
+        time.sleep(1)
         return
+
+    filepath = export_folder + "/" + filename
     
-    print(f"​\nExporting to Excel: {filename}")
-    export_to_excel(df, filename)
+    print(f"​\nExporting to Excel: {filepath}")
+    export_to_excel(df, filepath)
 
 # Main export method
 def export(array_selected_fields, filename, users=[], is_pdf=False, is_excel=False):
