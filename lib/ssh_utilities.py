@@ -10,10 +10,10 @@ def connect_ssh_with_retries(username, password, max_retries=5, retry_delay=5, p
     while True:
         try:
             if pkey:
-                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, pkey=pkey, timeout=10)
+                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, pkey=pkey, banner_timeout=10)
                 return client
             else:
-                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, timeout=10)
+                client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, banner_timeout=10)
                 return client
             
         except (paramiko.ssh_exception.SSHException, ConnectionResetError):

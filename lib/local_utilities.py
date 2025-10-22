@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, pexpect
 
 # Check if file exist on the current directory or an indicated one
 def check_file_exists(this_file, file_name, file_directory=None):
@@ -51,3 +51,17 @@ def create_subfolder_on_resources_folder(resources_path, subfolders):
         os.makedirs(subfolder_path)
     
     return subfolder_path
+
+# Manage to clone a git repo into a temp folder
+def git_clone_repo_bandit(repo_url, current_password, dest_dir):
+    # Iniciamos el proceso interactivo
+    child = pexpect.spawn(f"git clone {repo_url} {dest_dir}", encoding='utf-8')
+
+    # Espera el prompt de contraseña
+    child.expect("assword:")
+    child.sendline(current_password)
+
+    # Espera a que termine
+    child.expect(pexpect.EOF)
+
+    print(child.before)
