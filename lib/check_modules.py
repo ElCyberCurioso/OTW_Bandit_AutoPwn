@@ -1,15 +1,25 @@
-import subprocess, sys
+import subprocess, sys, os
 import importlib.util
+
+# Configurar codificación UTF-8 en Windows
+if sys.platform == 'win32':
+    # Intentar configurar UTF-8 para la consola de Windows
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        # Para versiones antiguas de Python
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
 
 def install_missing_modules(missing):
     for import_name, pip_name in missing:
         print(f"Installing {pip_name}...")
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
-            print(f"✅ {pip_name} installed successfully.")
+            print(f"[OK] {pip_name} installed successfully.")
         except Exception as e:
-            print(f"❌ Error installing {pip_name}: {e}")
-    print("✅ Dependency check completed.")
+            print(f"[ERROR] Error installing {pip_name}: {e}")
+    print("[OK] Dependency check completed.")
 
 def check_and_install_modules(modules: dict):
     """
@@ -24,15 +34,15 @@ def check_and_install_modules(modules: dict):
     ]
 
     if not missing:
-        # print("✅ All required modules are already installed.")
+        # print("[OK] All required modules are already installed.")
         return
 
-    print("⚠️ The following required modules are missing:")
+    print("[WARNING] The following required modules are missing:")
     for import_name, pip_name in missing:
         print(f" - {pip_name} (imported as '{import_name}')")
     choice = input("Do you want to install them now? (y/n): ").strip().lower()
     if choice == 'y':
         install_missing_modules(missing)
     else:
-        print("❌ Installation cancelled. The script may not work properly.")
+        print("[ERROR] Installation cancelled. The script may not work properly.")
         sys.exit(1)

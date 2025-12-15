@@ -57,43 +57,43 @@ def export_to_excel(data, filename="output.xlsx"):
     
     df.to_excel(filename, index=False)
 
-# Method that manages PDF exports
-def manage_pdf(df, filename, users, export_folder=constants.EXPORT_FOLDER):
-    if utilities.count_elements(users) > 1:
-        filename = filename + "_" + "all_users"
-    else:
-        filename = filename + "_" + users
-
-    if not filename.endswith(".pdf"):
-        filename = filename + ".pdf"
+def _prepare_export_filename(filename, users, extension, export_folder=constants.EXPORT_FOLDER):
+    """
+    Función helper para preparar el nombre del archivo de exportación.
+    Retorna (filepath, file_exists)
+    """
+    # Añadir sufijo según usuarios
+    suffix = "all_users" if utilities.count_elements(users) > 1 else users
+    filename = f"{filename}_{suffix}"
     
+    # Añadir extensión si no la tiene
+    if not filename.endswith(extension):
+        filename = f"{filename}{extension}"
+    
+    # Verificar si el archivo existe
     _, _, file_exists = local_utilities.check_file_exists(__file__, filename, file_directory=export_folder)
+    
     if file_exists:
         print("\nFile exist already!")
         time.sleep(1)
-        return
+        return None, True
     
-    filepath = export_folder + "/" + filename
+    return f"{export_folder}/{filename}", False
+
+# Method that manages PDF exports
+def manage_pdf(df, filename, users, export_folder=constants.EXPORT_FOLDER):
+    filepath, file_exists = _prepare_export_filename(filename, users, ".pdf", export_folder)
+    if file_exists:
+        return
     
     print(f"​\nExporting to PDF: {filepath}")
     export_to_pdf(df, filepath)
 
 # Method that manages Excel exports
 def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
-    if utilities.count_elements(users) > 1:
-        filename = filename + "_" + "all_users"
-    else:
-        filename = filename + "_" + users
-    if not filename.endswith(".xlsx"):
-        filename = filename + ".xlsx"
-    
-    _, _, file_exists = local_utilities.check_file_exists(__file__, filename, file_directory=export_folder)
+    filepath, file_exists = _prepare_export_filename(filename, users, ".xlsx", export_folder)
     if file_exists:
-        print("\nFile exist already!")
-        time.sleep(1)
         return
-
-    filepath = export_folder + "/" + filename
     
     print(f"​\nExporting to Excel: {filepath}")
     export_to_excel(df, filepath)

@@ -44,29 +44,27 @@ def select_user(fields, show_list_table=True, cols=3):
             return choice
         print(constants.INVALID_USER)
 
-# Update password of a user
-def update_password(fields):
-    columns_to_show = 3 # In how many columns wrap results
+def _update_user_field(fields, field_name, prompt_text, **kwargs):
+    """
+    Función genérica para actualizar un campo de usuario.
+    """
+    columns_to_show = 3
     user = select_user(fields, cols=columns_to_show)
     if user:
-        new_pass = input(f"Enter new password for {user}: ").strip()
-        data_utilities.update_info_for_user(user, new_password=new_pass)
+        new_value = input(f"{prompt_text} for {user}: ").strip()
+        data_utilities.update_info_for_user(user, **{kwargs.get('param_name', f'new_{field_name}'): new_value})
+
+# Update password of a user
+def update_password(fields):
+    _update_user_field(fields, "password", "Enter new password", param_name="new_password")
      
 # Update temp folder of a user
 def update_temp_folder(fields):
-    columns_to_show = 3 # In how many columns wrap results
-    user = select_user(fields, cols=columns_to_show)
-    if user:
-        new_temp_folder = input(f"Enter temp folder for {user}: ").strip()
-        data_utilities.update_info_for_user(user, new_temp_folder=new_temp_folder)
+    _update_user_field(fields, "temp_folder", "Enter temp folder", param_name="new_temp_folder")
 
 # Update notes of a user
 def update_notes(fields):
-    columns_to_show = 3 # In how many columns wrap results
-    user = select_user(fields, cols=columns_to_show)
-    if user:
-        new_notes = input(f"Enter notes for {user}: ").strip()
-        data_utilities.update_info_for_user(user, new_notes=new_notes)
+    _update_user_field(fields, "notes", "Enter notes", param_name="new_notes")
 
 # Update sshkey of a user
 def update_sshkey(fields):

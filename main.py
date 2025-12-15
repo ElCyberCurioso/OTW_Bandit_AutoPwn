@@ -78,16 +78,19 @@ def main():
 if __name__ == "__main__":
     # Check the installed modules in order to install the necessary ones.
     required = {
-        "argparse": "argparse",
         "pandas": "pandas",
         "paramiko": "paramiko",
-        "bz2": "bz2file",
-        "lzma": "python-lzma",
         "py7zr": "py7zr",
-        "fpdf": "fpdf",
+        "fpdf": "fpdf2",  # El paquete es fpdf2 pero se importa como fpdf
         "openpyxl": "openpyxl",
-        "simple_term_menu": "simple_term_menu"
+        "questionary": "questionary",
+        "tabulate": "tabulate"
     }
+    
+    # Añadir pexpect solo en sistemas Unix
+    import sys
+    if sys.platform != 'win32':
+        required["pexpect"] = "pexpect"
     
     # Check if required modules are installed
     # If not, ask permissions and try to install them

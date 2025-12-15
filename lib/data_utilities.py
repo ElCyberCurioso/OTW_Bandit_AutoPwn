@@ -78,9 +78,9 @@ def delete_all_info_for_users(field=None):
     
     for entry in data[1:]:
         if not entry[key]:
-            changes += f"({entry["user"]}) {key}: already empty\n"
+            changes += f"({entry['user']}) {key}: already empty\n"
         else:
-            changes += f"({entry["user"]}) {key}: {entry[key]} -> \"\" (empty)\n"
+            changes += f"({entry['user']}) {key}: {entry[key]} -> \"\" (empty)\n"
             entry[key] = ""
             updated = True
     
@@ -176,28 +176,31 @@ def _get_dataframe(data, fields):
     return pd.DataFrame(data, columns=fields)
 
 def _flatten_fields(fields):
+    """Aplana una lista de campos que puede contener sublistas."""
     if fields is None:
         return []
-    if any(isinstance(f, list) for f in fields):
-        return [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
-    return fields
+    if not any(isinstance(f, list) for f in fields):
+        return fields
+    return [item for sublist in fields for item in (sublist if isinstance(sublist, list) else [sublist])]
 
 def _handle_list_case(data, fields, cols, is_print, users):
+    """Maneja el caso cuando los datos se deben retornar como lista."""
     if is_print:
         _print_list_data(data, fields, cols)
-    else:
-        if users:
-            return [data[0].get(field) for field in fields] if data else []
-        else:
-            return data
+        return None
+    
+    return [data[0].get(field) for field in fields] if (users and data) else data
 
 def _handle_dataframe_case(data, fields, is_print, is_markdown):
+    """Maneja el caso cuando los datos se deben retornar como DataFrame."""
     data = _format_list_fields(data, fields)
     df = _get_dataframe(data, fields)
+    
     if is_print:
         _print_dataframe(df, fields, is_markdown)
-    else:
-        return df
+        return None
+    
+    return df
 
 def get_custom_data_json(cols=None, users=[], as_list=True, is_print=False, fields=None, is_markdown=False):
     fields = _flatten_fields(fields)

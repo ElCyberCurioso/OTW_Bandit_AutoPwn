@@ -1,142 +1,148 @@
 import lib.constants as constants
 import lib.utilities as utilities
+import questionary
+from questionary import Style
 
-from simple_term_menu import TerminalMenu
+# Estilo personalizado para los menús
+CUSTOM_STYLE = Style([
+    ('qmark', 'fg:#00ff00 bold'),          # Token '?' marcador
+    ('question', 'bold'),                   # Pregunta
+    ('answer', 'fg:#00ff00 bold'),         # Respuesta seleccionada
+    ('pointer', 'fg:#00ff00 bold'),        # Puntero '>'
+    ('highlighted', 'fg:#00ff00 bold'),    # Opción resaltada
+    ('selected', 'fg:#00ff00'),            # Opción seleccionada (checkbox)
+    ('separator', 'fg:#cc5454'),           # Separadores
+    ('instruction', ''),                   # Instrucciones
+    ('text', ''),                          # Texto plano
+])
 
-# Main menu config
-main_menu_cursor = "~$ "
-main_left_space = " " * len(main_menu_cursor)
-main_menu_title = main_left_space + "Main Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
-main_menu_items = constants.MAIN_MENU
-main_menu_cursor_style = ("fg_green",)
-main_menu_style = ("bg_green", "fg_black", "italics")
+def _create_menu_title(title):
+    """Helper para crear títulos de menú consistentes."""
+    return f"{title}\n{constants.KEYS_INSTRUCTIONS}"
 
-# List menu config
-list_menu_title = main_left_space[:-1] + "LIST Info Menu.\n" + main_left_space[:-1] + constants.KEYS_INSTRUCTIONS
-list_menu_items = constants.LIST_MENU
-list_menu_cursor = main_menu_cursor
-list_menu_cursor_style = main_menu_cursor_style
-list_menu_style = main_menu_style
+# Configuraciones específicas de cada menú
+MENU_CONFIGS = {
+    "main": {
+        "title": _create_menu_title("Main Menu"),
+        "items": constants.MAIN_MENU
+    },
+    "list": {
+        "title": _create_menu_title("LIST Info Menu"),
+        "items": constants.LIST_MENU
+    },
+    "edit": {
+        "title": _create_menu_title("EDIT Info Menu"),
+        "items": constants.EDIT_MENU
+    },
+    "delete": {
+        "title": _create_menu_title("DELETE Info Menu"),
+        "items": constants.DELETE_MENU
+    },
+    "export": {
+        "title": _create_menu_title("EXPORT Info Menu"),
+        "items": utilities.get_export_menu_fields()
+    },
+    "select_user": {
+        "title": f"Select User Menu\n{constants.KEYS_INSTRUCTIONS}",
+        "items": constants.SELECT_USER_MENU
+    }
+}
 
-# Edit menu config
-edit_menu_title = main_left_space + "EDIT Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
-edit_menu_items = constants.EDIT_MENU
-edit_menu_cursor = main_menu_cursor
-edit_menu_cursor_style = main_menu_cursor_style
-edit_menu_style = main_menu_style
+class MenuWrapper:
+    """Wrapper para mantener compatibilidad con el código existente."""
+    def __init__(self, question_obj, is_multiselect=False, all_choices=None):
+        self.question_obj = question_obj
+        self.is_multiselect = is_multiselect
+        self.chosen_menu_entries = []
+        self.all_choices = all_choices or []
+        
+    def show(self):
+        """Muestra el menú y retorna la selección."""
+        try:
+            result = self.question_obj.ask()
+            
+            if result is None:  # Usuario presionó Ctrl+C o Esc
+                return None
+                
+            if self.is_multiselect:
+                # Para checkbox, result es una lista de strings seleccionados
+                self.chosen_menu_entries = result if result else []
+                # Retornar lista de índices basada en las opciones seleccionadas
+                if not result:
+                    return None
+                indices = [i for i, choice in enumerate(self.all_choices) if choice in result]
+                return indices if indices else None
+            else:
+                # Para select, result es el string seleccionado
+                # Retorna el índice de la opción seleccionada
+                for i, choice in enumerate(self.all_choices):
+                    if choice == result:
+                        return i
+                return None
+        except (KeyboardInterrupt, EOFError):
+            return None
 
-# Delete menu config
-delete_menu_title = main_left_space + "DELETE Info Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
-delete_menu_items = constants.DELETE_MENU
-delete_menu_cursor = main_menu_cursor
-delete_menu_cursor_style = main_menu_cursor_style
-delete_menu_style = main_menu_style
-
-# Export menu config
-export_menu_title = main_left_space[:-1] + "EXPORT Info Menu.\n" + main_left_space[:-1] + constants.KEYS_INSTRUCTIONS
-export_menu_items = utilities.get_export_menu_fields()
-export_menu_cursor = main_menu_cursor
-export_menu_cursor_style = main_menu_cursor_style
-export_menu_style = main_menu_style
-
-# Input user menu config
-select_user_menu_title = "Select User Menu.\n" + main_left_space + constants.KEYS_INSTRUCTIONS
-select_user_menu_items = constants.SELECT_USER_MENU
-select_user_menu_cursor = main_menu_cursor
-select_user_menu_cursor_style = main_menu_cursor_style
-select_user_menu_style = main_menu_style
+def _create_questionary_menu(menu_type, is_multiselect=False, **kwargs):
+    """
+    Helper genérico para crear menús con questionary.
+    """
+    config = MENU_CONFIGS[menu_type]
+    title = kwargs.get("title", config["title"])
+    items = kwargs.get("menu_entries", config["items"])
+    
+    # Filtrar items vacíos si skip_empty_entries está activado
+    if kwargs.get("skip_empty_entries", False):
+        items = [item for item in items if item.strip()]
+    
+    if is_multiselect:
+        question = questionary.checkbox(
+            title,
+            choices=items,
+            style=CUSTOM_STYLE
+        )
+    else:
+        question = questionary.select(
+            title,
+            choices=items,
+            style=CUSTOM_STYLE
+        )
+    
+    return MenuWrapper(question, is_multiselect, items), False
 
 # Method that handles MAIN menu
 def main_menu_config():
-    main_menu_exit = False
-
-    main_menu = TerminalMenu(
-        menu_entries=main_menu_items,
-        title=constants.BANNER + "\n" + main_menu_title,
-        menu_cursor=main_menu_cursor,
-        menu_cursor_style=main_menu_cursor_style,
-        menu_highlight_style=main_menu_style,
-        cycle_cursor=True,
-        clear_screen=False,
+    return _create_questionary_menu(
+        "main",
+        title=constants.BANNER + "\n" + MENU_CONFIGS["main"]["title"]
     )
-    
-    return main_menu, main_menu_exit
 
 # Method that handles LIST menu
 def list_menu_config():
-    list_menu_exit = False
-    
-    list_menu = TerminalMenu(
-        constants.LIST_MENU,
-        title=list_menu_title,
-        multi_select=True,
-        show_multi_select_hint=True,
-        cycle_cursor=True,
-        clear_screen=False,
-    )
-    
-    return list_menu, list_menu_exit
+    return _create_questionary_menu("list", is_multiselect=True)
 
 # Method that handles EDIT menu
 def edit_menu_config():
-    edit_menu_exit = False
-
-    edit_menu = TerminalMenu(
-        menu_entries=edit_menu_items,
-        title=edit_menu_title,
-        menu_cursor=edit_menu_cursor,
-        menu_cursor_style=edit_menu_cursor_style,
-        menu_highlight_style=edit_menu_style,
-        cycle_cursor=True,
-        clear_screen=True,
-    )
-    
-    return edit_menu, edit_menu_exit
+    return _create_questionary_menu("edit")
 
 # Method that handles DELETE menu
 def delete_menu_config():
-    delete_menu_exit = False
-
-    delete_menu = TerminalMenu(
-        menu_entries=delete_menu_items,
-        title=delete_menu_title,
-        menu_cursor=delete_menu_cursor,
-        menu_cursor_style=delete_menu_cursor_style,
-        menu_highlight_style=delete_menu_style,
-        cycle_cursor=True,
-        clear_screen=True,
-    )
-
-    return delete_menu, delete_menu_exit
+    return _create_questionary_menu("delete")
 
 # Method that handles EXPORT menu
 def export_menu_config():
-    export_menu_exit = False
-
-    export_menu = TerminalMenu(
-        utilities.get_export_menu_fields(),
-        title=export_menu_title,
-        multi_select=True,
-        show_multi_select_hint=True,
-        cycle_cursor=True,
-        clear_screen=False,
-        skip_empty_entries=True,
+    return _create_questionary_menu(
+        "export",
+        menu_entries=utilities.get_export_menu_fields(),
+        is_multiselect=True,
+        skip_empty_entries=True
     )
-
-    return export_menu, export_menu_exit
 
 # Method that handles SELECT USER menu
 def select_user_menu_config(next_text, next_title):
-    select_user_menu_exit = False
-
-    select_user_menu = TerminalMenu(
-        menu_entries=[next_text if x == "<default_text>" else x for x in select_user_menu_items], # Change <default_text> with next_text parameter in menu entries array
-        title=main_left_space + next_title + " > " + select_user_menu_title,
-        menu_cursor=select_user_menu_cursor,
-        menu_cursor_style=select_user_menu_cursor_style,
-        menu_highlight_style=select_user_menu_style,
-        cycle_cursor=True,
-        clear_screen=False,
+    config = MENU_CONFIGS["select_user"]
+    menu_entries = [next_text if x == "<default_text>" else x for x in config["items"]]
+    return _create_questionary_menu(
+        "select_user",
+        menu_entries=menu_entries,
+        title=f"{next_title} > {config['title']}"
     )
-
-    return select_user_menu, select_user_menu_exit

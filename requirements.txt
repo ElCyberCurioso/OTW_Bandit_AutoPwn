@@ -1,7 +1,8 @@
-argparse
 pandas
 paramiko
-bz2file
-python-lzma
 py7zr
-fpdf
+fpdf2
+openpyxl
+questionary
+tabulate
+pexpect; sys_platform != 'win32'

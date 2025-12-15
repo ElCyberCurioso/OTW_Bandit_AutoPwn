@@ -63,7 +63,7 @@ def handle_list(args):
         print("Listing data for all users\n")
 
     fields = get_selected_fields(args)
-    utilities.print_table(fields, user=args.user)
+    utilities.print_table(fields, users=args.user)
 
 # Method that handles EXPORT mode
 def handle_export(args):
@@ -81,11 +81,20 @@ def handle_export(args):
             sys.exit(1)
         print(f"​\n[+] Exporting fields: {selected_fields}")
 
+    users = []
     if args.user:
         utilities.validate_user(args.user)
-
+        users = args.user
+    
+    # Determinar nombre del archivo
+    filename = ""
     if args.pdf:
-        export_utilities.export(args.user, array_selected_fields, is_pdf=True)
+        filename = args.pdf
+    elif args.excel:
+        filename = args.excel
+    
+    if args.pdf:
+        export_utilities.export(array_selected_fields, filename, users, is_pdf=True, is_excel=False)
     if args.excel:
-        export_utilities.export(args.user, array_selected_fields, is_excel=True)
+        export_utilities.export(array_selected_fields, filename, users, is_pdf=False, is_excel=True)
         
