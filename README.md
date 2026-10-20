@@ -316,6 +316,17 @@ options:
  └── requirements.txt
 ```
 
+## 🧪 Development
+
+```bash
+pip install -r requirements-dev.txt   # runtime deps + pytest + ruff
+pytest                                # run the unit test suite
+ruff check .                          # lint
+```
+
+Unit tests cover the pure helper logic (no network required); the full
+exploitation chain needs live SSH access to the OverTheWire Bandit server.
+
 ## 📝 License
 
 MIT License — free to use and modify.\

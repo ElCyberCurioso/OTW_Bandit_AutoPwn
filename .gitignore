@@ -1,5 +1,8 @@
 **/resources/*
+**/__pycache__/
 lib/__pycache__/*
+.pytest_cache/
+.ruff_cache/
 bandit26_27_funcional.py
 lib/text_formatter.py
 __pycache__/*
