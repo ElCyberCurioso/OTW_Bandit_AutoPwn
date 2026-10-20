@@ -46,14 +46,18 @@ def create_resources_folder():
 # Create a bandit folder inside resource folder
 def create_subfolder_on_resources_folder(resources_path, subfolders):
     subfolder_path = os.path.join(resources_path, subfolders)
-    
+
     if not os.path.exists(subfolder_path):
         os.makedirs(subfolder_path)
-    
+
     return subfolder_path
 
-# Manage to clone a git repo into a temp folder
-def git_clone_repo_bandit(repo_url, current_password, dest_dir):
+# Create the resources folder (if needed) and a named subfolder inside it
+def resources_subfolder(name):
+    return create_subfolder_on_resources_folder(create_resources_folder(), name)
+
+# Manage to clone a git repo locally into a destination folder (via pexpect)
+def git_clone_local(repo_url, current_password, dest_dir):
     # Iniciamos el proceso interactivo
     child = pexpect.spawn(f"git clone {repo_url} {dest_dir}", encoding='utf-8')
 

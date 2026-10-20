@@ -4,8 +4,8 @@ import lib.constants as constants
 import lib.ssh_utilities as ssh_utilities
 import lib.data_utilities as data_utilities
 
-# Manage to clone a git repo into a temp folder
-def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
+# Manage to clone a git repo on the remote host into a temp folder (via interactive shell)
+def git_clone_remote(client, temp_dir, repo_url, current_password):
     channel = client.invoke_shell()
     time.sleep(1)
 
@@ -14,22 +14,15 @@ def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
 
     channel.send("whoami\n")
     time.sleep(1)
-    
+
     channel.send("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone " + repo_url + " " + temp_dir + "\n")
     time.sleep(1)
-    
+
     channel.send(current_password + "\n")
     time.sleep(1)
 
     # Read buffer output
-    output = ""
-    start_time = time.time()
-    while True:
-        if channel.recv_ready():
-            output += channel.recv(1024).decode(errors="ignore")
-        if time.time() - start_time > 5:  # Wait 5 seconds
-            break
-        time.sleep(0.2)
+    ssh_utilities.read_channel(channel, timeout=5)
 
     # Close connection
     channel.send("exit\n")

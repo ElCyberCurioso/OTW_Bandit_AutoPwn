@@ -34,3 +34,21 @@ def ssh_connection(username, password):
 def ssh_connection_sshkey(username, pkey):
     client = connect_ssh_with_retries(username, "", pkey=pkey)
     return client
+
+# Run a command on an open client and return its stdout, stripped.
+# stdout.read() blocks until the command finishes (EOF), so this also
+# serves as "wait until command completes" when the output is unused.
+def run(client, command):
+    _, stdout, _ = client.exec_command(command)
+    return stdout.read().decode().strip()
+
+# Drain an interactive shell channel for up to `timeout` seconds and
+# return everything received.
+def read_channel(channel, timeout=5):
+    output = ""
+    start_time = time.time()
+    while time.time() - start_time <= timeout:
+        if channel.recv_ready():
+            output += channel.recv(1024).decode(errors="ignore")
+        time.sleep(0.2)
+    return output
