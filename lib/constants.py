@@ -55,8 +55,7 @@ DELETE_MENU = ["Delete password",
                BACK_TO_MAIN_MENU_OPTION]
 
 EXPORT_MENU = ["Export to PDF",
-               "Export to Excel",
-               ""]
+               "Export to Excel"]
 
 SELECT_USER_MENU = ["<default_text>",
                     BACK_TO_MAIN_MENU_OPTION]
@@ -84,7 +83,6 @@ BANDIT_USERS = [
 ]
 
 GIT_REPO_BANDIT_27_28 = "ssh://bandit27-git@bandit.labs.overthewire.org:2220/home/bandit27-git/repo"
-GIT_REPO_BANDIT_28_29 = "ssh://bandit28-git@bandit.labs.overthewire.org:2220/home/bandit28-git/repo"
 GIT_REPO_BANDIT_29_30 = "ssh://bandit29-git@bandit.labs.overthewire.org:2220/home/bandit29-git/repo"
 GIT_REPO_BANDIT_30_31 = "ssh://bandit30-git@bandit.labs.overthewire.org:2220/home/bandit30-git/repo"
 GIT_REPO_BANDIT_31_32 = "ssh://bandit31-git@bandit.labs.overthewire.org:2220/home/bandit31-git/repo"

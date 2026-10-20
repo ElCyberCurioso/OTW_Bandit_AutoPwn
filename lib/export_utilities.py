@@ -24,12 +24,9 @@ def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     # Determine orientation
     total_table_width = sum(col_widths)
     page_width = pdf.w - 2 * pdf.l_margin  # Usable page width
-    # orientation = 'P'
     if total_table_width > page_width:
-        orientation = 'L'
-        pdf = FPDF(orientation=orientation)
+        pdf = FPDF(orientation='L')
         pdf.set_font("Arial", size=10)
-        # page_width = pdf.w - 2 * pdf.l_margin
 
     pdf.add_page()
     # Title

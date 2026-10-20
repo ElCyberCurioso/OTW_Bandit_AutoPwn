@@ -309,7 +309,6 @@ options:
  ├── utils/
  │    ├── .info.json
  │    ├── bandit21_password.sh
- │    ├── host_scan.sh
  │    └── port_scan.sh
  ├── .gitignore
  ├── main.py

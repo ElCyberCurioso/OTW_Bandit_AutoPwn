@@ -34,10 +34,6 @@ def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
     # Close connection
     channel.send("exit\n")
 
-# Changes owner and group to indicated one
-def change_owner_temp_directory(client, temp_dir, user):
-    _, _, _ = client.exec_command("chown " + user + ":" + user + " " + temp_dir)
-
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
 def make_temp_directory(user, existing_client=None, credentials_default=False):
     if not existing_client or credentials_default:
@@ -76,13 +72,5 @@ def get_temp_directory(client, user):
         temp_dir = make_temp_directory(user, existing_client=client)
     
     clean_temp_directory(client, temp_dir)
-    
-    return temp_dir
 
-# Getting password of a bandit user using an open session
-def get_current_password(client):
-    _, stdout, _ = client.exec_command('whoami')
-    current_user = stdout.read().decode().strip()
-    _, stdout, _ = client.exec_command("cat /etc/bandit_pass/" + current_user)
-    current_password = stdout.read().decode().strip()
-    return current_password
+    return temp_dir

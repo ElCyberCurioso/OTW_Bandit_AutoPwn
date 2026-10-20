@@ -36,7 +36,6 @@ def edit_menu():
             # Return to main menu
             edit_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
-    edit_menu_back = False
 
 # Method that handles DELETE menu
 def delete_menu():
@@ -56,7 +55,6 @@ def delete_menu():
             # Return to main menu
             delete_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
-    delete_menu_back = False
 
 # Method that handles EXPORT menu
 def export_menu():
@@ -112,8 +110,7 @@ def select_user_menu(next_action, next_text, next_title, *next_parameters):
             # Return to main menu
             select_user_menu_back = True
             print(constants.BACK_TO_MAIN_MENU)
-    select_user_menu_back = False
-    
+
 # Method that handles MAIN menu
 def menu():
     utilities.setup_signal_handlers()

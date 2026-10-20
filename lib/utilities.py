@@ -18,13 +18,6 @@ def setup_signal_handlers():
     signal.signal(signal.SIGINT, exit_handler)  # Ctrl+C
     signal.signal(signal.SIGTERM, exit_handler) # kill
 
-# Cleans screen after an action
-def clear_screen():
-    if os.name == "nt": # Windows
-        os.system("cls")
-    else: # Linux
-        os.system("clear")
-
 # Menu to select user and gets all users (to print them), and other parameters
 def select_user(fields, show_list_table=True, cols=3):
     if show_list_table: # If want to show data in list format (with commas)
@@ -97,10 +90,6 @@ def hack_user():
     if user:
         ec.main(user)
 
-# Print banner
-def show_banner():
-    print(constants.BANNER)
-
 # Print as pandas table
 def print_table(fields, users=None):
     data_utilities.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, users=users)
@@ -123,8 +112,8 @@ def get_b64_file_content(file_path):
     return b64_sshkey.decode("ascii")
 
 def get_export_menu_fields():
-    # Insert all fields into export menu
-    position = 3
+    # Insert all fields into export menu (after PDF/Excel entries)
+    position = 2
     items1 = constants.EXPORT_MENU
     items2 = constants.ARRAY_ALL_FIELDS
     items = items1[:position] + items2 + items1[position:]
