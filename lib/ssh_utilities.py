@@ -1,11 +1,14 @@
-import paramiko, time
+import time
+
+import paramiko
 
 import lib.constants as constants
+
 
 def connect_ssh_with_retries(username, password, max_retries=5, retry_delay=5, pkey=None):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    
+
     retries = 0
     while True:
         try:
@@ -15,7 +18,7 @@ def connect_ssh_with_retries(username, password, max_retries=5, retry_delay=5, p
             else:
                 client.connect(hostname=constants.OTW_BANDIT_SSH_URL, port=constants.OTW_BANDIT_SSH_PORT, username=username, password=password, banner_timeout=10)
                 return client
-            
+
         except (paramiko.ssh_exception.SSHException, ConnectionResetError):
             print("[!] Error while connecting")
             retries += 1

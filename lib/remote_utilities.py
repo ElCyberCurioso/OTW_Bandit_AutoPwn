@@ -1,8 +1,9 @@
 import time
 
 import lib.constants as constants
-import lib.ssh_utilities as ssh_utilities
 import lib.data_utilities as data_utilities
+import lib.ssh_utilities as ssh_utilities
+
 
 # Manage to clone a git repo on the remote host into a temp folder (via interactive shell)
 def git_clone_remote(client, temp_dir, repo_url, current_password):
@@ -33,13 +34,13 @@ def make_temp_directory(user, existing_client=None, credentials_default=False):
         client = ssh_utilities.ssh_connection(constants.DEFAULT_USER, constants.DEFAULT_PASSWORD)
     else:
         client = existing_client
-    
+
     _, stdout, _ = client.exec_command("mktemp -d")
     temp_dir = stdout.read().decode().strip()
     _, stdout, _ = client.exec_command("chmod 777 " + temp_dir)
-    
+
     data_utilities.update_info_for_user(user, is_automated=True, new_temp_folder=temp_dir)
-    
+
     if not existing_client:
         client.close()
     return temp_dir
@@ -51,19 +52,19 @@ def clean_temp_directory(client, temp_dir):
 # Get temp directory from .json file if exists, else create it and save it to .json
 def get_temp_directory(client, user):
     temp_dir = ""
-    
+
     user_temp_folder = data_utilities.get_custom_data_json(users=user, fields=["temp_folder"])
     temp_dir = str(user_temp_folder[0])
     if temp_dir:
         # Check if folder exists
         _, stdout, _ = client.exec_command("ls " + temp_dir + " &>/dev/null && echo 'exists' || echo 'no exists'")
         result = stdout.read().decode().strip()
-        
+
         if result == "no exists":
             temp_dir = make_temp_directory(user, existing_client=client)
     else:
         temp_dir = make_temp_directory(user, existing_client=client)
-    
+
     clean_temp_directory(client, temp_dir)
 
     return temp_dir

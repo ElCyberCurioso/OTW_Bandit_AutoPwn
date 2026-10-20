@@ -1,11 +1,13 @@
-import pandas as pd
-from fpdf import FPDF
 import time
 
+import pandas as pd
+from fpdf import FPDF
+
+import lib.constants as constants
 import lib.data_utilities as data_utilities
 import lib.local_utilities as local_utilities
 import lib.utilities as utilities
-import lib.constants as constants
+
 
 def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     pdf = FPDF()
@@ -33,7 +35,7 @@ def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     pdf.set_font("Arial", 'B', 16)
     pdf.cell(0, 10, title, ln=True, align='C')
     pdf.ln(10)
-    
+
     # Header
     pdf.set_font("Arial", 'B', 10)
     for i, col in enumerate(df.columns):
@@ -51,7 +53,7 @@ def export_to_pdf(df, filename="output.pdf", title="Information Report"):
 
 def export_to_excel(data, filename="output.xlsx"):
     df = pd.DataFrame(data)
-    
+
     df.to_excel(filename, index=False)
 
 def _prepare_export_filename(filename, users, extension, export_folder=constants.EXPORT_FOLDER):
@@ -62,19 +64,19 @@ def _prepare_export_filename(filename, users, extension, export_folder=constants
     # Añadir sufijo según usuarios
     suffix = "all_users" if utilities.count_elements(users) > 1 else users
     filename = f"{filename}_{suffix}"
-    
+
     # Añadir extensión si no la tiene
     if not filename.endswith(extension):
         filename = f"{filename}{extension}"
-    
+
     # Verificar si el archivo existe
     _, _, file_exists = local_utilities.check_file_exists(__file__, filename, file_directory=export_folder)
-    
+
     if file_exists:
         print("\nFile exist already!")
         time.sleep(1)
         return None, True
-    
+
     return f"{export_folder}/{filename}", False
 
 # Method that manages PDF exports
@@ -82,7 +84,7 @@ def manage_pdf(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     filepath, file_exists = _prepare_export_filename(filename, users, ".pdf", export_folder)
     if file_exists:
         return
-    
+
     print(f"​\nExporting to PDF: {filepath}")
     export_to_pdf(df, filepath)
 
@@ -91,7 +93,7 @@ def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     filepath, file_exists = _prepare_export_filename(filename, users, ".xlsx", export_folder)
     if file_exists:
         return
-    
+
     print(f"​\nExporting to Excel: {filepath}")
     export_to_excel(df, filepath)
 
@@ -99,7 +101,7 @@ def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
 def export(array_selected_fields, filename, users=None, is_pdf=False, is_excel=False):
     users = users or []
     df = data_utilities.get_custom_data_json(users=users, as_list=False, is_print=False, fields=array_selected_fields)
-    
+
     if is_pdf or is_excel:
         if is_pdf:
             manage_pdf(df, filename, users)

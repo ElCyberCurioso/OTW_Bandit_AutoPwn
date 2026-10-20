@@ -1,20 +1,22 @@
-import argparse, os
+import argparse
+import os
 
 import lib.args_utilities as args_utilities
-import lib.constants as constants
 import lib.check_modules as check_modules
+import lib.constants as constants
 import lib.local_utilities as local_utilities
+
 
 def main():
     # In order to get parameters in the same order that are indicated, this class must be called by the argument declaration
     class CustomAction(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             if 'ordered_args' not in namespace:
-                setattr(namespace, 'ordered_args', [])
+                namespace.ordered_args = []
             previous = namespace.ordered_args
             previous.append((self.dest, values))
-            setattr(namespace, 'ordered_args', previous)
-    
+            namespace.ordered_args = previous
+
     parser = argparse.ArgumentParser(description="User management tool with advanced options.")
     subparsers = parser.add_subparsers(dest="mode", required=True, help="Operation mode")
 
@@ -87,17 +89,17 @@ if __name__ == "__main__":
         "questionary": "questionary",
         "tabulate": "tabulate"
     }
-    
+
     # Añadir pexpect solo en sistemas Unix
     import sys
     if sys.platform != 'win32':
         required["pexpect"] = "pexpect"
-    
+
     # Check if required modules are installed
     # If not, ask permissions and try to install them
     check_modules.check_and_install_modules(required)
-    
+
     # Check if .info.json exists
     local_utilities.get_file_if_not_exists(constants.JSON_INFO_FILE, "utils", os.path.dirname(os.path.abspath(__file__)))
-    
+
     main()

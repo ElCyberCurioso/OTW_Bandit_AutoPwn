@@ -1,10 +1,12 @@
+import base64
+import os
+import signal
 from sys import exit
 
 import lib.constants as constants
 import lib.data_utilities as data_utilities
 import lib.export_utilities as export_utilities
 
-import signal, os, base64, time
 
 # Script exit handler
 def exit_handler(sig=None, frame=None):
@@ -24,7 +26,7 @@ def select_user(fields, show_list_table=True, cols=3):
         print_list(cols, fields)
     else: # If want to show data in data in tables (pandas markdown tables)
         print_table(fields)
-        
+
     users = constants.BANDIT_USERS[1:] # Getting users to validate user's input, but not including bandit0
     while True:
         choice = input("\nIndicate a user or 'all' (type 'back' to return): ").strip().lower()
@@ -49,7 +51,7 @@ def _update_user_field(fields, field_name, prompt_text, **kwargs):
 # Update password of a user
 def update_password(fields):
     _update_user_field(fields, "password", "Enter new password", param_name="new_password")
-     
+
 # Update temp folder of a user
 def update_temp_folder(fields):
     _update_user_field(fields, "temp_folder", "Enter temp folder", param_name="new_temp_folder")
@@ -94,7 +96,7 @@ def hack_user():
 # Print as pandas table
 def print_table(fields, users=None):
     data_utilities.get_custom_data_json(as_list=False, is_print=True, is_markdown=True, fields=fields, users=users)
-    
+
 # Print as list
 def print_list(cols, fields, users=None):
     data_utilities.get_custom_data_json(cols, as_list=True, is_print=True, fields=fields, users=users)
@@ -107,7 +109,7 @@ def validate_user(user):
 
 # Get base64 text of file content
 def get_b64_file_content(file_path):
-    file = open(file_path, "r")
+    file = open(file_path)
     b64_sshkey = base64.b64encode(file.read().encode("ascii"))
     file.close()
     return b64_sshkey.decode("ascii")
