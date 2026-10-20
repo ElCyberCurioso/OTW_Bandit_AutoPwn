@@ -34,6 +34,7 @@ def main():
     delete_parser.add_argument("-p", "--password", action="store_true", help="Delete password")
     delete_parser.add_argument("-t", "--temp-folder", action="store_true", help="Delete temp folder")
     delete_parser.add_argument("-n", "--notes", action="store_true", help="Delete notes")
+    delete_parser.add_argument("-s", "--sshkey", action="store_true", help="Delete sshkey")
     delete_parser.add_argument("user", help=constants.TARGET_USER)
 
     # List Mode

@@ -1,7 +1,6 @@
 from sys import exit
 
 import lib.constants as constants
-import lib.exploitation_chain as ec
 import lib.data_utilities as data_utilities
 import lib.export_utilities as export_utilities
 
@@ -17,13 +16,6 @@ def exit_handler(sig=None, frame=None):
 def setup_signal_handlers():
     signal.signal(signal.SIGINT, exit_handler)  # Ctrl+C
     signal.signal(signal.SIGTERM, exit_handler) # kill
-
-# Cleans screen after an action
-def clear_screen():
-    if os.name == "nt": # Windows
-        os.system("cls")
-    else: # Linux
-        os.system("clear")
 
 # Menu to select user and gets all users (to print them), and other parameters
 def select_user(fields, show_list_table=True, cols=3):
@@ -93,13 +85,11 @@ def export_fields(fields, filename, is_pdf, is_excel):
 
 # Action pending to implement
 def hack_user():
+    # Imported locally to avoid a circular import (exploitation_chain -> utilities)
+    import lib.exploitation_chain as ec
     user = select_user(["user","password"])
     if user:
         ec.main(user)
-
-# Print banner
-def show_banner():
-    print(constants.BANNER)
 
 # Print as pandas table
 def print_table(fields, users=None):
@@ -123,8 +113,8 @@ def get_b64_file_content(file_path):
     return b64_sshkey.decode("ascii")
 
 def get_export_menu_fields():
-    # Insert all fields into export menu
-    position = 3
+    # Insert all fields into export menu (after PDF/Excel entries)
+    position = 2
     items1 = constants.EXPORT_MENU
     items2 = constants.ARRAY_ALL_FIELDS
     items = items1[:position] + items2 + items1[position:]

@@ -1,0 +1,4 @@
+# Development tooling (tests + lint). Install: pip install -r requirements-dev.txt
+-r requirements.txt
+pytest==8.3.4
+ruff==0.9.2

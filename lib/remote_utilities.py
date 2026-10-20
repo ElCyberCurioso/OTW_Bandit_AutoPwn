@@ -4,39 +4,28 @@ import lib.constants as constants
 import lib.ssh_utilities as ssh_utilities
 import lib.data_utilities as data_utilities
 
-# Manage to clone a git repo into a temp folder
-def git_clone_repo_bandit(client, temp_dir, repo_url, current_password):
+# Manage to clone a git repo on the remote host into a temp folder (via interactive shell)
+def git_clone_remote(client, temp_dir, repo_url, current_password):
     channel = client.invoke_shell()
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send("id\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send("whoami\n")
-    time.sleep(1)
-    
+    time.sleep(constants.SHELL_STEP_WAIT)
+
     channel.send("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone " + repo_url + " " + temp_dir + "\n")
-    time.sleep(1)
-    
+    time.sleep(constants.SHELL_STEP_WAIT)
+
     channel.send(current_password + "\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     # Read buffer output
-    output = ""
-    start_time = time.time()
-    while True:
-        if channel.recv_ready():
-            output += channel.recv(1024).decode(errors="ignore")
-        if time.time() - start_time > 5:  # Wait 5 seconds
-            break
-        time.sleep(0.2)
+    ssh_utilities.read_channel(channel)
 
     # Close connection
     channel.send("exit\n")
-
-# Changes owner and group to indicated one
-def change_owner_temp_directory(client, temp_dir, user):
-    _, _, _ = client.exec_command("chown " + user + ":" + user + " " + temp_dir)
 
 # Generate a temp folder using bandit0 credentials and giving full permissions to all users
 def make_temp_directory(user, existing_client=None, credentials_default=False):
@@ -76,13 +65,5 @@ def get_temp_directory(client, user):
         temp_dir = make_temp_directory(user, existing_client=client)
     
     clean_temp_directory(client, temp_dir)
-    
-    return temp_dir
 
-# Getting password of a bandit user using an open session
-def get_current_password(client):
-    _, stdout, _ = client.exec_command('whoami')
-    current_user = stdout.read().decode().strip()
-    _, stdout, _ = client.exec_command("cat /etc/bandit_pass/" + current_user)
-    current_password = stdout.read().decode().strip()
-    return current_password
+    return temp_dir

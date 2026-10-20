@@ -309,13 +309,23 @@ options:
  ├── utils/
  │    ├── .info.json
  │    ├── bandit21_password.sh
- │    ├── host_scan.sh
  │    └── port_scan.sh
  ├── .gitignore
  ├── main.py
  ├── README.md
  └── requirements.txt
 ```
+
+## 🧪 Development
+
+```bash
+pip install -r requirements-dev.txt   # runtime deps + pytest + ruff
+pytest                                # run the unit test suite
+ruff check .                          # lint
+```
+
+Unit tests cover the pure helper logic (no network required); the full
+exploitation chain needs live SSH access to the OverTheWire Bandit server.
 
 ## 📝 License
 

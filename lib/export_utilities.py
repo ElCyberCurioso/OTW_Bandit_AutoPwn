@@ -24,12 +24,9 @@ def export_to_pdf(df, filename="output.pdf", title="Information Report"):
     # Determine orientation
     total_table_width = sum(col_widths)
     page_width = pdf.w - 2 * pdf.l_margin  # Usable page width
-    # orientation = 'P'
     if total_table_width > page_width:
-        orientation = 'L'
-        pdf = FPDF(orientation=orientation)
+        pdf = FPDF(orientation='L')
         pdf.set_font("Arial", size=10)
-        # page_width = pdf.w - 2 * pdf.l_margin
 
     pdf.add_page()
     # Title
@@ -99,7 +96,8 @@ def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     export_to_excel(df, filepath)
 
 # Main export method
-def export(array_selected_fields, filename, users=[], is_pdf=False, is_excel=False):
+def export(array_selected_fields, filename, users=None, is_pdf=False, is_excel=False):
+    users = users or []
     df = data_utilities.get_custom_data_json(users=users, as_list=False, is_print=False, fields=array_selected_fields)
     
     if is_pdf or is_excel:

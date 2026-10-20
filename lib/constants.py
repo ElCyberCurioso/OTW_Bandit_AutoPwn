@@ -1,16 +1,28 @@
+import os
+
+# Project root = parent of this lib/ directory. Used to anchor file paths
+# so the tool works regardless of the current working directory.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 JSON_INFO_FILE = ".info.json"
+JSON_INFO_PATH = os.path.join(PROJECT_ROOT, JSON_INFO_FILE)
 EXPORT_FOLDER = "exports"
 
 OTW_BANDIT_SSH_URL = "bandit.labs.overthewire.org"
 OTW_BANDIT_SSH_PORT = 2220
 
+# Timing (seconds)
+CHANNEL_READ_TIMEOUT = 5   # how long to drain an interactive shell channel
+SHELL_STEP_WAIT = 1        # pause between interactive shell commands
+UI_MESSAGE_WAIT = 2        # pause so the user can read an action message
+
 DEFAULT_USER = "bandit0"
 DEFAULT_PASSWORD = "bandit0"
 
-BANNER = """
-   ___                _____ _        __        ___          
-  / _ \__   _____ _ _|_   _| |__   __\ \      / (_)_ __ ___ 
- | | | \ \ / / _ \ '__|| | | '_ \ / _ \ \ /\ / /| | '__/ _ \\
+BANNER = r"""
+   ___                _____ _        __        ___
+  / _ \__   _____ _ _|_   _| |__   __\ \      / (_)_ __ ___
+ | | | \ \ / / _ \ '__|| | | '_ \ / _ \ \ /\ / /| | '__/ _ \
  | |_| |\ V /  __/ |   | | | | | |  __/\ V  V / | | | |  __/
   \___/  \_/ \___|_|   |_| |_| |_|\___| \_/\_/  |_|_|  \___|
   ____                  _ _ _                               
@@ -48,8 +60,7 @@ DELETE_MENU = ["Delete password",
                BACK_TO_MAIN_MENU_OPTION]
 
 EXPORT_MENU = ["Export to PDF",
-               "Export to Excel",
-               ""]
+               "Export to Excel"]
 
 SELECT_USER_MENU = ["<default_text>",
                     BACK_TO_MAIN_MENU_OPTION]
@@ -77,7 +88,6 @@ BANDIT_USERS = [
 ]
 
 GIT_REPO_BANDIT_27_28 = "ssh://bandit27-git@bandit.labs.overthewire.org:2220/home/bandit27-git/repo"
-GIT_REPO_BANDIT_28_29 = "ssh://bandit28-git@bandit.labs.overthewire.org:2220/home/bandit28-git/repo"
 GIT_REPO_BANDIT_29_30 = "ssh://bandit29-git@bandit.labs.overthewire.org:2220/home/bandit29-git/repo"
 GIT_REPO_BANDIT_30_31 = "ssh://bandit30-git@bandit.labs.overthewire.org:2220/home/bandit30-git/repo"
 GIT_REPO_BANDIT_31_32 = "ssh://bandit31-git@bandit.labs.overthewire.org:2220/home/bandit31-git/repo"

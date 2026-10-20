@@ -43,7 +43,9 @@ def handle_delete(args):
         fields.append("temp_folder")
     if args.notes:
         fields.append("notes")
-    
+    if args.sshkey:
+        fields.append("sshkey")
+
     data_utilities.delete_info_for_user(args.user, fields)
 
 def get_selected_fields(args):

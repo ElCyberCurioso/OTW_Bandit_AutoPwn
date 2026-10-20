@@ -1,0 +1,13 @@
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+# E/W pycodestyle, F pyflakes, I import-sorting, UP pyupgrade, B bugbear
+select = ["E", "F", "W", "I", "UP", "B"]
+# E501 line-too-long handled by formatter; E402 needed by main.py dep-check
+# bootstrap that must run before the local imports.
+ignore = ["E501", "E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
