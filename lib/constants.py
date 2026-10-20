@@ -1,4 +1,11 @@
+import os
+
+# Project root = parent of this lib/ directory. Used to anchor file paths
+# so the tool works regardless of the current working directory.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 JSON_INFO_FILE = ".info.json"
+JSON_INFO_PATH = os.path.join(PROJECT_ROOT, JSON_INFO_FILE)
 EXPORT_FOLDER = "exports"
 
 OTW_BANDIT_SSH_URL = "bandit.labs.overthewire.org"

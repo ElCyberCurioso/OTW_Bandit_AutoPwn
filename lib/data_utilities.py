@@ -38,10 +38,11 @@ def update_info_for_user(user_to_update, is_automated=False, new_password="", ne
     else:
         json_manage.save_credentials_json(data)
 
-def delete_info_for_user(user_to_update, fields=[]):
+def delete_info_for_user(user_to_update, fields=None):
+    fields = fields or []
     changes = ""
     updated = False
-    
+
     data = json_manage.get_info_json()
     entry = _find_user_entry(data, user_to_update)
     if entry is None:
@@ -123,8 +124,8 @@ def _print_fields(data, fields, cols):
     
     if len(fields) == 1:
         values = [entry[fields[0]] for entry in data]
-    elif len(fields) == 2:
-        values = [entry[fields[0]] + ":" + entry[fields[1]] for entry in data]
+    else:
+        values = [":".join(str(entry[f]) for f in fields) for entry in data]
     
     # Generate all strings to be displayed (index + value)
     formatted_values = [f"{v}" for _, v in enumerate(values)]
@@ -162,6 +163,8 @@ def _print_list_data(data, fields, cols):
 
 def _filter_data_by_user(data, users):
     if users:
+        if isinstance(users, str):
+            users = [users]
         return [item for item in data if item['user'] in users]
     return data
 
@@ -202,7 +205,8 @@ def _handle_dataframe_case(data, fields, is_print, is_markdown):
     
     return df
 
-def get_custom_data_json(cols=None, users=[], as_list=True, is_print=False, fields=None, is_markdown=False):
+def get_custom_data_json(cols=None, users=None, as_list=True, is_print=False, fields=None, is_markdown=False):
+    users = users or []
     fields = _flatten_fields(fields)
     data = json_manage.get_info_json()
     data = _filter_data_by_user(data, users)

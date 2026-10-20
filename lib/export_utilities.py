@@ -99,7 +99,8 @@ def manage_excel(df, filename, users, export_folder=constants.EXPORT_FOLDER):
     export_to_excel(df, filepath)
 
 # Main export method
-def export(array_selected_fields, filename, users=[], is_pdf=False, is_excel=False):
+def export(array_selected_fields, filename, users=None, is_pdf=False, is_excel=False):
+    users = users or []
     df = data_utilities.get_custom_data_json(users=users, as_list=False, is_print=False, fields=array_selected_fields)
     
     if is_pdf or is_excel:
