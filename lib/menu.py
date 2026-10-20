@@ -1,7 +1,7 @@
 import time
 
 import lib.constants as constants
-import lib.config as config
+import lib.menu_config as config
 import lib.utilities as utilities
 
 # Method that handles LIST menu

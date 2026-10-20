@@ -11,6 +11,11 @@ EXPORT_FOLDER = "exports"
 OTW_BANDIT_SSH_URL = "bandit.labs.overthewire.org"
 OTW_BANDIT_SSH_PORT = 2220
 
+# Timing (seconds)
+CHANNEL_READ_TIMEOUT = 5   # how long to drain an interactive shell channel
+SHELL_STEP_WAIT = 1        # pause between interactive shell commands
+UI_MESSAGE_WAIT = 2        # pause so the user can read an action message
+
 DEFAULT_USER = "bandit0"
 DEFAULT_PASSWORD = "bandit0"
 

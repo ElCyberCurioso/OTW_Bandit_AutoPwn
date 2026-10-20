@@ -1,6 +1,7 @@
 import os, time
 import pandas as pd
 
+import lib.constants as constants
 import lib.json_manage as json_manage
 import lib.utilities as utilities
 
@@ -64,7 +65,7 @@ def delete_info_for_user(user_to_update, fields=None):
     if _confirm_changes(changes):
         print("Performing changes...")
         json_manage.save_credentials_json(data)
-        time.sleep(2)
+        time.sleep(constants.UI_MESSAGE_WAIT)
 
 def delete_all_info_for_users(field=None):
     changes = ""
@@ -87,13 +88,13 @@ def delete_all_info_for_users(field=None):
     
     if not updated:
         print("No changes detected. Exiting...")
-        time.sleep(2)
+        time.sleep(constants.UI_MESSAGE_WAIT)
         return
     
     if _confirm_changes(changes):
         print("Performing changes...")
         json_manage.save_credentials_json(data)
-        time.sleep(2)
+        time.sleep(constants.UI_MESSAGE_WAIT)
 
 def _find_user_entry(data, user_to_update):
     for entry in data:

@@ -1,7 +1,6 @@
 from sys import exit
 
 import lib.constants as constants
-import lib.exploitation_chain as ec
 import lib.data_utilities as data_utilities
 import lib.export_utilities as export_utilities
 
@@ -86,6 +85,8 @@ def export_fields(fields, filename, is_pdf, is_excel):
 
 # Action pending to implement
 def hack_user():
+    # Imported locally to avoid a circular import (exploitation_chain -> utilities)
+    import lib.exploitation_chain as ec
     user = select_user(["user","password"])
     if user:
         ec.main(user)

@@ -44,7 +44,7 @@ def run(client, command):
 
 # Drain an interactive shell channel for up to `timeout` seconds and
 # return everything received.
-def read_channel(channel, timeout=5):
+def read_channel(channel, timeout=constants.CHANNEL_READ_TIMEOUT):
     output = ""
     start_time = time.time()
     while time.time() - start_time <= timeout:

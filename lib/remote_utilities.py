@@ -7,22 +7,22 @@ import lib.data_utilities as data_utilities
 # Manage to clone a git repo on the remote host into a temp folder (via interactive shell)
 def git_clone_remote(client, temp_dir, repo_url, current_password):
     channel = client.invoke_shell()
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send("id\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send("whoami\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send("GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no\" git clone " + repo_url + " " + temp_dir + "\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     channel.send(current_password + "\n")
-    time.sleep(1)
+    time.sleep(constants.SHELL_STEP_WAIT)
 
     # Read buffer output
-    ssh_utilities.read_channel(channel, timeout=5)
+    ssh_utilities.read_channel(channel)
 
     # Close connection
     channel.send("exit\n")
