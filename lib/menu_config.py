@@ -1,7 +1,8 @@
-import lib.constants as constants
-import lib.utilities as utilities
 import questionary
 from questionary import Style
+
+import lib.constants as constants
+import lib.utilities as utilities
 
 # Estilo personalizado para los menús
 CUSTOM_STYLE = Style([
@@ -55,15 +56,15 @@ class MenuWrapper:
         self.is_multiselect = is_multiselect
         self.chosen_menu_entries = []
         self.all_choices = all_choices or []
-        
+
     def show(self):
         """Muestra el menú y retorna la selección."""
         try:
             result = self.question_obj.ask()
-            
+
             if result is None:  # Usuario presionó Ctrl+C o Esc
                 return None
-                
+
             if self.is_multiselect:
                 # Para checkbox, result es una lista de strings seleccionados
                 self.chosen_menu_entries = result if result else []
@@ -89,11 +90,11 @@ def _create_questionary_menu(menu_type, is_multiselect=False, **kwargs):
     config = MENU_CONFIGS[menu_type]
     title = kwargs.get("title", config["title"])
     items = kwargs.get("menu_entries", config["items"])
-    
+
     # Filtrar items vacíos si skip_empty_entries está activado
     if kwargs.get("skip_empty_entries", False):
         items = [item for item in items if item.strip()]
-    
+
     if is_multiselect:
         question = questionary.checkbox(
             title,
@@ -106,7 +107,7 @@ def _create_questionary_menu(menu_type, is_multiselect=False, **kwargs):
             choices=items,
             style=CUSTOM_STYLE
         )
-    
+
     return MenuWrapper(question, is_multiselect, items), False
 
 # Method that handles MAIN menu

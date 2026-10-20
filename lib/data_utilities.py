@@ -1,32 +1,35 @@
-import os, time
+import os
+import time
+
 import pandas as pd
 
 import lib.constants as constants
 import lib.json_manage as json_manage
 import lib.utilities as utilities
 
+
 # Update properties of a level on each execution
 def update_info_for_user(user_to_update, is_automated=False, new_password="", new_temp_folder="", new_notes="", new_sshkey=""):
     new_values = {}
-    
+
     data = json_manage.get_info_json()
     entry = _find_user_entry(data, user_to_update)
     if entry is None:
         print(f"User '{user_to_update}' not found.")
         return
-    
+
     if new_password:
         new_values.update({"password": new_password})
-    
+
     if new_temp_folder:
         new_values.update({"temp_folder": new_temp_folder})
-    
+
     if new_notes:
         new_values.update({"notes": new_notes})
-    
+
     if new_sshkey and os.path.isfile(new_sshkey): # Check if file exists
         new_values.update({"sshkey": utilities.get_b64_file_content(new_sshkey)})
-    
+
     changes, updated = _update_entry_fields(entry, new_values)
 
     if not updated:
@@ -49,7 +52,7 @@ def delete_info_for_user(user_to_update, fields=None):
     if entry is None:
         print(f"User '{user_to_update}' not found.")
         return
-    
+
     for key in fields:
         if not entry[key]:
             changes += f"{key}: already empty\n"
@@ -57,11 +60,11 @@ def delete_info_for_user(user_to_update, fields=None):
             changes += f"{key}: {entry[key]} -> \"\" (empty)\n"
             entry[key] = ""
             updated = True
-    
+
     if not updated:
         print("No changes detected.")
         return
-    
+
     if _confirm_changes(changes):
         print("Performing changes...")
         json_manage.save_credentials_json(data)
@@ -71,13 +74,13 @@ def delete_all_info_for_users(field=None):
     changes = ""
     updated = False
     key = field[0]
-    
+
     data = json_manage.get_info_json()
 
     if not key:
         print(f"Field '{key}' not found.")
         return
-    
+
     for entry in data[1:]:
         if not entry[key]:
             changes += f"({entry['user']}) {key}: already empty\n"
@@ -85,12 +88,12 @@ def delete_all_info_for_users(field=None):
             changes += f"({entry['user']}) {key}: {entry[key]} -> \"\" (empty)\n"
             entry[key] = ""
             updated = True
-    
+
     if not updated:
         print("No changes detected. Exiting...")
         time.sleep(constants.UI_MESSAGE_WAIT)
         return
-    
+
     if _confirm_changes(changes):
         print("Performing changes...")
         json_manage.save_credentials_json(data)
@@ -122,12 +125,12 @@ def _confirm_changes(changes):
 
 # Method called to print a list
 def _print_fields(data, fields, cols):
-    
+
     if len(fields) == 1:
         values = [entry[fields[0]] for entry in data]
     else:
         values = [":".join(str(entry[f]) for f in fields) for entry in data]
-    
+
     # Generate all strings to be displayed (index + value)
     formatted_values = [f"{v}" for _, v in enumerate(values)]
 
@@ -150,7 +153,7 @@ def _print_fields(data, fields, cols):
 
 def _print_dataframe(df, fields, is_markdown):
     print_boxed("List of: " + str(fields))
-    
+
     if is_markdown:
         print("\n" + df.to_markdown(index=False) + "\n")
     else:
@@ -192,18 +195,18 @@ def _handle_list_case(data, fields, cols, is_print, users):
     if is_print:
         _print_list_data(data, fields, cols)
         return None
-    
+
     return [data[0].get(field) for field in fields] if (users and data) else data
 
 def _handle_dataframe_case(data, fields, is_print, is_markdown):
     """Maneja el caso cuando los datos se deben retornar como DataFrame."""
     data = _format_list_fields(data, fields)
     df = _get_dataframe(data, fields)
-    
+
     if is_print:
         _print_dataframe(df, fields, is_markdown)
         return None
-    
+
     return df
 
 def get_custom_data_json(cols=None, users=None, as_list=True, is_print=False, fields=None, is_markdown=False):

@@ -1,10 +1,11 @@
 import sys
 
-import lib.menu as menu
-import lib.utilities as utilities
+import lib.data_utilities as data_utilities
 import lib.exploitation_chain as ec
 import lib.export_utilities as export_utilities
-import lib.data_utilities as data_utilities
+import lib.menu as menu
+import lib.utilities as utilities
+
 
 def handle_menu(_):
     menu.menu()
@@ -20,7 +21,7 @@ def handle_edit(args):
     temp_folder = ""
     notes = ""
     sshkey = ""
-    
+
     if args.password:
         password = args.password
     if args.temp_folder:
@@ -29,14 +30,14 @@ def handle_edit(args):
         notes = args.notes
     if args.sshkey:
         sshkey = args.sshkey
-    
+
     data_utilities.update_info_for_user(args.user, new_password=password, new_temp_folder=temp_folder, new_notes=notes, new_sshkey=sshkey)
 
 # Method that handles DELETE mode
 def handle_delete(args):
     fields = []
     utilities.validate_user(args.user)
-    
+
     if args.password:
         fields.append("password")
     if args.temp_folder:
@@ -54,7 +55,7 @@ def get_selected_fields(args):
     list_all = all(selected_flags) or not any(selected_flags)
     if list_all:
         return field_names
-    return [name for flag, name in zip(selected_flags, field_names) if flag]
+    return [name for flag, name in zip(selected_flags, field_names, strict=False) if flag]
 
 # Method that handles LIST mode
 def handle_list(args):
@@ -87,16 +88,15 @@ def handle_export(args):
     if args.user:
         utilities.validate_user(args.user)
         users = args.user
-    
+
     # Determinar nombre del archivo
     filename = ""
     if args.pdf:
         filename = args.pdf
     elif args.excel:
         filename = args.excel
-    
+
     if args.pdf:
         export_utilities.export(array_selected_fields, filename, users, is_pdf=True, is_excel=False)
     if args.excel:
         export_utilities.export(array_selected_fields, filename, users, is_pdf=False, is_excel=True)
-        

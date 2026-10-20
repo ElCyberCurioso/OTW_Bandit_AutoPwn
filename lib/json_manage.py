@@ -2,9 +2,10 @@ import json
 
 import lib.constants as constants
 
+
 # Load info from JSON info file
 def get_info_json(file_path=constants.JSON_INFO_PATH):
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8") as f:
         data = json.load(f)
         return data
 

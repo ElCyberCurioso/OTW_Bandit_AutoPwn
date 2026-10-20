@@ -1,5 +1,6 @@
-import subprocess, sys, os
 import importlib.util
+import subprocess
+import sys
 
 # Configurar codificación UTF-8 en Windows
 if sys.platform == 'win32':
@@ -12,7 +13,7 @@ if sys.platform == 'win32':
         sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
 
 def install_missing_modules(missing):
-    for import_name, pip_name in missing:
+    for _import_name, pip_name in missing:
         print(f"Installing {pip_name}...")
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])

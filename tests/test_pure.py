@@ -7,7 +7,6 @@ import lib.exploitation_chain as ec
 import lib.recursive_file_decompressor as decompressor
 import lib.utilities as utilities
 
-
 # --- exploitation_chain._user_num ---------------------------------------
 
 def test_user_num_basic():

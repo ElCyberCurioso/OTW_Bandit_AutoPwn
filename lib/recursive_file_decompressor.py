@@ -1,11 +1,13 @@
-import zipfile
-import tarfile
-import gzip
 import bz2
+import gzip
 import lzma
-import py7zr
-import shutil
 import os
+import shutil
+import tarfile
+import zipfile
+
+import py7zr
+
 
 def detect_compression_type(filepath):
     with open(filepath, 'rb') as f:
